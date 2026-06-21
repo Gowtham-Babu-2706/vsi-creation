@@ -58,7 +58,7 @@ function App() {
           <div className="text-center px-6 space-y-6">
             {/* 3D spinning emblem */}
             <IntroLogo3D />
-            <h1 className="text-4xl md:text-6xl font-display text-shine-grad uppercase tracking-wider">
+            <h1 className="text-4xl md:text-6xl font-display  text-shine-grad uppercase tracking-wider">
               VSI CREATIONS
             </h1>
             <p className="text-accent-gold uppercase tracking-[6px] text-xs md:text-sm font-semibold animate-pulse">

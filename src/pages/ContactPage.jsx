@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Mail, Phone, MapPin, Send, CheckCircle2, Clock, ShieldAlert } from 'lucide-react';
 
 export default function ContactPage() {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const selectedServiceParam = queryParams.get('service') || 'general';
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    service: 'general',
+    service: selectedServiceParam,
     message: ''
   });
 
@@ -59,7 +64,7 @@ export default function ContactPage() {
       name: '',
       email: '',
       phone: '',
-      service: 'general',
+      service: selectedServiceParam,
       message: ''
     });
     setIsSubmitted(false);
@@ -228,10 +233,19 @@ export default function ContactPage() {
                     onChange={handleInputChange}
                     className="w-full bg-bg-card border border-border-color text-sm text-white px-4 py-3.5 rounded-xl outline-none focus:border-accent-gold focus:bg-bg-main transition-all cursor-pointer font-semibold"
                   >
-                    <option value="general">🎬 General Production / Design Blueprint</option>
-                    <option value="cinematography">📹 Elite Cinematography (RED/Sony Cinema)</option>
-                    <option value="aerial-assets">🚁 Structural Aerial Assets (Inspire/FPV Drones)</option>
-                    <option value="live-broadcast">📡 Low-Latency Live Broadcasting</option>
+                    <option value="general">🎬 General Inquiry</option>
+                    <option value="event-management">💼 Event Management</option>
+                    <option value="college-educational">🎓 College & Educational Events</option>
+                    <option value="cultural-programs">🎭 Cultural Programs</option>
+                    <option value="wedding-planning">💍 Wedding Planning & Management</option>
+                    <option value="birthday-celebrations">🎉 Birthday & Private Celebrations</option>
+                    <option value="event-logistics">🚚 Event Coordination & Logistics</option>
+                    <option value="media-production">📹 Media Production</option>
+                    <option value="creative-services">🎨 Creative Services</option>
+                    <option value="digital-marketing">📣 Digital Marketing</option>
+                    <option value="event-production">🎪 Event Production</option>
+                    <option value="talent-entertainment">🌟 Talent & Entertainment</option>
+                    <option value="equipment-rental">⚙️ Equipment Rental</option>
                     <option value="other">⭐ Other Custom Concept</option>
                   </select>
                 </div>

@@ -53,7 +53,7 @@ export function IntroLogo3D() {
           <directionalLight position={[-4, -2, -4]} intensity={0.7} color="#f59e0b" />
           <pointLight       position={[0, 4, 2]}   intensity={1.0} color="#ec4899" />
           <EmblemModel />
-          <Environment preset="city" />
+          {/* <Environment preset="city" /> */}
         </Suspense>
       </Canvas>
     </div>

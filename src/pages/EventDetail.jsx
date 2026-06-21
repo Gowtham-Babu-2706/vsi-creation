@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useSearchParams } from 'react-router-dom';
 import {
   ArrowLeft, Calendar, MapPin, Ticket, Play,
   FileText, Info, Film, Clock, ChevronRight
@@ -9,6 +9,7 @@ import RegistrationModal from '../components/RegistrationModal';
 
 export default function EventDetail() {
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
   const [event,          setEvent]          = useState(null);
   const [loading,        setLoading]        = useState(true);
   const [isModalOpen,    setIsModalOpen]    = useState(false);
@@ -20,6 +21,10 @@ export default function EventDetail() {
       try {
         const data = await api.getEventById(id);
         setEvent(data);
+        // Auto-open registration modal if redirected from Home page "Reserve Spot"
+        if (searchParams.get('register') === 'true') {
+          setIsModalOpen(true);
+        }
       } catch (err) {
         console.error('Failed to load event details', err);
       } finally {
@@ -27,7 +32,7 @@ export default function EventDetail() {
       }
     };
     loadEvent();
-  }, [id]);
+  }, [id, searchParams]);
 
   if (loading) {
     return (
@@ -229,8 +234,21 @@ export default function EventDetail() {
                 <Ticket className="w-5 h-5 text-accent-gold" />
                 <h3 className="font-display text-lg text-text-main">Secure Your Spot</h3>
               </div>
+
+              {/* Price display */}
+              {event.price != null && event.price > 0 ? (
+                <div className="flex items-center justify-between bg-bg-main/40 border border-accent-gold/20 rounded-xl px-4 py-2.5">
+                  <span className="text-xs text-text-muted">Price per seat</span>
+                  <span className="text-accent-gold font-black text-lg">₹{event.price.toFixed(2)}</span>
+                </div>
+              ) : (
+                <div className="bg-emerald-500/10 border border-emerald-400/20 rounded-xl px-4 py-2.5 text-xs text-emerald-400 font-semibold text-center">
+                  🎟 Free Entry Event
+                </div>
+              )}
+
               <p className="text-xs text-text-muted leading-relaxed">
-                Reserve your entry to this exclusive VSI experience. Limited seats are available — don't miss out.
+                Reserve your entry to this exclusive VSI experience. Limited seats available — don't miss out.
               </p>
 
               <button
@@ -243,7 +261,9 @@ export default function EventDetail() {
                 Register Now <ChevronRight className="w-4 h-4" />
               </button>
 
-              <p className="text-[10px] text-text-muted text-center">Free registration · Limited availability</p>
+              <p className="text-[10px] text-text-muted text-center">
+                {event.price > 0 ? 'Secure Stripe payment · Limited availability' : 'Free registration · Limited availability'}
+              </p>
             </div>
           </div>
 
@@ -265,6 +285,7 @@ export default function EventDetail() {
         onClose={() => setIsModalOpen(false)}
         eventName={event.title}
         eventId={event.id}
+        eventPrice={event.price ?? 0}
       />
     </div>
   );

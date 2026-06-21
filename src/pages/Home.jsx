@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowUpRight, Zap, MapPin, Calendar, Star,
-  ChevronRight, CalendarDays, Sparkles, Users, Award
+  ChevronRight, CalendarDays, Sparkles, Users, Award, Clock
 } from 'lucide-react';
+import { api } from '../utils/api';
 
 /* ── Static Data ── */
 const PORTFOLIO_ITEMS = [
@@ -37,51 +38,92 @@ const GALLERY_ITEMS = [
   { src: 'https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=800', title: 'Crowd Capture' }
 ];
 
-const UPCOMING_EVENTS = [
-  {
-    id: 'neon-beats',
-    day: '24', month: 'Jul',
-    title: 'Neon Beats Arena Music Festival',
-    desc: 'Grand central arena sound coordination and live multi-axis lasers.',
-    badge: '🎵 DJ & Stage Setup'
-  },
-  {
-    id: 'apex-gala',
-    day: '12', month: 'Sep',
-    title: 'The Apex Annual Corporate Gala Awards',
-    desc: 'Luxury red-carpet configurations and live multi-camera broadcast capture.',
-    badge: '🏆 Corporate Gala'
-  },
-  {
-    id: 'velvet-symphony',
-    day: '05', month: 'Nov',
-    title: 'Velvet Symphony Milestone Celebration',
-    desc: 'Immersive lighting displays, projection mapping, and fine dining staging.',
-    badge: '💎 Bespoke Private'
-  }
-];
+// UPCOMING_EVENTS is now loaded dynamically from the backend API
 
 const SERVICES = [
   {
-    id: 'cinematography',
+    id: 'event-management',
     num: '01',
-    icon: '🎬',
-    title: 'Elite Cinematography',
-    desc: 'Multi-cam 4K capture, prime cinematic festival lenses, and hyper-polished color-graded films.'
+    icon: '💼',
+    title: 'Event Management',
+    desc: 'End-to-end planning, execution, and coordination for premium corporate, brand and educational events.'
   },
   {
-    id: 'aerial-assets',
+    id: 'college-educational',
     num: '02',
-    icon: '🚁',
-    title: 'Structural Aerial Assets',
-    desc: 'High-altitude drone coordination for landscape tracking shots and majestic arena overviews.'
+    icon: '🎓',
+    title: 'College & Educational Events',
+    desc: 'High-energy cultural fests, academic symposiums, tech expos, convocations, and student events.'
   },
   {
-    id: 'live-broadcast',
+    id: 'cultural-programs',
     num: '03',
-    icon: '📡',
-    title: 'Low-Latency Live Broadcast',
-    desc: 'Pristine multi-camera TV and multi-platform social streaming infrastructure.'
+    icon: '🎭',
+    title: 'Cultural Programs',
+    desc: 'Grand traditional dance, music, stage plays, and community heritage festivals with specialized acoustics.'
+  },
+  {
+    id: 'wedding-planning',
+    num: '04',
+    icon: '💍',
+    title: 'Wedding Planning & Management',
+    desc: 'Immersive, luxurious wedding designs, destination logistics, and seamless on-site day coordination.'
+  },
+  {
+    id: 'birthday-celebrations',
+    num: '05',
+    icon: '🎉',
+    title: 'Birthday & Private Celebrations',
+    desc: 'Custom-tailored themes, milestone birthday celebrations, anniversaries, and high-styling private dinners.'
+  },
+  {
+    id: 'event-logistics',
+    num: '06',
+    icon: '🚚',
+    title: 'Event Coordination & Logistics',
+    desc: 'Precise crew management, vendor scheduling, permit filings, crowd management and security tracking.'
+  },
+  {
+    id: 'media-production',
+    num: '07',
+    icon: '📹',
+    title: 'Media Production',
+    desc: 'High-fidelity event photography, cinematic drone assets, commercials, and professional live-action video.'
+  },
+  {
+    id: 'creative-services',
+    num: '08',
+    icon: '🎨',
+    title: 'Creative Services',
+    desc: 'Event branding, stage LED motion graphics, social creatives, logos, brochures, and dynamic animations.'
+  },
+  {
+    id: 'digital-marketing',
+    num: '09',
+    icon: '📣',
+    title: 'Digital Marketing',
+    desc: 'Strategic social media management, Google PPC campaigns, content copy, SEO, and ticket promotion.'
+  },
+  {
+    id: 'event-production',
+    num: '10',
+    icon: '🎪',
+    title: 'Event Production',
+    desc: 'Heavy stage design, pixel-pitch LED wall solutions, concert-grade audio setup, and premium trussing rigs.'
+  },
+  {
+    id: 'talent-entertainment',
+    num: '11',
+    icon: '🌟',
+    title: 'Talent & Entertainment',
+    desc: 'Direct booking liaison for celebrity appearances, live acoustic bands, professional hosts, and DJs.'
+  },
+  {
+    id: 'equipment-rental',
+    num: '12',
+    icon: '⚙️',
+    title: 'Equipment Rental',
+    desc: 'Rent professional line-array sound systems, LED screens, projectors, and stage lights on demand.'
   }
 ];
 
@@ -100,9 +142,52 @@ const REVIEWS = [
   }
 ];
 
+/* ── Helpers ── */
+const MONTH_ABBR = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function parseDateParts(dateStr) {
+  // dateStr is YYYY-MM-DD from backend
+  const parts = dateStr ? dateStr.split('-') : [];
+  if (parts.length === 3) {
+    const day = parts[2];                         // "24"
+    const month = MONTH_ABBR[parseInt(parts[1], 10) - 1]; // "Jul"
+    return { day, month };
+  }
+  return { day: '--', month: '---' };
+}
+
+const CATEGORY_BADGES = {
+  concert: '🎵 DJ & Stage Setup',
+  gala:    '🏆 Corporate Gala',
+  private: '💎 Bespoke Private',
+  showcase: '🚀 Product Launch',
+};
+
 /* ── Component ── */
 export default function Home() {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', domain: '', message: '' });
+  const [upcomingEvents, setUpcomingEvents] = useState([]);
+  const [eventsLoading, setEventsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUpcoming = async () => {
+      try {
+        const all = await api.getEvents();
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const upcoming = all
+          .filter(e => new Date(e.date) >= today)
+          .sort((a, b) => new Date(a.date) - new Date(b.date))
+          .slice(0, 3); // show max 3 upcoming on home
+        setUpcomingEvents(upcoming);
+      } catch (err) {
+        console.error('Failed to load upcoming events:', err);
+      } finally {
+        setEventsLoading(false);
+      }
+    };
+    fetchUpcoming();
+  }, []);
 
   const handleInputChange = e => {
     const { name, value } = e.target;
@@ -147,8 +232,8 @@ export default function Home() {
 
           {/* Headline */}
           <h1 className="font-display text-5xl md:text-7xl lg:text-8xl text-text-main leading-[1.02]">
-            Creating Memories.<br />
-            <span className="text-shine-grad">Capturing Milestones.</span>
+            <span className='lobster'>Creating Memories.</span><br />
+            <span className="text-shine-grad"><span className='lobster'>Capturing Milestones.</span></span>
           </h1>
 
           {/* Sub */}
@@ -334,41 +419,74 @@ export default function Home() {
         </div>
 
         <div className="flex flex-col gap-5">
-          {UPCOMING_EVENTS.map(event => (
-            <div
-              key={event.id}
-              className="bg-bg-card border border-border-color border-l-4 border-l-accent-primary rounded-2xl p-5 md:p-7
-                grid grid-cols-1 md:grid-cols-12 items-center gap-5
-                hover:border-l-accent-secondary hover:shadow-xl hover:shadow-accent-primary/8
-                hover:scale-[1.005] transition-all group"
-            >
-              {/* Date block */}
-              <div className="md:col-span-2 flex md:flex-col items-center md:items-start gap-3 md:gap-0">
-                <span className="font-display text-4xl text-accent-gold leading-none">{event.day}</span>
-                <span className="text-xs text-text-muted font-semibold uppercase tracking-wider md:mt-1">{event.month}</span>
+          {eventsLoading ? (
+            /* Skeleton loaders while events are fetching */
+            [1, 2, 3].map(n => (
+              <div key={n} className="bg-bg-card border border-border-color border-l-4 border-l-accent-primary/30 rounded-2xl p-5 md:p-7 animate-pulse flex gap-6 items-center">
+                <div className="w-14 h-14 bg-bg-surface rounded-xl shrink-0" />
+                <div className="flex-1 space-y-3">
+                  <div className="h-4 bg-bg-surface rounded w-2/3" />
+                  <div className="h-3 bg-bg-surface rounded w-1/2" />
+                </div>
+                <div className="w-28 h-9 bg-bg-surface rounded-xl shrink-0" />
               </div>
-
-              {/* Info */}
-              <div className="md:col-span-7 space-y-2">
-                <h3 className="font-display text-lg text-text-main group-hover:text-accent-secondary transition-colors">{event.title}</h3>
-                <p className="text-xs md:text-sm text-text-muted">{event.desc}</p>
-                <span className="badge-pill">{event.badge}</span>
-              </div>
-
-              {/* CTA */}
-              <div className="md:col-span-3 md:text-right">
-                <Link
-                  to={`/events/${event.id}`}
-                  className="inline-flex items-center justify-center gap-2 px-5 py-3 text-xs font-semibold uppercase tracking-wider
-                    bg-accent-primary/15 border border-accent-primary/35 text-accent-secondary rounded-xl
-                    hover:bg-accent-primary hover:border-accent-primary hover:text-white transition-all cursor-pointer"
+            ))
+          ) : upcomingEvents.length > 0 ? (
+            upcomingEvents.map(event => {
+              const { day, month } = parseDateParts(event.date);
+              const badge = CATEGORY_BADGES[event.category] || `📅 ${event.category}`;
+              return (
+                <div
+                  key={event.id}
+                  className="bg-bg-card border border-border-color border-l-4 border-l-accent-primary rounded-2xl p-5 md:p-7
+                    grid grid-cols-1 md:grid-cols-12 items-center gap-5
+                    hover:border-l-accent-secondary hover:shadow-xl hover:shadow-accent-primary/8
+                    hover:scale-[1.005] transition-all group"
                 >
-                  <CalendarDays className="w-3.5 h-3.5" />
-                  Reserve Spot
-                </Link>
-              </div>
+                  {/* Date block */}
+                  <div className="md:col-span-2 flex md:flex-col items-center md:items-start gap-3 md:gap-0">
+                    <span className="font-display text-4xl text-accent-gold leading-none">{day}</span>
+                    <span className="text-xs text-text-muted font-semibold uppercase tracking-wider md:mt-1">{month}</span>
+                  </div>
+
+                  {/* Info */}
+                  <div className="md:col-span-7 space-y-2">
+                    <h3 className="font-display text-lg text-text-main group-hover:text-accent-secondary transition-colors">{event.title}</h3>
+                    <p className="text-xs md:text-sm text-text-muted">{event.description}</p>
+                    <div className="flex items-center gap-3 flex-wrap">
+                      <span className="badge-pill">{badge}</span>
+                      {event.price != null && (
+                        <span className="text-[11px] font-bold text-accent-gold bg-accent-gold/10 border border-accent-gold/30 px-2.5 py-0.5 rounded-full">
+                          ₹{event.price.toFixed(2)} / seat
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* CTA — links to event detail with ?register=true to auto-open modal */}
+                  <div className="md:col-span-3 md:text-right">
+                    <Link
+                      to={`/events/${event.id}?register=true`}
+                      className="inline-flex items-center justify-center gap-2 px-5 py-3 text-xs font-semibold uppercase tracking-wider
+                        bg-accent-primary/15 border border-accent-primary/35 text-accent-secondary rounded-xl
+                        hover:bg-accent-primary hover:border-accent-primary hover:text-white transition-all cursor-pointer"
+                    >
+                      <CalendarDays className="w-3.5 h-3.5" />
+                      Reserve Spot
+                    </Link>
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <div className="text-center py-12 bg-bg-surface border border-border-color rounded-2xl">
+              <Clock className="w-8 h-8 text-accent-primary mx-auto mb-3 animate-pulse" />
+              <p className="text-sm text-text-muted">No upcoming events scheduled. Check back soon.</p>
+              <Link to="/events" className="mt-4 inline-flex items-center gap-2 text-xs font-semibold text-accent-secondary hover:text-accent-gold transition-colors">
+                View All Events <ChevronRight className="w-3.5 h-3.5" />
+              </Link>
             </div>
-          ))}
+          )}
         </div>
       </section>
 

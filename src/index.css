@@ -14,7 +14,7 @@
   --color-border-color:   #2e2850;
 
   /* ── Font Families ── */
-  --font-display: 'Patua One', serif;
+  --font-display: 'Black Ops One', system-ui; 
   --font-body:    'Inter', sans-serif;
 
   /* ── Animations ── */
@@ -28,16 +28,32 @@
 
 /* ── Base Styles ── */
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Patua One', serif;
   background-color: #09080f;
   color: #f0eeff;
   line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11", "ss01";
 }
 
-/* Patua One applied to all heading tags globally */
-h1, h2, h3, h4, h5, h6 {
+/* Patua One applied to display & large headings, Inter for smaller headings to maximize readability */
+h1, h2, h3 {
   font-family: 'Patua One', serif;
-  letter-spacing: 0.01em;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+}
+
+h4, h5, h6 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  -webkit-font-smoothing: antialiased;
+}
+
+.lobster{
+    font-family: "Lobster Two", sans-serif;
 }
 
 /* ── Custom Scrollbar ── */

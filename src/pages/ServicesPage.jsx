@@ -1,34 +1,130 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, Video, Compass, Radio, ChevronRight } from 'lucide-react';
+import {
+  Sparkles,
+  Briefcase,
+  GraduationCap,
+  Music,
+  Heart,
+  Cake,
+  Truck,
+  Video,
+  Palette,
+  Megaphone,
+  Layers,
+  Users,
+  Wrench,
+  ChevronRight
+} from 'lucide-react';
 
 const SERVICES = [
   {
-    id: 'cinematography',
+    id: 'event-management',
     num: '01',
-    title: 'Elite Cinematography',
-    tagline: 'Multi-cam 4K capture, prime lenses, and cinematic grading.',
-    desc: 'Our cinema unit deploys industry-standard digital sensor systems alongside specialized high-speed cinema prime lenses. We capture live action with fluid motion stabilizers and customize visual palettes to align with luxury brand specifications.',
+    title: 'Event Management',
+    tagline: 'End-to-end planning, execution, and coordination for premium events.',
+    desc: 'We turn your concepts into reality. From high-profile corporate galas to immersive brand launches and massive trade shows, our production team handles scheduling, design, vendor management, and execution flawlessly.',
+    icon: Briefcase,
+    banner: 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=1000'
+  },
+  {
+    id: 'college-educational',
+    num: '02',
+    title: 'College & Educational Events',
+    tagline: 'Energetic cultural fests, academic symposiums, and college events.',
+    desc: 'Empowering student communities and academic institutions with high-production value. We specialize in coordinating multi-day college festivals, tech expos, seminars, and graduation ceremonies.',
+    icon: GraduationCap,
+    banner: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1000'
+  },
+  {
+    id: 'cultural-programs',
+    num: '03',
+    title: 'Cultural Programs',
+    tagline: 'Celebrating art, heritage, and community through grand staging.',
+    desc: 'Bringing local and international heritage to life. We orchestrate grand traditional dance performances, music festivals, theater productions, and community cultural celebrations with specialized acoustic and visual design.',
+    icon: Music,
+    banner: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=1000'
+  },
+  {
+    id: 'wedding-planning',
+    num: '04',
+    title: 'Wedding Planning & Management',
+    tagline: 'Immersive, luxurious, and custom-tailored wedding celebrations.',
+    desc: 'Your dream wedding, seamlessly orchestrated. We offer complete wedding design, custom theme building, guest logistics, vendor coordination, and live event direction to create unforgettable memories.',
+    icon: Heart,
+    banner: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1000'
+  },
+  {
+    id: 'birthday-celebrations',
+    num: '05',
+    title: 'Birthday & Private Celebrations',
+    tagline: 'Custom themes, vibrant styling, and intimate event coordination.',
+    desc: 'Crafting unforgettable milestones and intimate celebrations. Whether it is a grand milestone birthday, an anniversary, or a private dinner, we design customized experiences with curated styling.',
+    icon: Cake,
+    banner: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=1000'
+  },
+  {
+    id: 'event-logistics',
+    num: '06',
+    title: 'Event Coordination & Logistics',
+    tagline: 'Precise vendor alignment, RSVP tracking, and on-ground management.',
+    desc: 'The backbone of every successful production. We manage complex crowd management, vendor operations, scheduling, permits, security grids, and physical logistics mapping for events of all scales.',
+    icon: Truck,
+    banner: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1000'
+  },
+  {
+    id: 'media-production',
+    num: '07',
+    title: 'Media Production',
+    tagline: 'High-fidelity photography, videography, and commercial film assets.',
+    desc: 'Staging high-quality visuals. Our camera units and production crews deliver professional event photography, drone flythroughs, corporate films, promotional videos, and full live coverage in pristine formats.',
     icon: Video,
     banner: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1000'
   },
   {
-    id: 'aerial-assets',
-    num: '02',
-    title: 'Structural Aerial Assets',
-    tagline: 'High-altitude flight mapping and cinematic tracking shots.',
-    desc: 'Fully licensed drone maneuvers designed to establish venue majesty. We orchestrate dual-operator flight grids, capturing synchronous wide tracking pans and aerial perspective mapping for large-scale outdoor events.',
-    icon: Compass,
-    banner: 'https://images.unsplash.com/photo-1506157786151-b8491531f063?w=1000'
+    id: 'creative-services',
+    num: '08',
+    title: 'Creative Services',
+    tagline: 'Branding, graphic design, and custom motion animation assets.',
+    desc: 'Sculpting the visual identity of your events. We craft custom event logos, stage graphics, social media promotions, physical brochures, flyers, and dynamic motion animations to drive engagement.',
+    icon: Palette,
+    banner: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1000'
   },
   {
-    id: 'live-broadcast',
-    num: '03',
-    title: 'Low-Latency Live Broadcast',
-    tagline: 'Ultra-low latency television & digital web streaming.',
-    desc: 'We build local broadcast stations inside venues. Featuring high-grade hardware switchers, zero-delay wireless transmitters, and robust network bonding, we broadcast crystal clear content to audiences globally.',
-    icon: Radio,
+    id: 'digital-marketing',
+    num: '09',
+    title: 'Digital Marketing',
+    tagline: 'Strategic social campaigns, content creation, and event promotion.',
+    desc: 'Amplifying event reach and brand presence. We specialize in target audience generation, social media management, organic search optimization, online ticket promotions, and targeted ad campaigns.',
+    icon: Megaphone,
+    banner: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1000'
+  },
+  {
+    id: 'event-production',
+    num: '10',
+    title: 'Event Production',
+    tagline: 'Stage design, LED walls, audio systems, and professional lighting.',
+    desc: 'Building spectacular environments. We construct heavy-duty stages, deploy massive LED screens, design custom truss setups, align sound systems, and install professional light rigs for maximum sensory impact.',
+    icon: Layers,
     banner: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1000'
+  },
+  {
+    id: 'talent-entertainment',
+    num: '11',
+    title: 'Talent & Entertainment',
+    tagline: 'Artist bookings, live bands, celebrity scheduling, and performers.',
+    desc: 'Elevating events with elite entertainment. We manage direct booking and coordination for celebrities, event hosts, DJs, live acoustic bands, classical dancers, and custom performance acts.',
+    icon: Users,
+    banner: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1000'
+  },
+  {
+    id: 'equipment-rental',
+    num: '12',
+    title: 'Equipment Rental',
+    tagline: 'High-end audio, video, lighting, and stage hardware.',
+    desc: 'Rent premium event hardware on demand. We provide industry-standard sound boards, high-definition LED screens, stage lights, digital projectors, and advanced live-streaming hardware packages.',
+    icon: Wrench,
+    banner: 'https://images.unsplash.com/photo-1484755560693-a4074577af3a?w=1000'
   }
 ];
 
@@ -49,7 +145,7 @@ export default function ServicesPage() {
             Production Ecosystem
           </h1>
           <p className="text-sm md:text-base text-text-muted leading-relaxed">
-            Explore our specialized capabilities and production assets. We deliver high-fidelity cinematography, drone mapping, and low-latency broadcasting solutions.
+            Explore our specialized capabilities and production assets. We deliver end-to-end event management, media production, and equipment rentals.
           </p>
         </div>
 
@@ -58,12 +154,11 @@ export default function ServicesPage() {
           {SERVICES.map((service) => {
             const Icon = service.icon;
             return (
-              <Link
+              <div
                 key={service.id}
-                to={`/services/${service.id}`}
                 className="bg-bg-card border border-border-color rounded-3xl overflow-hidden hover:border-accent-gold/45 hover:-translate-y-2 hover:shadow-2xl hover:shadow-accent-primary/10 transition-all duration-300 group flex flex-col justify-between"
               >
-                <div>
+                <Link to={`/services/${service.id}`} className="block flex-grow cursor-pointer">
                   {/* Image Banner */}
                   <div className="h-48 overflow-hidden relative border-b border-border-color/40">
                     <img
@@ -93,12 +188,15 @@ export default function ServicesPage() {
                       {service.desc}
                     </p>
                   </div>
-                </div>
+                </Link>
 
-                <div className="px-6 pb-6 pt-2 flex items-center text-xs text-accent-gold font-bold uppercase tracking-wider gap-1">
+                <Link
+                  to={`/contact?service=${service.id}`}
+                  className="px-6 pb-6 pt-2 flex items-center text-xs text-accent-gold font-bold uppercase tracking-wider gap-1 hover:text-white transition-colors cursor-pointer"
+                >
                   Explore Technology <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </Link>
+                </Link>
+              </div>
             );
           })}
         </div>

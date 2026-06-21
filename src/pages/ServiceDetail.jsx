@@ -1,69 +1,490 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Cpu, Monitor, Radio, Compass, Video, Sparkles, Send } from 'lucide-react';
+import {
+  ArrowLeft,
+  Sparkles,
+  Send,
+  Briefcase,
+  GraduationCap,
+  Music,
+  Heart,
+  Cake,
+  Truck,
+  Video,
+  Palette,
+  Megaphone,
+  Layers,
+  Users,
+  Wrench
+} from 'lucide-react';
 
 const SERVICE_DATA = {
-  'cinematography': {
-    title: 'Elite Cinematography',
-    tagline: 'Multi-cam 4K capture, prime lenses, and cinematic grading.',
-    description: 'Our cinema unit deploys industry-standard digital sensor systems alongside specialized high-speed cinema prime lenses. We capture live action with fluid motion stabilizers and customize visual palettes during digital grading to align with luxury brand specifications.',
+  'event-management': {
+    title: 'Event Management',
+    tagline: 'End-to-end planning, execution, and coordination for premium events.',
+    description: 'We turn your concepts into reality. From high-profile corporate galas to immersive brand launches and massive trade shows, our production team handles scheduling, design, vendor management, and execution flawlessly.',
+    icon: Briefcase,
+    heroImage: 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=1800',
+    techStack: [
+      { name: 'Staging Blueprint', detail: 'Custom blueprints & CAD layouts' },
+      { name: 'Vendor Liaison', detail: 'Logistics, permits & clearances' },
+      { name: 'RSVP Grids', detail: 'Invitee check-lists & tracking' },
+      { name: 'On-Ground Direction', detail: 'Event runsheet & stage management' }
+    ],
+    packages: [
+      {
+        name: 'Premium Management',
+        duration: 'Standard Execution Flow',
+        details: [
+          'End-to-End Coordination',
+          'Permit Clearance Filings',
+          'Staging Sound & Light Coordination',
+          'Event Runsheets & Schedules'
+        ]
+      },
+      {
+        name: 'Bespoke Executive Staging',
+        duration: 'Complex Multi-Day Events',
+        details: [
+          'Full Custom CAD/3D Venue Blueprints',
+          'VIP Guest Hospitality Logistics',
+          'Direct Creative & Production Design',
+          '24/7 Staging Coordination Desk'
+        ]
+      }
+    ],
+    faqs: [
+      { q: 'What is the booking window?', a: 'We recommend initiating the brief at least 4-6 weeks prior to the event date to secure crew schedules.' },
+      { q: 'Do you support multi-location events?', a: 'Yes, our coordination team executes concurrent staging across multiple venues globally.' }
+    ]
+  },
+  'college-educational': {
+    title: 'College & Educational Events',
+    tagline: 'Energetic cultural fests, academic symposiums, and college events.',
+    description: 'Empowering student communities and academic institutions with high-production value. We specialize in coordinating multi-day college festivals, tech expos, seminars, and graduation ceremonies.',
+    icon: GraduationCap,
+    heroImage: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1800',
+    techStack: [
+      { name: 'Youth Staging', detail: 'High-energy light & sound grids' },
+      { name: 'Talent Scouting', detail: 'Booking local bands & speakers' },
+      { name: 'Crowd Management', detail: 'Arena entry planning & security grids' },
+      { name: 'Campus Liaison', detail: 'Student coordinators & permits' }
+    ],
+    packages: [
+      {
+        name: 'Standard Campus Setup',
+        duration: 'Single Day Event',
+        details: [
+          'Main Stage Setup & Sound System',
+          'Security & Crowd Flow Plan',
+          'Student Coordinator Briefings',
+          'Basic Media Coverage'
+        ]
+      },
+      {
+        name: 'Elite Festival Production',
+        duration: 'Multi-Day Cultural Fest',
+        details: [
+          'High-Power Sound & LED Grid Staging',
+          'Artist/Celebrity Management',
+          'Inter-Collegiate Competitions Desk',
+          'Full Event Video & Live Stream Packages'
+        ]
+      }
+    ],
+    faqs: [
+      { q: 'How do you coordinate with student committees?', a: 'We assign a dedicated Production Manager to liaise directly with the student committee and faculty representatives.' },
+      { q: 'Can you manage sponsorships?', a: 'Yes, we provide branding spaces, LED wall integrations, and brochure displays for event sponsors.' }
+    ]
+  },
+  'cultural-programs': {
+    title: 'Cultural Programs',
+    tagline: 'Celebrating art, heritage, and community through grand staging.',
+    description: 'Bringing local and international heritage to life. We orchestrate grand traditional dance performances, music festivals, theater productions, and community cultural celebrations with specialized acoustic and visual design.',
+    icon: Music,
+    heroImage: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=1800',
+    techStack: [
+      { name: 'Acoustic Calibration', detail: 'Tuned audio for folk & classical setups' },
+      { name: 'Stage Backdrops', detail: 'Traditional thematic scenic design' },
+      { name: 'Lighting Design', detail: 'Warm highlights & spotlight tracing' },
+      { name: 'Talent Care', detail: 'Green rooms & performance schedules' }
+    ],
+    packages: [
+      {
+        name: 'Traditional Showcase',
+        duration: 'Evening Cultural Programs',
+        details: [
+          'Acoustic Tuning & Warm Lights',
+          'Scenic Backdrop Staging',
+          'Artist Coordination Desk',
+          'Event Highlight Media Pack'
+        ]
+      },
+      {
+        name: 'Grand Heritage Festival',
+        duration: 'Multi-Day Traditional Gala',
+        details: [
+          'Advanced Surround Sound Design',
+          'Interactive Theme Projection Mapping',
+          'Celebrity Artist Booking Liaison',
+          'Live Video Broadcast & Archival Recording'
+        ]
+      }
+    ],
+    faqs: [
+      { q: 'Do you handle classical instrument amplification?', a: 'Yes, our audio engineers specialize in microphoning and calibrating acoustic folk and classical instruments.' },
+      { q: 'Can you handle outdoor amphitheater events?', a: 'Absolutely. We design specific trussing and weather-proof sound/lighting setups for outdoor spaces.' }
+    ]
+  },
+  'wedding-planning': {
+    title: 'Wedding Planning & Management',
+    tagline: 'Immersive, luxurious, and custom-tailored wedding celebrations.',
+    description: 'Your dream wedding, seamlessly orchestrated. We offer complete wedding design, custom theme building, guest logistics, vendor coordination, and live event direction to create unforgettable memories.',
+    icon: Heart,
+    heroImage: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1800',
+    techStack: [
+      { name: 'Decor Design', detail: 'Thematic fabric, floral & stage setups' },
+      { name: 'Hospitality', detail: 'Guest transfer & RSVP grids' },
+      { name: 'Theme Styling', detail: 'Custom colors & light concepts' },
+      { name: 'Event Flow', detail: 'Barat, Sangeet & Reception schedules' }
+    ],
+    packages: [
+      {
+        name: 'Bespoke Wedding Curation',
+        duration: 'Full Wedding Festivities',
+        details: [
+          'Theme Selection & Setup Design',
+          'Catering & Vendor Coordination',
+          'Logistics & Guest RSVP Tracking',
+          'Staging & Audio Support'
+        ]
+      },
+      {
+        name: 'Grand Luxury Wedding',
+        duration: 'Multi-Day Destination Celebrations',
+        details: [
+          'Complete Venue & Staging Makeovers',
+          'VIP Concierge & Transport Grids',
+          'Custom Choreography & Staging Support',
+          'Full Cinematic Media Coverage Pack'
+        ]
+      }
+    ],
+    faqs: [
+      { q: 'Do you offer custom theme building?', a: 'Yes, our design team drafts 3D renders of custom stages, entrances, and table setups for your approval.' },
+      { q: 'How do you handle guest transport?', a: 'We set up a central hospitality desk to manage hotel check-ins, local transfers, and airport pickups.' }
+    ]
+  },
+  'birthday-celebrations': {
+    title: 'Birthday & Private Celebrations',
+    tagline: 'Custom themes, vibrant styling, and intimate event coordination.',
+    description: 'Crafting unforgettable milestones and intimate celebrations. Whether it is a grand milestone birthday, an anniversary, or a private dinner, we design customized experiences with curated styling.',
+    icon: Cake,
+    heroImage: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=1800',
+    techStack: [
+      { name: 'Custom Themes', detail: 'Milestone, neon or vintage layouts' },
+      { name: 'Dessert Styling', detail: 'Curated gourmet cake & food styling' },
+      { name: 'Interactive Zones', detail: 'Photo booths & activity spaces' },
+      { name: 'Intimate Lighting', detail: 'Fairy lights & ambient profile systems' }
+    ],
+    packages: [
+      {
+        name: 'Essential Celebration Pack',
+        duration: 'Intimate Gatherings',
+        details: [
+          'Custom Theme Decor & Entryway',
+          'Audio Sound Box & Ambient Lights',
+          'Activity/Game Coordination',
+          'Photo Booth Setup'
+        ]
+      },
+      {
+        name: 'Grand Private Gala',
+        duration: 'Milestone Parties',
+        details: [
+          'Premium Ballroom Staging',
+          'Dynamic LED Backdrops',
+          'Curated Professional Anchors/DJs',
+          'Cinematic Photo & Highlight Reel'
+        ]
+      }
+    ],
+    faqs: [
+      { q: 'Do you manage food and beverage layouts?', a: 'Yes, we work with custom catering teams to align food stalls with the overall party theme.' },
+      { q: 'What is the minimum guest size?', a: 'We plan events for everything from intimate dinners of 20 guests to massive celebrations of over 1000.' }
+    ]
+  },
+  'event-logistics': {
+    title: 'Event Coordination & Logistics',
+    tagline: 'Precise vendor alignment, RSVP tracking, and on-ground management.',
+    description: 'The backbone of every successful production. We manage complex crowd management, vendor operations, scheduling, permits, security grids, and physical logistics mapping for events of all scales.',
+    icon: Truck,
+    heroImage: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1800',
+    techStack: [
+      { name: 'Fleet Tracking', detail: 'On-time venue transport grids' },
+      { name: 'Permit Liaison', detail: 'Local civic & sound clearances' },
+      { name: 'Crew Distribution', detail: 'Dedicated ground managers & routes' },
+      { name: 'Safety Planning', detail: 'First-aid points & fire clearances' }
+    ],
+    packages: [
+      {
+        name: 'Operational Logistics Plan',
+        duration: 'Single Venue Events',
+        details: [
+          'Vendor Timing Coordination',
+          'Equipment Load-in/out Scheduling',
+          'Basic Security & Flow Planning',
+          'Permit Clearance Filings'
+        ]
+      },
+      {
+        name: 'Full-Scale Staging Grid',
+        duration: 'High-Profile Arenas',
+        details: [
+          'Fleet & Valet Management System',
+          'VIP Protection & Escort Routes',
+          'Medical & Fire Safety Compliance',
+          'Multi-Agency On-Ground Command Desk'
+        ]
+      }
+    ],
+    faqs: [
+      { q: 'How do you prevent scheduling delays?', a: 'We design detailed production runsheets specifying exact load-in times for all staging crews.' },
+      { q: 'Do you secure sound and local permits?', a: 'Yes, our logistics team coordinates with police and civic boards to obtain sound and assembly clearances.' }
+    ]
+  },
+  'media-production': {
+    title: 'Media Production',
+    tagline: 'High-fidelity photography, videography, and commercial film assets.',
+    description: 'Staging high-quality visuals. Our camera units and production crews deliver professional event photography, drone flythroughs, corporate films, promotional videos, and full live coverage in pristine formats.',
     icon: Video,
     heroImage: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1800',
     techStack: [
-      { name: 'Sensor Rigs', detail: 'RED V-Raptor 8K & Sony FX9' },
-      { name: 'Lens Packages', detail: 'Arri Signature Primes & Cooke Anamorphics' },
-      { name: 'Motion Stabilizers', detail: 'Freefly MōVI Pro & Ronin 2 systems' },
-      { name: 'Color Space', detail: 'ACES Pipeline, customized Rec2020 LUTS' }
+      { name: 'Cinema Sensors', detail: 'RED V-Raptor 8K & Sony FX9' },
+      { name: 'Drone Payloads', detail: 'Zenmuse X9-8K aerial flight units' },
+      { name: 'Fast Delivery', detail: 'ACES color pipelines & DaVinci grading' },
+      { name: 'Staged Stills', detail: 'High-resolution premium photography' }
     ],
     packages: [
-      { name: 'Cinema Highlight', price: '$4,500', duration: 'Full Day Capture', details: ['1 Lead Cinematographer', '4K Master Files Delivery', '3-Minute Cinematic Trailer', 'Color Graded (DaVinci Resolve)'] },
-      { name: 'Premier Multi-Cam', price: '$9,200', duration: 'Multi-Day Events', details: ['3 Cinematographers + Jib', '8K Raw Master Delivery', '10-Minute Narrative Film', 'Full Event Documentary Edit'] }
+      {
+        name: 'Cinema Highlights',
+        duration: 'Single Day Coverage',
+        details: [
+          '2 Lead Cinematographers',
+          '4K Master File Deliverables',
+          '3-Minute Edited Highlight Film',
+          'Color Graded Stills'
+        ]
+      },
+      {
+        name: 'Elite Production Set',
+        duration: 'Multi-Day Events',
+        details: [
+          'Multi-Cam Setup + Jib Crane',
+          '8K Raw Cinema Backup',
+          '10-Minute Narrative Aftermovie',
+          'Licensed Drone Flythrough Sequences'
+        ]
+      }
     ],
     faqs: [
-      { q: 'What is your turnaround time for color grading?', a: 'Standard delivery is 14 days, but a 48-hour rush highlight is available upon package upgrade.' },
-      { q: 'Do you deliver raw footage?', a: 'Yes, full raw footage backup can be provided on encrypted high-speed SSDs.' }
+      { q: 'What is the delivery turnaround?', a: 'Highlight reels are delivered within 14 days, with options for 48-hour express production.' },
+      { q: 'Can we get all raw footage?', a: 'Yes, we transfer all unedited files onto high-speed SSDs upon project wrap.' }
     ]
   },
-  'aerial-assets': {
-    title: 'Structural Aerial Assets',
-    tagline: 'High-altitude flight mapping and cinematic tracking shots.',
-    description: 'Fully licensed drone maneuvers designed to establish venue majesty. We orchestrate dual-operator flight grids, capturing synchronous wide tracking pans and aerial perspective mapping for large-scale outdoor events.',
-    icon: Compass,
-    heroImage: 'https://images.unsplash.com/photo-1506157786151-b8491531f063?w=1800',
+  'creative-services': {
+    title: 'Creative Services',
+    tagline: 'Branding, graphic design, and custom motion animation assets.',
+    description: 'Sculpting the visual identity of your events. We craft custom event logos, stage graphics, social media promotions, physical brochures, flyers, and dynamic motion animations to drive engagement.',
+    icon: Palette,
+    heroImage: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1800',
     techStack: [
-      { name: 'UAV Aircraft', detail: 'DJI Inspire 3 & Custom Heavy-Lift FPVs' },
-      { name: 'Camera Payloads', detail: 'Zenmuse X9-8K Air' },
-      { name: 'Flight Clearance', detail: 'FAA Part 107 Certified / Local airspace mapping' },
-      { name: 'Max Flight Time', detail: 'Continuous rotation batteries' }
+      { name: 'Vector Branding', detail: 'Illustrator logo & branding guidelines' },
+      { name: 'Dynamic Animation', detail: 'After Effects stage loops' },
+      { name: 'Print Specs', detail: 'High-resolution CMYK print files' },
+      { name: 'Stage Visuals', detail: 'Thematic backdrop presentation layouts' }
     ],
     packages: [
-      { name: 'Aerial Establishers', price: '$2,800', duration: '4 Hours Active Flight', details: ['1 Certified Drone Pilot', '4K ProRes 422 HQ Clips', '10 Edited Aerial Stills', 'Airspace Clearance Filing Included'] },
-      { name: 'FPV Flythrough & Chase', price: '$5,500', duration: 'Full Day Capture', details: ['1 Pilot + 1 Spotter', 'High-Speed Indoor/Outdoor FPV Rigs', 'Virtual Reality Goggles Output Feed', 'Seamless Edited flythrough compilation'] }
+      {
+        name: 'Event Branding Pack',
+        duration: 'Visual Collaterals',
+        details: [
+          'Custom Logo & Identity Guides',
+          'Print-Ready Flyer & Brochure Layouts',
+          'Sticker & Badge Vector Assets',
+          'Digital Invite Designs'
+        ]
+      },
+      {
+        name: 'Motion & Stage Graphics',
+        duration: 'High-Impact Screen Assets',
+        details: [
+          'Custom Stage LED Loop Animations',
+          '3D Countdown Motion Graphics',
+          'Social Media Promo Videos',
+          'Dynamic Presentation Master Deck'
+        ]
+      }
     ],
     faqs: [
-      { q: 'Can you fly in adverse weather conditions?', a: 'Flights are subject to wind speeds under 25mph and light rain. Safety and FAA guidelines are prioritised.' },
-      { q: 'Do you cover indoor spaces with drones?', a: 'Yes! Our custom micro-FPV drones feature guarded rotors designed for indoor flythroughs.' }
+      { q: 'Can you work with existing brand guides?', a: 'Absolutely. We align all typography, colors, and asset sizes with your corporate design system.' },
+      { q: 'Do you provide print services?', a: 'We provide print-ready source files, and can coordinate with printing vendors for quality checks.' }
     ]
   },
-  'live-broadcast': {
-    title: 'Low-Latency Live Broadcast',
-    tagline: 'Ultra-low latency television & digital web streaming.',
-    description: 'We build local broadcast stations inside venues. Featuring high-grade hardware switchers, zero-delay wireless transmitters, and robust network bonding, we broadcast crystal clear content to millions.',
-    icon: Radio,
+  'digital-marketing': {
+    title: 'Digital Marketing',
+    tagline: 'Strategic social campaigns, content creation, and event promotion.',
+    description: 'Amplifying event reach and brand presence. We specialize in target audience generation, social media management, organic search optimization, online ticket promotions, and targeted ad campaigns.',
+    icon: Megaphone,
+    heroImage: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1800',
+    techStack: [
+      { name: 'Targeted Campaigns', detail: 'Meta Ads Manager & Search PPC' },
+      { name: 'Content Copy', detail: 'Campaign scriptwriting & copy' },
+      { name: 'Traffic Monitoring', detail: 'Pixel trackers & analytics integrations' },
+      { name: 'SEO Auditing', detail: 'Optimizing local search keywords' }
+    ],
+    packages: [
+      {
+        name: 'Social Promotion Pack',
+        duration: '4-Week Campaigns',
+        details: [
+          'Meta & Search Ad Account Setup',
+          'Creative Graphic Advertisements',
+          'Weekly Performance Reports',
+          'Target Location Optimization'
+        ]
+      },
+      {
+        name: 'Omnichannel Amplification',
+        duration: 'Complete Campaign Management',
+        details: [
+          'Viral Content Reels & Script Writing',
+          'PR Outreach & Online Press Releases',
+          'Ticketing Platform System Integration',
+          'SEO Booster for Event Pages'
+        ]
+      }
+    ],
+    faqs: [
+      { q: 'Do you guarantee event ticket sales?', a: 'While ticket sales depend on artist draw, our campaigns maximize reach and click-through rates.' },
+      { q: 'Is the budget for ads included?', a: 'Ad spends are paid directly to the platforms, while our package covers strategy, design, and management.' }
+    ]
+  },
+  'event-production': {
+    title: 'Event Production',
+    tagline: 'Stage design, LED walls, audio systems, and professional lighting.',
+    description: 'Building spectacular environments. We construct heavy-duty stages, deploy massive LED screens, design custom truss setups, align sound systems, and install professional light rigs for maximum sensory impact.',
+    icon: Layers,
     heroImage: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1800',
     techStack: [
-      { name: 'Video Switchers', detail: 'Blackmagic ATEM Constellation 8K' },
-      { name: 'RF Transmitter', detail: 'Teradek Bolt 4K LT (Zero Delay)' },
-      { name: 'Network Bonding', detail: 'LiveU Solo PRO (Dual 5G + Ethernet)' },
-      { name: 'Streaming Target', detail: 'YouTube Live, RTMP servers, Zoom VIP' }
+      { name: 'LED Screens', detail: 'High-pitch indoor/outdoor grids' },
+      { name: 'Concert Audio', detail: 'Line arrays & professional mixing' },
+      { name: 'Heavy Trussing', detail: 'Aluminum stage & backdrop frames' },
+      { name: 'Lighting Rigs', detail: 'Moving heads, beam lasers & washes' }
     ],
     packages: [
-      { name: 'Digital Webcast', price: '$6,000', duration: 'Up to 5 Hours Stream', details: ['2 Static Cameras', 'RTMP Network Setup', 'Custom Graphic Overlays/Lower Thirds', 'VOD Recording Backup'] },
-      { name: 'Arena Broadcast Station', price: '$14,500', duration: 'Full Day Multi-Stream', details: ['6 Cameras (Wireless + Crane)', 'Live Instant Replay & Slow-Mo', 'Dual Network Backup Bonding', 'Dedicated Event Broadcast Director'] }
+      {
+        name: 'Staging & Sound Rig',
+        duration: 'Standard Production Scale',
+        details: [
+          'Truss Backdrop & stage panels',
+          'Professional Stage Lighting',
+          'Point-Source Front Sound System',
+          'On-Site Technical Crew'
+        ]
+      },
+      {
+        name: 'Elite Arena Production',
+        duration: 'Concert & Large Scale Festivals',
+        details: [
+          'Heavy Duty Aluminum Trussing Grid',
+          'Massive Pixel-Pitch LED Screen Walls',
+          'Line Array Concert Audio System',
+          'Interactive Beam Lasers & Moving Lights'
+        ]
+      }
     ],
     faqs: [
-      { q: 'What internet connection is required?', a: 'We leverage cellular bonding (combining multiple SIM networks), meaning we can stream from remote areas without venue WiFi.' },
-      { q: 'Can we integrate sponsorships into the stream?', a: 'Absolutely. We support pre-rendered commercials, dynamic sponsor logos, and custom lower-third designs.' }
+      { q: 'Do you supply backup power?', a: 'Yes, we provide silent generator units sized to cover the entire audio and stage lighting draw.' },
+      { q: 'Are your stages certified?', a: 'All our heavy truss setups and stage platforms undergo standard safety load calculations.' }
+    ]
+  },
+  'talent-entertainment': {
+    title: 'Talent & Entertainment',
+    tagline: 'Artist bookings, live bands, celebrity scheduling, and performers.',
+    description: 'Elevating events with elite entertainment. We manage direct booking and coordination for celebrities, event hosts, DJs, live acoustic bands, classical dancers, and custom performance acts.',
+    icon: Users,
+    heroImage: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1800',
+    techStack: [
+      { name: 'Artist Booking', detail: 'Direct agency liaising' },
+      { name: 'Runschedules', detail: 'Soundcheck & performance timing' },
+      { name: 'Rider Compliance', detail: 'Technical & hospitality riders' },
+      { name: 'Backstage Ops', detail: 'Green room styling & security' }
+    ],
+    packages: [
+      {
+        name: 'Host & Live Music Booking',
+        duration: 'Event Night Scheduling',
+        details: [
+          'Professional Anchor/Emcee Allocation',
+          'Local Acoustic Bands Booking',
+          'Soundcheck & Staging Support',
+          'Backstage Coordinator allocation'
+        ]
+      },
+      {
+        name: 'Elite Artist Show',
+        duration: 'High-Profile Performances',
+        details: [
+          'Celebrity/A-list Booking Liaison',
+          'Full Rider Compliance Audits',
+          'Sound, Light & Visual Staged Cues',
+          'VIP Backstage Control & Escorts'
+        ]
+      }
+    ],
+    faqs: [
+      { q: 'How are artist fees paid?', a: 'Artist fees are paid directly to the management, while our package covers booking liaison and runsheet control.' },
+      { q: 'Can you suggest acts for our theme?', a: 'Yes, our booking office provides customized artist rosters based on your target audience.' }
+    ]
+  },
+  'equipment-rental': {
+    title: 'Equipment Rental',
+    tagline: 'High-end audio, video, lighting, and stage hardware.',
+    description: 'Rent premium event hardware on demand. We provide industry-standard sound boards, high-definition LED screens, stage lights, digital projectors, and advanced live-streaming hardware packages.',
+    icon: Wrench,
+    heroImage: 'https://images.unsplash.com/photo-1484755560693-a4074577af3a?w=1800',
+    techStack: [
+      { name: 'Hardware Audits', detail: 'High-frequency gear testing' },
+      { name: 'On-Time Delivery', detail: 'Dedicated transport fleet' },
+      { name: 'Setup Assistance', detail: 'Cabling & sound profile calibration' },
+      { name: 'Backup Spares', detail: 'Zero operational downtime spares' }
+    ],
+    packages: [
+      {
+        name: 'Basic Gear Rental',
+        duration: 'On-Demand Setup',
+        details: [
+          'Sound Monitors & Wired Mics',
+          'Projectors & Stand Screens',
+          'Basic LED Lights & Cable Rigs',
+          'Equipment Setup Engineers'
+        ]
+      },
+      {
+        name: 'Premium System Rental',
+        duration: 'High-End Configuration',
+        details: [
+          'Full Sound Line-Array Systems',
+          'Pixel-Pitch LED Panels & Stands',
+          'Digital Mixing & Audio Boards',
+          'Backup Silent Power Generators'
+        ]
+      }
+    ],
+    faqs: [
+      { q: 'Do you supply technicians with the rental?', a: 'Yes, all our rentals include certified equipment operators to set up and control the hardware.' },
+      { q: 'Can we rent individual items?', a: 'Certainly. We accommodate custom gear orders from individual microphones to massive LED setups.' }
     ]
   }
 };
@@ -82,7 +503,7 @@ export default function ServiceDetail() {
 
   if (!service) {
     return (
-      <div className="min-height-screen bg-bg-main text-white flex flex-col justify-center items-center py-20 px-8">
+      <div className="min-h-screen bg-bg-main text-white flex flex-col justify-center items-center py-20 px-8">
         <h2 className="text-3xl font-bold text-accent-gold mb-4">Service Not Found</h2>
         <Link to="/" className="inline-flex items-center text-white bg-accent-primary hover:bg-red-700 px-6 py-3 rounded-xl transition-all">
           <ArrowLeft className="w-5 h-5 mr-2" /> Back to Home
@@ -95,7 +516,7 @@ export default function ServiceDetail() {
 
   const handleBook = (e) => {
     e.preventDefault();
-    alert(`Inquiry sent for ${service.title} (${selectedPkg} Package). Our production unit will coordinate package pricing briefs shortly.`);
+    alert(`Inquiry sent for ${service.title} (${selectedPkg} Package). Our production unit will coordinate staging specifications and scheduling shortly.`);
   };
 
   return (
@@ -106,7 +527,7 @@ export default function ServiceDetail() {
 
       <div className="max-w-7xl mx-auto px-8">
         {/* Navigation */}
-        <Link to="/" className="inline-flex items-center text-accent-gold hover:text-white mb-8 text-sm font-semibold transition-colors">
+        <Link to="/services" className="inline-flex items-center text-accent-gold hover:text-white mb-8 text-sm font-semibold transition-colors">
           <ArrowLeft className="w-4 h-4 mr-2" /> Back to Capabilities
         </Link>
 
@@ -122,10 +543,10 @@ export default function ServiceDetail() {
             <p className="text-accent-gold text-lg md:text-xl font-medium mt-2">{service.tagline}</p>
             <p className="text-text-muted mt-6 leading-relaxed text-base">{service.description}</p>
 
-            {/* Technical Specs */}
+            {/* Core Capabilities */}
             <div className="mt-8 space-y-3">
               <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center">
-                <Cpu className="w-4 h-4 text-accent-gold mr-2" /> Standard Hardware & Integration
+                <Sparkles className="w-4 h-4 text-accent-gold mr-2" /> Core Expertise & Capabilities
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
                 {service.techStack.map((tech, idx) => (
@@ -149,9 +570,9 @@ export default function ServiceDetail() {
             <div className="absolute bottom-6 left-6 right-6">
               <div className="bg-bg-card/90 backdrop-blur-md p-4 rounded-2xl border border-border-color">
                 <span className="text-xs text-accent-gold uppercase font-bold tracking-wider flex items-center">
-                  <Sparkles className="w-3.5 h-3.5 mr-1" /> Elite Hardware Configurations
+                  <Sparkles className="w-3.5 h-3.5 mr-1" /> Premium Quality Execution
                 </span>
-                <span className="text-xs text-text-muted mt-1 block">Deploying certified systems for flawless operational performance.</span>
+                <span className="text-xs text-text-muted mt-1 block">Deploying certified resources for flawless operational performance.</span>
               </div>
             </div>
           </div>
@@ -160,8 +581,8 @@ export default function ServiceDetail() {
         {/* Packages Grid */}
         <section className="mb-16">
           <div className="text-center max-w-xl mx-auto mb-10">
-            <h2 className="text-3xl font-extrabold text-white">Select Pricing Layouts</h2>
-            <p className="text-text-muted mt-2 text-sm">Review standard budgets built around equipment scale and operation times.</p>
+            <h2 className="text-3xl font-extrabold text-white">Staging & Service Options</h2>
+            <p className="text-text-muted mt-2 text-sm">Select the operational scale and service depth required for your concept.</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
@@ -169,12 +590,12 @@ export default function ServiceDetail() {
               <div 
                 key={idx} 
                 className={`border rounded-3xl p-8 flex flex-col justify-between transition-all relative ${
-                  pkg.name.includes('Premier') || pkg.name.includes('Arena')
+                  pkg.name.includes('Premier') || pkg.name.includes('Arena') || pkg.name.includes('Bespoke') || pkg.name.includes('Elite') || pkg.name.includes('Grand') || pkg.name.includes('Premium')
                     ? 'bg-bg-card border-accent-gold shadow-accent-gold/5' 
                     : 'bg-bg-surface border-border-color hover:border-accent-primary'
                 }`}
               >
-                {pkg.name.includes('Premier') || pkg.name.includes('Arena') ? (
+                {pkg.name.includes('Premier') || pkg.name.includes('Arena') || pkg.name.includes('Bespoke') || pkg.name.includes('Elite') || pkg.name.includes('Grand') || pkg.name.includes('Premium') ? (
                   <span className="absolute -top-3.5 right-6 bg-accent-gold text-bg-main font-extrabold text-[10px] tracking-widest uppercase px-3 py-1 rounded-full border border-bg-main">
                     Highly Requested
                   </span>
@@ -182,10 +603,7 @@ export default function ServiceDetail() {
                 <div>
                   <h3 className="text-xl font-bold text-white">{pkg.name}</h3>
                   <p className="text-xs text-text-muted mt-1">{pkg.duration}</p>
-                  <div className="mt-4 flex items-baseline">
-                    <span className="text-4xl font-extrabold text-accent-gold">{pkg.price}</span>
-                    <span className="text-xs text-text-muted ml-2">/ starting brief</span>
-                  </div>
+                  
                   <ul className="mt-6 space-y-3 border-t border-border-color/60 pt-6">
                     {pkg.details.map((detail, dIdx) => (
                       <li key={dIdx} className="text-sm text-text-muted flex items-center">

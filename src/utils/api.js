@@ -101,6 +101,16 @@ export const api = {
     return res.json();
   },
 
+  createPaymentIntent: async (amount, currency = 'inr') => {
+    const res = await fetch(`${API_BASE_URL}/payments/create-payment-intent`, {
+      method: 'POST',
+      headers: getHeaders(false),
+      body: JSON.stringify({ amount, currency })
+    });
+    if (!res.ok) throw new Error('Failed to initialize payment session.');
+    return res.json();
+  },
+
   getBookings: async () => {
     const res = await fetch(`${API_BASE_URL}/bookings`, {
       headers: getHeaders(true)
