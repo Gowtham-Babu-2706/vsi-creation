@@ -1,22 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import {
-  ArrowLeft,
-  Sparkles,
-  Send,
-  Briefcase,
-  GraduationCap,
-  Music,
-  Heart,
-  Cake,
-  Truck,
-  Video,
-  Palette,
-  Megaphone,
-  Layers,
-  Users,
-  Wrench
-} from 'lucide-react';
+import * as Icons from 'lucide-react';
+import { api } from '../utils/api';
 
 const SERVICE_DATA = {
   'event-management': {
@@ -491,28 +476,117 @@ const SERVICE_DATA = {
 
 export default function ServiceDetail() {
   const { id } = useParams();
-  const service = SERVICE_DATA[id];
+  const [service, setService] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [selectedPkg, setSelectedPkg] = useState('');
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (service) {
-      setSelectedPkg(service.packages[0].name);
-    }
-  }, [id, service]);
+    const fetchService = async () => {
+      try {
+        setLoading(true);
+        const dbService = await api.getServiceById(id);
+        const staticData = SERVICE_DATA[id] || {
+          techStack: [
+            { name: 'On-Ground Direction', detail: 'Runschedules & stage management' },
+            { name: 'Vendor Liaison', detail: 'Logistics, permits & clearances' },
+            { name: 'RSVP Grids', detail: 'Invitee check-lists & tracking' },
+            { name: 'Technical Support', detail: 'Stage lighting & audio support' }
+          ],
+          packages: [
+            {
+              name: 'Standard Execution',
+              duration: 'Standard Execution Flow',
+              details: [
+                'End-to-End Coordination',
+                'Staging Sound & Light Coordination',
+                'Event Runsheets & Schedules',
+                'Technical Crew Support'
+              ]
+            },
+            {
+              name: 'Bespoke Premium Setup',
+              duration: 'Premium Production Staging',
+              details: [
+                'Full Venue Styling Design',
+                'Direct Creative Direction',
+                '24/7 Staging Coordination Desk',
+                'Custom Visual Loops & Displays'
+              ]
+            }
+          ],
+          faqs: [
+            { q: 'What is the booking window?', a: 'We recommend initiating the brief at least 4-6 weeks prior to the event date to secure crew schedules.' },
+            { q: 'Do you support custom configurations?', a: 'Yes, we customize sound, lighting, and stage setup size to match your exact spatial requirements.' }
+          ]
+        };
+
+        const mergedService = {
+          id: dbService.id,
+          title: dbService.title,
+          tagline: dbService.tagline,
+          description: dbService.description,
+          banner: dbService.banner || staticData.heroImage,
+          icon: dbService.icon,
+          techStack: staticData.techStack,
+          packages: staticData.packages,
+          faqs: staticData.faqs
+        };
+        setService(mergedService);
+        if (mergedService.packages && mergedService.packages.length > 0) {
+          setSelectedPkg(mergedService.packages[0].name);
+        }
+      } catch (err) {
+        console.error('Failed to load service from DB, falling back to static data:', err);
+        const staticService = SERVICE_DATA[id];
+        if (staticService) {
+          const mappedStatic = {
+            id,
+            title: staticService.title,
+            tagline: staticService.tagline,
+            description: staticService.description,
+            banner: staticService.heroImage,
+            icon: staticService.icon,
+            techStack: staticService.techStack,
+            packages: staticService.packages,
+            faqs: staticService.faqs
+          };
+          setService(mappedStatic);
+          setSelectedPkg(staticService.packages[0].name);
+        } else {
+          setService(null);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchService();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-bg-main text-white flex flex-col justify-center items-center py-20 gap-4">
+        <div className="w-10 h-10 border-4 border-accent-gold border-t-transparent rounded-full animate-spin"></div>
+        <span className="text-xs text-text-muted font-semibold uppercase tracking-widest animate-pulse">Loading Capabilities...</span>
+      </div>
+    );
+  }
 
   if (!service) {
     return (
       <div className="min-h-screen bg-bg-main text-white flex flex-col justify-center items-center py-20 px-8">
         <h2 className="text-3xl font-bold text-accent-gold mb-4">Service Not Found</h2>
         <Link to="/" className="inline-flex items-center text-white bg-accent-primary hover:bg-red-700 px-6 py-3 rounded-xl transition-all">
-          <ArrowLeft className="w-5 h-5 mr-2" /> Back to Home
+          <Icons.ArrowLeft className="w-5 h-5 mr-2" /> Back to Home
         </Link>
       </div>
     );
   }
 
-  const IconComponent = service.icon;
+  const IconComponent = typeof service.icon === 'string' 
+    ? (Icons[service.icon] || Icons.HelpCircle) 
+    : (service.icon || Icons.HelpCircle);
 
   const handleBook = (e) => {
     e.preventDefault();
@@ -528,7 +602,7 @@ export default function ServiceDetail() {
       <div className="max-w-7xl mx-auto px-8">
         {/* Navigation */}
         <Link to="/services" className="inline-flex items-center text-accent-gold hover:text-white mb-8 text-sm font-semibold transition-colors">
-          <ArrowLeft className="w-4 h-4 mr-2" /> Back to Capabilities
+          <Icons.ArrowLeft className="w-4 h-4 mr-2" /> Back to Capabilities
         </Link>
 
         {/* Hero Section */}
@@ -546,10 +620,10 @@ export default function ServiceDetail() {
             {/* Core Capabilities */}
             <div className="mt-8 space-y-3">
               <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center">
-                <Sparkles className="w-4 h-4 text-accent-gold mr-2" /> Core Expertise & Capabilities
+                <Icons.Sparkles className="w-4 h-4 text-accent-gold mr-2" /> Core Expertise & Capabilities
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
-                {service.techStack.map((tech, idx) => (
+                {service.techStack && service.techStack.map((tech, idx) => (
                   <div key={idx} className="bg-bg-surface border border-border-color p-4 rounded-xl">
                     <span className="text-xs text-text-muted block font-semibold">{tech.name}</span>
                     <span className="text-sm text-white font-medium mt-1 block">{tech.detail}</span>
@@ -562,7 +636,7 @@ export default function ServiceDetail() {
           {/* Visual Showcase */}
           <div className="h-[400px] rounded-3xl overflow-hidden border border-border-color shadow-2xl relative group">
             <img 
-              src={service.heroImage} 
+              src={service.banner} 
               alt={service.title} 
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
@@ -570,7 +644,7 @@ export default function ServiceDetail() {
             <div className="absolute bottom-6 left-6 right-6">
               <div className="bg-bg-card/90 backdrop-blur-md p-4 rounded-2xl border border-border-color">
                 <span className="text-xs text-accent-gold uppercase font-bold tracking-wider flex items-center">
-                  <Sparkles className="w-3.5 h-3.5 mr-1" /> Premium Quality Execution
+                  <Icons.Sparkles className="w-3.5 h-3.5 mr-1" /> Premium Quality Execution
                 </span>
                 <span className="text-xs text-text-muted mt-1 block">Deploying certified resources for flawless operational performance.</span>
               </div>
@@ -586,7 +660,7 @@ export default function ServiceDetail() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {service.packages.map((pkg, idx) => (
+            {service.packages && service.packages.map((pkg, idx) => (
               <div 
                 key={idx} 
                 className={`border rounded-3xl p-8 flex flex-col justify-between transition-all relative ${
@@ -634,7 +708,7 @@ export default function ServiceDetail() {
           <section className="bg-bg-surface border border-border-color p-8 rounded-3xl">
             <h2 className="text-2xl font-bold text-white mb-6">Service FAQ</h2>
             <div className="space-y-6">
-              {service.faqs.map((faq, idx) => (
+              {service.faqs && service.faqs.map((faq, idx) => (
                 <div key={idx} className="border-b border-border-color pb-4 last:border-0 last:pb-0">
                   <h4 className="text-base font-semibold text-white">{faq.q}</h4>
                   <p className="text-sm text-text-muted mt-2 leading-relaxed">{faq.a}</p>
@@ -676,7 +750,7 @@ export default function ServiceDetail() {
                 type="submit" 
                 className="w-full py-4 bg-gradient-to-r from-accent-primary to-[#700016] text-sm text-white font-bold rounded-xl border border-accent-gold/20 hover:border-accent-gold shadow-lg shadow-accent-primary/20 hover:shadow-accent-primary/40 hover:-translate-y-0.5 transition-all flex items-center justify-center cursor-pointer"
               >
-                <Send className="w-4 h-4 mr-2" /> Send Production Brief
+                <Icons.Send className="w-4 h-4 mr-2" /> Send Production Brief
               </button>
             </form>
           </section>

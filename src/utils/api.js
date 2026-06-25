@@ -126,5 +126,97 @@ export const api = {
     });
     if (!res.ok) throw new Error('Failed to remove registration record.');
     return true;
+  },
+
+  // Services
+  getServices: async () => {
+    const res = await fetch(`${API_BASE_URL}/services`, {
+      headers: getHeaders(false)
+    });
+    if (!res.ok) throw new Error('Failed to retrieve services catalog.');
+    return res.json();
+  },
+
+  getServiceById: async (id) => {
+    const res = await fetch(`${API_BASE_URL}/services/${id}`, {
+      headers: getHeaders(false)
+    });
+    if (!res.ok) throw new Error('Service details not found.');
+    return res.json();
+  },
+
+  createService: async (serviceData) => {
+    const res = await fetch(`${API_BASE_URL}/services`, {
+      method: 'POST',
+      headers: getHeaders(true),
+      body: JSON.stringify(serviceData)
+    });
+    if (!res.ok) throw new Error('Failed to configure new service.');
+    return res.json();
+  },
+
+  updateService: async (id, serviceData) => {
+    const res = await fetch(`${API_BASE_URL}/services/${id}`, {
+      method: 'PUT',
+      headers: getHeaders(true),
+      body: JSON.stringify(serviceData)
+    });
+    if (!res.ok) throw new Error('Failed to modify service details.');
+    return res.json();
+  },
+
+  deleteService: async (id) => {
+    const res = await fetch(`${API_BASE_URL}/services/${id}`, {
+      method: 'DELETE',
+      headers: getHeaders(true)
+    });
+    if (!res.ok) throw new Error('Failed to delete service.');
+    return true;
+  },
+
+  // Gallery
+  getGallery: async () => {
+    const res = await fetch(`${API_BASE_URL}/gallery`, {
+      headers: getHeaders(false)
+    });
+    if (!res.ok) throw new Error('Failed to retrieve gallery events.');
+    return res.json();
+  },
+
+  getGalleryById: async (id) => {
+    const res = await fetch(`${API_BASE_URL}/gallery/${id}`, {
+      headers: getHeaders(false)
+    });
+    if (!res.ok) throw new Error('Gallery event details not found.');
+    return res.json();
+  },
+
+  createGalleryEvent: async (galleryData) => {
+    const res = await fetch(`${API_BASE_URL}/gallery`, {
+      method: 'POST',
+      headers: getHeaders(true),
+      body: JSON.stringify(galleryData)
+    });
+    if (!res.ok) throw new Error('Failed to publish new gallery event.');
+    return res.json();
+  },
+
+  updateGalleryEvent: async (id, galleryData) => {
+    const res = await fetch(`${API_BASE_URL}/gallery/${id}`, {
+      method: 'PUT',
+      headers: getHeaders(true),
+      body: JSON.stringify(galleryData)
+    });
+    if (!res.ok) throw new Error('Failed to modify gallery event.');
+    return res.json();
+  },
+
+  deleteGalleryEvent: async (id) => {
+    const res = await fetch(`${API_BASE_URL}/gallery/${id}`, {
+      method: 'DELETE',
+      headers: getHeaders(true)
+    });
+    if (!res.ok) throw new Error('Failed to remove gallery event.');
+    return true;
   }
 };

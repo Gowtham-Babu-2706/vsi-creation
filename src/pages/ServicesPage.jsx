@@ -128,7 +128,33 @@ const SERVICES = [
   }
 ];
 
+import { useState, useEffect } from 'react';
+import * as Icons from 'lucide-react';
+import { api } from '../utils/api';
+
 export default function ServicesPage() {
+  const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const data = await api.getServices();
+        if (data && data.length > 0) {
+          setServices(data);
+        } else {
+          setServices(SERVICES);
+        }
+      } catch (err) {
+        console.error('Failed to fetch services, using fallback data:', err);
+        setServices(SERVICES);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchServices();
+  }, []);
+
   return (
     <div className="bg-bg-main text-text-main min-h-screen pt-24 pb-16 relative">
       {/* Spotlights */}
@@ -139,7 +165,7 @@ export default function ServicesPage() {
         {/* Page Header */}
         <div className="text-center md:text-left max-w-2xl space-y-3">
           <span className="text-xs text-accent-gold font-bold uppercase tracking-[4px] glow-gold flex items-center justify-center md:justify-start gap-1">
-            <Sparkles className="w-4 h-4 text-accent-primary" /> Premium Capabilities
+            <Icons.Sparkles className="w-4 h-4 text-accent-primary" /> Premium Capabilities
           </span>
           <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">
             Production Ecosystem
@@ -149,57 +175,65 @@ export default function ServicesPage() {
           </p>
         </div>
 
-        {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {SERVICES.map((service) => {
-            const Icon = service.icon;
-            return (
-              <div
-                key={service.id}
-                className="bg-bg-card border border-border-color rounded-3xl overflow-hidden hover:border-accent-gold/45 hover:-translate-y-2 hover:shadow-2xl hover:shadow-accent-primary/10 transition-all duration-300 group flex flex-col justify-between"
-              >
-                <Link to={`/services/${service.id}`} className="block flex-grow cursor-pointer">
-                  {/* Image Banner */}
-                  <div className="h-48 overflow-hidden relative border-b border-border-color/40">
-                    <img
-                      src={service.banner}
-                      alt={service.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-bg-card via-transparent to-transparent"></div>
-                    
-                    {/* Badge Number */}
-                    <div className="absolute top-4 left-4 w-10 h-10 bg-bg-main/80 backdrop-blur-md border border-border-color text-accent-gold font-black text-xs rounded-xl flex items-center justify-center">
-                      {service.num}
-                    </div>
-                  </div>
-
-                  <div className="p-6 space-y-4">
-                    <div className="flex items-center gap-2">
-                      <div className="p-2 bg-accent-primary/10 border border-accent-primary/20 rounded-xl text-accent-gold">
-                        <Icon className="w-5 h-5" />
-                      </div>
-                      <h3 className="text-lg font-bold text-white group-hover:text-accent-gold transition-colors">
-                        {service.title}
-                      </h3>
-                    </div>
-                    <p className="text-xs text-accent-gold font-medium">{service.tagline}</p>
-                    <p className="text-xs text-text-muted leading-relaxed line-clamp-3">
-                      {service.desc}
-                    </p>
-                  </div>
-                </Link>
-
-                <Link
-                  to={`/contact?service=${service.id}`}
-                  className="px-6 pb-6 pt-2 flex items-center text-xs text-accent-gold font-bold uppercase tracking-wider gap-1 hover:text-white transition-colors cursor-pointer"
+        {loading ? (
+          <div className="flex flex-col justify-center items-center py-20 gap-4">
+            <div className="w-10 h-10 border-4 border-accent-gold border-t-transparent rounded-full animate-spin"></div>
+            <span className="text-xs text-text-muted font-semibold uppercase tracking-widest animate-pulse">Loading Capabilities...</span>
+          </div>
+        ) : (
+          /* Services Grid */
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {services.map((service) => {
+              // Dynamically resolve icon component
+              const IconComponent = Icons[service.icon] || Icons.HelpCircle;
+              return (
+                <div
+                  key={service.id}
+                  className="bg-bg-card border border-border-color rounded-3xl overflow-hidden hover:border-accent-gold/45 hover:-translate-y-2 hover:shadow-2xl hover:shadow-accent-primary/10 transition-all duration-300 group flex flex-col justify-between"
                 >
-                  Explore Technology <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </div>
-            );
-          })}
-        </div>
+                  <Link to={`/services/${service.id}`} className="block flex-grow cursor-pointer">
+                    {/* Image Banner */}
+                    <div className="h-48 overflow-hidden relative border-b border-border-color/40">
+                      <img
+                        src={service.banner}
+                        alt={service.title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-bg-card via-transparent to-transparent"></div>
+                      
+                      {/* Badge Number */}
+                      <div className="absolute top-4 left-4 w-10 h-10 bg-bg-main/80 backdrop-blur-md border border-border-color text-accent-gold font-black text-xs rounded-xl flex items-center justify-center">
+                        {service.num}
+                      </div>
+                    </div>
+
+                    <div className="p-6 space-y-4">
+                      <div className="flex items-center gap-2">
+                        <div className="p-2 bg-accent-primary/10 border border-accent-primary/20 rounded-xl text-accent-gold">
+                          <IconComponent className="w-5 h-5" />
+                        </div>
+                        <h3 className="text-lg font-bold text-white group-hover:text-accent-gold transition-colors">
+                          {service.title}
+                        </h3>
+                      </div>
+                      <p className="text-xs text-accent-gold font-medium">{service.tagline}</p>
+                      <p className="text-xs text-text-muted leading-relaxed line-clamp-3">
+                        {service.description}
+                      </p>
+                    </div>
+                  </Link>
+
+                  <Link
+                    to={`/contact?service=${service.id}`}
+                    className="px-6 pb-6 pt-2 flex items-center text-xs text-accent-gold font-bold uppercase tracking-wider gap-1 hover:text-white transition-colors cursor-pointer"
+                  >
+                    Explore Technology <Icons.ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

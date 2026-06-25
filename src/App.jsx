@@ -8,17 +8,12 @@ import EventDetail from './pages/EventDetail';
 import ServiceDetail from './pages/ServiceDetail';
 import GalleryPage from './pages/GalleryPage';
 import GalleryDetail from './pages/GalleryDetail';
-import Login from './pages/Login';
-import AdminDashboard from './pages/AdminDashboard';
 import ServicesPage from './pages/ServicesPage';
 import ContactPage from './pages/ContactPage';
 import { api } from './utils/api';
 import { IntroLogo3D } from './components/SpinningLogo3D';
 import vsiLogo from './assets/logo.png';
 import './App.css';
-
-const ProtectedRoute = ({ children }) =>
-  api.isAuthenticated() ? children : <Navigate to="/login" replace />;
 
 const NAV_LINKS = [
   { label: 'Home',     to: '/' },
@@ -155,15 +150,6 @@ function App() {
           <Route path="/contact"       element={<ContactPage />} />
           <Route path="/gallery"       element={<GalleryPage />} />
           <Route path="/gallery/:id"   element={<GalleryDetail />} />
-          <Route path="/login"         element={<Login />} />
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute>
-                <AdminDashboard />
-              </ProtectedRoute>
-            }
-          />
         </Routes>
       </main>
 

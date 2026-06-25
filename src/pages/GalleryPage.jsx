@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Search, SlidersHorizontal, Images, Sparkles } from 'lucide-react';
-import { getGalleryEvents } from '../utils/galleryData';
+import { GALLERY_EVENTS } from '../utils/galleryData';
 import GalleryCard from '../components/GalleryCard';
+import { api } from '../utils/api';
 
 const CATEGORIES = [
   { id: 'all',                   label: 'All Events' },
@@ -22,10 +23,23 @@ export default function GalleryPage() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const data = getGalleryEvents();
-    setEvents(data);
-    const t = setTimeout(() => setLoading(false), 700);
-    return () => clearTimeout(t);
+    const fetchGallery = async () => {
+      try {
+        setLoading(true);
+        const data = await api.getGallery();
+        if (data && data.length > 0) {
+          setEvents(data);
+        } else {
+          setEvents(GALLERY_EVENTS);
+        }
+      } catch (err) {
+        console.error('Failed to fetch gallery events, using fallback:', err);
+        setEvents(GALLERY_EVENTS);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchGallery();
   }, []);
 
   const filtered = events.filter((ev) => {

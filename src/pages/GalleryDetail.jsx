@@ -7,6 +7,7 @@ import {
 import { getGalleryEventById } from '../utils/galleryData';
 import VideoPlayer from '../components/VideoPlayer';
 import Lightbox from '../components/Lightbox';
+import { api } from '../utils/api';
 
 export default function GalleryDetail() {
   const { id } = useParams();
@@ -19,9 +20,23 @@ export default function GalleryDetail() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const data = getGalleryEventById(id);
-    setEvent(data);
-    setLoading(false);
+    const fetchEvent = async () => {
+      try {
+        setLoading(true);
+        const data = await api.getGalleryById(id);
+        if (data) {
+          setEvent(data);
+        } else {
+          setEvent(getGalleryEventById(id));
+        }
+      } catch (err) {
+        console.error('Failed to fetch gallery event by id, using fallback:', err);
+        setEvent(getGalleryEventById(id));
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchEvent();
   }, [id]);
 
   const openLightbox = (images, idx) => {
