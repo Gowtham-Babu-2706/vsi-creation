@@ -8,7 +8,7 @@ const SERVICE_DATA = {
     title: 'Event Management',
     tagline: 'End-to-end planning, execution, and coordination for premium events.',
     description: 'We turn your concepts into reality. From high-profile corporate galas to immersive brand launches and massive trade shows, our production team handles scheduling, design, vendor management, and execution flawlessly.',
-    icon: Briefcase,
+    icon: 'Briefcase',
     heroImage: 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=1800',
     techStack: [
       { name: 'Staging Blueprint', detail: 'Custom blueprints & CAD layouts' },
@@ -47,7 +47,7 @@ const SERVICE_DATA = {
     title: 'College & Educational Events',
     tagline: 'Energetic cultural fests, academic symposiums, and college events.',
     description: 'Empowering student communities and academic institutions with high-production value. We specialize in coordinating multi-day college festivals, tech expos, seminars, and graduation ceremonies.',
-    icon: GraduationCap,
+    icon: 'GraduationCap',
     heroImage: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1800',
     techStack: [
       { name: 'Youth Staging', detail: 'High-energy light & sound grids' },
@@ -86,7 +86,7 @@ const SERVICE_DATA = {
     title: 'Cultural Programs',
     tagline: 'Celebrating art, heritage, and community through grand staging.',
     description: 'Bringing local and international heritage to life. We orchestrate grand traditional dance performances, music festivals, theater productions, and community cultural celebrations with specialized acoustic and visual design.',
-    icon: Music,
+    icon: 'Music',
     heroImage: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=1800',
     techStack: [
       { name: 'Acoustic Calibration', detail: 'Tuned audio for folk & classical setups' },
@@ -125,7 +125,7 @@ const SERVICE_DATA = {
     title: 'Wedding Planning & Management',
     tagline: 'Immersive, luxurious, and custom-tailored wedding celebrations.',
     description: 'Your dream wedding, seamlessly orchestrated. We offer complete wedding design, custom theme building, guest logistics, vendor coordination, and live event direction to create unforgettable memories.',
-    icon: Heart,
+    icon: 'Heart',
     heroImage: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1800',
     techStack: [
       { name: 'Decor Design', detail: 'Thematic fabric, floral & stage setups' },
@@ -164,7 +164,7 @@ const SERVICE_DATA = {
     title: 'Birthday & Private Celebrations',
     tagline: 'Custom themes, vibrant styling, and intimate event coordination.',
     description: 'Crafting unforgettable milestones and intimate celebrations. Whether it is a grand milestone birthday, an anniversary, or a private dinner, we design customized experiences with curated styling.',
-    icon: Cake,
+    icon: 'Cake',
     heroImage: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=1800',
     techStack: [
       { name: 'Custom Themes', detail: 'Milestone, neon or vintage layouts' },
@@ -203,7 +203,7 @@ const SERVICE_DATA = {
     title: 'Event Coordination & Logistics',
     tagline: 'Precise vendor alignment, RSVP tracking, and on-ground management.',
     description: 'The backbone of every successful production. We manage complex crowd management, vendor operations, scheduling, permits, security grids, and physical logistics mapping for events of all scales.',
-    icon: Truck,
+    icon: 'Truck',
     heroImage: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1800',
     techStack: [
       { name: 'Fleet Tracking', detail: 'On-time venue transport grids' },
@@ -242,7 +242,7 @@ const SERVICE_DATA = {
     title: 'Media Production',
     tagline: 'High-fidelity photography, videography, and commercial film assets.',
     description: 'Staging high-quality visuals. Our camera units and production crews deliver professional event photography, drone flythroughs, corporate films, promotional videos, and full live coverage in pristine formats.',
-    icon: Video,
+    icon: 'Video',
     heroImage: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1800',
     techStack: [
       { name: 'Cinema Sensors', detail: 'RED V-Raptor 8K & Sony FX9' },
@@ -281,7 +281,7 @@ const SERVICE_DATA = {
     title: 'Creative Services',
     tagline: 'Branding, graphic design, and custom motion animation assets.',
     description: 'Sculpting the visual identity of your events. We craft custom event logos, stage graphics, social media promotions, physical brochures, flyers, and dynamic motion animations to drive engagement.',
-    icon: Palette,
+    icon: 'Palette',
     heroImage: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1800',
     techStack: [
       { name: 'Vector Branding', detail: 'Illustrator logo & branding guidelines' },
@@ -320,7 +320,7 @@ const SERVICE_DATA = {
     title: 'Digital Marketing',
     tagline: 'Strategic social campaigns, content creation, and event promotion.',
     description: 'Amplifying event reach and brand presence. We specialize in target audience generation, social media management, organic search optimization, online ticket promotions, and targeted ad campaigns.',
-    icon: Megaphone,
+    icon: 'Megaphone',
     heroImage: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1800',
     techStack: [
       { name: 'Targeted Campaigns', detail: 'Meta Ads Manager & Search PPC' },
@@ -359,7 +359,7 @@ const SERVICE_DATA = {
     title: 'Event Production',
     tagline: 'Stage design, LED walls, audio systems, and professional lighting.',
     description: 'Building spectacular environments. We construct heavy-duty stages, deploy massive LED screens, design custom truss setups, align sound systems, and install professional light rigs for maximum sensory impact.',
-    icon: Layers,
+    icon: 'Layers',
     heroImage: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1800',
     techStack: [
       { name: 'LED Screens', detail: 'High-pitch indoor/outdoor grids' },
@@ -398,7 +398,7 @@ const SERVICE_DATA = {
     title: 'Talent & Entertainment',
     tagline: 'Artist bookings, live bands, celebrity scheduling, and performers.',
     description: 'Elevating events with elite entertainment. We manage direct booking and coordination for celebrities, event hosts, DJs, live acoustic bands, classical dancers, and custom performance acts.',
-    icon: Users,
+    icon: 'Users',
     heroImage: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1800',
     techStack: [
       { name: 'Artist Booking', detail: 'Direct agency liaising' },
@@ -437,7 +437,7 @@ const SERVICE_DATA = {
     title: 'Equipment Rental',
     tagline: 'High-end audio, video, lighting, and stage hardware.',
     description: 'Rent premium event hardware on demand. We provide industry-standard sound boards, high-definition LED screens, stage lights, digital projectors, and advanced live-streaming hardware packages.',
-    icon: Wrench,
+    icon: 'Wrench',
     heroImage: 'https://images.unsplash.com/photo-1484755560693-a4074577af3a?w=1800',
     techStack: [
       { name: 'Hardware Audits', detail: 'High-frequency gear testing' },

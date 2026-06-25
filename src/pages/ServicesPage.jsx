@@ -1,21 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Sparkles,
-  Briefcase,
-  GraduationCap,
-  Music,
-  Heart,
-  Cake,
-  Truck,
-  Video,
-  Palette,
-  Megaphone,
-  Layers,
-  Users,
-  Wrench,
-  ChevronRight
-} from 'lucide-react';
+import * as Icons from 'lucide-react';
+import { api } from '../utils/api';
 
 const SERVICES = [
   {
@@ -24,7 +10,7 @@ const SERVICES = [
     title: 'Event Management',
     tagline: 'End-to-end planning, execution, and coordination for premium events.',
     desc: 'We turn your concepts into reality. From high-profile corporate galas to immersive brand launches and massive trade shows, our production team handles scheduling, design, vendor management, and execution flawlessly.',
-    icon: Briefcase,
+    icon: 'Briefcase',
     banner: 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=1000'
   },
   {
@@ -33,7 +19,7 @@ const SERVICES = [
     title: 'College & Educational Events',
     tagline: 'Energetic cultural fests, academic symposiums, and college events.',
     desc: 'Empowering student communities and academic institutions with high-production value. We specialize in coordinating multi-day college festivals, tech expos, seminars, and graduation ceremonies.',
-    icon: GraduationCap,
+    icon: 'GraduationCap',
     banner: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1000'
   },
   {
@@ -42,7 +28,7 @@ const SERVICES = [
     title: 'Cultural Programs',
     tagline: 'Celebrating art, heritage, and community through grand staging.',
     desc: 'Bringing local and international heritage to life. We orchestrate grand traditional dance performances, music festivals, theater productions, and community cultural celebrations with specialized acoustic and visual design.',
-    icon: Music,
+    icon: 'Music',
     banner: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=1000'
   },
   {
@@ -51,7 +37,7 @@ const SERVICES = [
     title: 'Wedding Planning & Management',
     tagline: 'Immersive, luxurious, and custom-tailored wedding celebrations.',
     desc: 'Your dream wedding, seamlessly orchestrated. We offer complete wedding design, custom theme building, guest logistics, vendor coordination, and live event direction to create unforgettable memories.',
-    icon: Heart,
+    icon: 'Heart',
     banner: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1000'
   },
   {
@@ -60,7 +46,7 @@ const SERVICES = [
     title: 'Birthday & Private Celebrations',
     tagline: 'Custom themes, vibrant styling, and intimate event coordination.',
     desc: 'Crafting unforgettable milestones and intimate celebrations. Whether it is a grand milestone birthday, an anniversary, or a private dinner, we design customized experiences with curated styling.',
-    icon: Cake,
+    icon: 'Cake',
     banner: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=1000'
   },
   {
@@ -69,7 +55,7 @@ const SERVICES = [
     title: 'Event Coordination & Logistics',
     tagline: 'Precise vendor alignment, RSVP tracking, and on-ground management.',
     desc: 'The backbone of every successful production. We manage complex crowd management, vendor operations, scheduling, permits, security grids, and physical logistics mapping for events of all scales.',
-    icon: Truck,
+    icon: 'Truck',
     banner: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1000'
   },
   {
@@ -78,7 +64,7 @@ const SERVICES = [
     title: 'Media Production',
     tagline: 'High-fidelity photography, videography, and commercial film assets.',
     desc: 'Staging high-quality visuals. Our camera units and production crews deliver professional event photography, drone flythroughs, corporate films, promotional videos, and full live coverage in pristine formats.',
-    icon: Video,
+    icon: 'Video',
     banner: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1000'
   },
   {
@@ -87,7 +73,7 @@ const SERVICES = [
     title: 'Creative Services',
     tagline: 'Branding, graphic design, and custom motion animation assets.',
     desc: 'Sculpting the visual identity of your events. We craft custom event logos, stage graphics, social media promotions, physical brochures, flyers, and dynamic motion animations to drive engagement.',
-    icon: Palette,
+    icon: 'Palette',
     banner: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1000'
   },
   {
@@ -96,7 +82,7 @@ const SERVICES = [
     title: 'Digital Marketing',
     tagline: 'Strategic social campaigns, content creation, and event promotion.',
     desc: 'Amplifying event reach and brand presence. We specialize in target audience generation, social media management, organic search optimization, online ticket promotions, and targeted ad campaigns.',
-    icon: Megaphone,
+    icon: 'Megaphone',
     banner: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1000'
   },
   {
@@ -105,7 +91,7 @@ const SERVICES = [
     title: 'Event Production',
     tagline: 'Stage design, LED walls, audio systems, and professional lighting.',
     desc: 'Building spectacular environments. We construct heavy-duty stages, deploy massive LED screens, design custom truss setups, align sound systems, and install professional light rigs for maximum sensory impact.',
-    icon: Layers,
+    icon: 'Layers',
     banner: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1000'
   },
   {
@@ -114,7 +100,7 @@ const SERVICES = [
     title: 'Talent & Entertainment',
     tagline: 'Artist bookings, live bands, celebrity scheduling, and performers.',
     desc: 'Elevating events with elite entertainment. We manage direct booking and coordination for celebrities, event hosts, DJs, live acoustic bands, classical dancers, and custom performance acts.',
-    icon: Users,
+    icon: 'Users',
     banner: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1000'
   },
   {
@@ -123,14 +109,12 @@ const SERVICES = [
     title: 'Equipment Rental',
     tagline: 'High-end audio, video, lighting, and stage hardware.',
     desc: 'Rent premium event hardware on demand. We provide industry-standard sound boards, high-definition LED screens, stage lights, digital projectors, and advanced live-streaming hardware packages.',
-    icon: Wrench,
+    icon: 'Wrench',
     banner: 'https://images.unsplash.com/photo-1484755560693-a4074577af3a?w=1000'
   }
 ];
 
-import { useState, useEffect } from 'react';
-import * as Icons from 'lucide-react';
-import { api } from '../utils/api';
+
 
 export default function ServicesPage() {
   const [services, setServices] = useState([]);
