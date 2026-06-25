@@ -1,32 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { X, CheckCircle2, AlertTriangle, User, Mail, Phone, MapPin, Sparkles, CreditCard, Lock, Ticket } from 'lucide-react';
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { api } from '../utils/api';
 
-// Replace with your real Stripe Publishable Key
-const STRIPE_PK = 'pk_test_51Pdummy_publishable_key_change_me_to_your_real_stripe_test_pk';
-
-const stripePromise = loadStripe(STRIPE_PK).catch(() => null); // null = mock mode
-
-const CARD_ELEMENT_OPTIONS = {
-  style: {
-    base: {
-      color: '#f0f0f0',
-      fontFamily: '"Inter", "Helvetica Neue", Helvetica, sans-serif',
-      fontSmoothing: 'antialiased',
-      fontSize: '14px',
-      '::placeholder': { color: '#6b7280' },
-    },
-    invalid: { color: '#f87171', iconColor: '#f87171' },
-  },
+const loadRazorpayScript = () => {
+  return new Promise((resolve) => {
+    if (window.Razorpay) {
+      resolve(true);
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.async = true;
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
 };
 
-/* ─── Inner form (has access to Stripe hooks) ─── */
+/* ─── Inner form ─── */
 function RegistrationForm({ onClose, eventName, eventId, eventPrice }) {
-  const stripe    = useStripe();
-  const elements  = useElements();
-
   const [step, setStep]         = useState('details'); // 'details' | 'payment' | 'success'
   const [formData, setFormData] = useState({
     fullName: '', email: '', phone: '', city: '', age: '', participants: 1, notes: ''
@@ -38,7 +30,7 @@ function RegistrationForm({ onClose, eventName, eventId, eventPrice }) {
 
   const pricePerSeat  = typeof eventPrice === 'number' ? eventPrice : 0;
   const totalAmount   = pricePerSeat * Number(formData.participants || 1);
-  const amountInPaise = Math.round(totalAmount * 100); // Stripe uses smallest currency unit
+  const amountInPaise = Math.round(totalAmount * 100); // Razorpay uses smallest currency unit (paise)
 
   const validate = () => {
     const errs  = {};
@@ -66,7 +58,39 @@ function RegistrationForm({ onClose, eventName, eventId, eventPrice }) {
   /* Step 1 → Step 2 */
   const handleNextToPayment = (e) => {
     e.preventDefault();
-    if (validate()) setStep('payment');
+    if (validate()) {
+      if (pricePerSeat === 0) {
+        // Direct free registration bypasses payment screen
+        handleFreeSubmit();
+      } else {
+        setStep('payment');
+      }
+    }
+  };
+
+  const handleFreeSubmit = async () => {
+    setProcessing(true);
+    setErrors({});
+    try {
+      const transactionId = 'FREE_' + Date.now();
+      await api.createBooking({
+        ...formData,
+        age:          Number(formData.age),
+        participants: Number(formData.participants),
+        eventId,
+        eventName,
+        transactionId,
+        paymentStatus: 'FREE',
+        submittedAt:  new Date().toISOString(),
+      });
+      setTxId(transactionId);
+      setIsMock(false);
+      setStep('success');
+    } catch (err) {
+      setErrors({ submit: err.message || 'Registration failed. Please try again.' });
+    } finally {
+      setProcessing(false);
+    }
   };
 
   /* Step 2 → Confirm payment */
@@ -76,62 +100,84 @@ function RegistrationForm({ onClose, eventName, eventId, eventPrice }) {
     setErrors({});
 
     try {
-      let transactionId  = '';
-      let paymentStatus  = 'PAID';
-      let mockMode       = false;
+      // Request a Razorpay Order from our backend
+      const intentData = await api.createPaymentIntent(amountInPaise, 'inr');
 
-      if (pricePerSeat === 0) {
-        // Free event — no payment needed
-        transactionId = 'FREE_' + Date.now();
-        paymentStatus = 'FREE';
+      if (intentData.isMock) {
+        // Mock mode — Razorpay keys not configured
+        const transactionId = intentData.paymentIntentId;
+        
+        await api.createBooking({
+          ...formData,
+          age:          Number(formData.age),
+          participants: Number(formData.participants),
+          eventId,
+          eventName,
+          transactionId,
+          paymentStatus: 'MOCK_PAID',
+          submittedAt:  new Date().toISOString(),
+        });
+
+        setTxId(transactionId);
+        setIsMock(true);
+        setStep('success');
       } else {
-        // Request a PaymentIntent from our backend
-        const intentData = await api.createPaymentIntent(amountInPaise, 'inr');
-
-        if (intentData.isMock || !stripe || !elements) {
-          // Mock mode — Stripe keys not configured
-          transactionId = intentData.paymentIntentId;
-          paymentStatus = 'MOCK_PAID';
-          mockMode = true;
-        } else {
-          // Real Stripe confirmation
-          const card = elements.getElement(CardElement);
-          const { paymentIntent, error } = await stripe.confirmCardPayment(intentData.clientSecret, {
-            payment_method: {
-              card,
-              billing_details: { name: formData.fullName, email: formData.email },
-            },
-          });
-
-          if (error) {
-            setErrors({ submit: error.message });
-            setProcessing(false);
-            return;
-          }
-
-          transactionId = paymentIntent.id;
-          paymentStatus = paymentIntent.status.toUpperCase();
+        // Real Razorpay integration
+        const loaded = await loadRazorpayScript();
+        if (!loaded) {
+          throw new Error('Razorpay SDK failed to load. Please verify your internet connection.');
         }
+
+        const options = {
+          key: intentData.keyId,
+          amount: intentData.amount,
+          currency: intentData.currency,
+          name: 'VSI Creation',
+          description: `Pass for ${eventName}`,
+          order_id: intentData.orderId,
+          prefill: {
+            name: formData.fullName,
+            email: formData.email,
+            contact: formData.phone,
+          },
+          theme: {
+            color: '#d97706', // Gold accent color
+          },
+          handler: async function (response) {
+            try {
+              setProcessing(true);
+              await api.createBooking({
+                ...formData,
+                age:          Number(formData.age),
+                participants: Number(formData.participants),
+                eventId,
+                eventName,
+                transactionId: response.razorpay_payment_id,
+                paymentStatus: 'PAID',
+                submittedAt:  new Date().toISOString(),
+              });
+
+              setTxId(response.razorpay_payment_id);
+              setIsMock(false);
+              setStep('success');
+            } catch (err) {
+              setErrors({ submit: err.message || 'Failed to complete booking registration.' });
+            } finally {
+              setProcessing(false);
+            }
+          },
+          modal: {
+            ondismiss: function () {
+              setProcessing(false);
+            }
+          }
+        };
+
+        const rzp1 = new window.Razorpay(options);
+        rzp1.open();
       }
-
-      // Save booking with payment details
-      await api.createBooking({
-        ...formData,
-        age:          Number(formData.age),
-        participants: Number(formData.participants),
-        eventId,
-        eventName,
-        transactionId,
-        paymentStatus,
-        submittedAt:  new Date().toISOString(),
-      });
-
-      setTxId(transactionId);
-      setIsMock(mockMode);
-      setStep('success');
     } catch (err) {
-      setErrors({ submit: err.message || 'Payment failed. Please try again.' });
-    } finally {
+      setErrors({ submit: err.message || 'Payment processing error. Please try again.' });
       setProcessing(false);
     }
   };
@@ -299,7 +345,7 @@ function RegistrationForm({ onClose, eventName, eventId, eventPrice }) {
         </form>
       )}
 
-      {/* ── Step 2: Payment ── */}
+      {/* ── Step 2: Payment Summary ── */}
       {step === 'payment' && (
         <form onSubmit={handlePaymentSubmit} className="space-y-5">
           {/* Summary */}
@@ -313,7 +359,7 @@ function RegistrationForm({ onClose, eventName, eventId, eventPrice }) {
               <span className="text-white font-semibold">{formData.participants}</span>
             </div>
             <div className="border-t border-border-color/40 pt-2 flex justify-between">
-              <span className="text-text-muted font-semibold">Total</span>
+              <span className="text-text-muted font-semibold">Total Amount</span>
               <span className="text-accent-gold font-black text-base">₹{totalAmount.toFixed(2)}</span>
             </div>
           </div>
@@ -324,17 +370,15 @@ function RegistrationForm({ onClose, eventName, eventId, eventPrice }) {
             </div>
           )}
 
-          {/* Card Element */}
-          <div className="space-y-2">
-            <label className="text-[10px] text-text-muted uppercase font-bold tracking-wider flex items-center gap-2">
-              <CreditCard className="w-3.5 h-3.5" /> Card Details
-            </label>
-            <div className="bg-bg-card/60 border border-border-color rounded-xl px-4 py-4 focus-within:border-accent-gold transition-all">
-              <CardElement options={CARD_ELEMENT_OPTIONS} />
+          {/* Secure Payment Info */}
+          <div className="bg-bg-card/40 border border-border-color rounded-xl p-4 space-y-3">
+            <div className="flex items-center gap-3 text-xs text-text-muted">
+              <Lock className="w-4.5 h-4.5 text-emerald-400 shrink-0" />
+              <div>
+                <p className="font-bold text-white">Secured by Razorpay</p>
+                <p className="text-[10px]">UPI, Credit/Debit Cards, Netbanking, and Wallets are supported.</p>
+              </div>
             </div>
-            <p className="text-[10px] text-text-muted flex items-center gap-1.5">
-              <Lock className="w-3 h-3 text-emerald-400" /> Secured by Stripe. Use test card: <span className="font-mono text-accent-gold">4242 4242 4242 4242</span>
-            </p>
           </div>
 
           <div className="flex gap-3">
@@ -347,11 +391,11 @@ function RegistrationForm({ onClose, eventName, eventId, eventPrice }) {
               {processing ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Processing…
+                  Initializing Razorpay…
                 </>
               ) : (
                 <>
-                  <Lock className="w-4 h-4" /> Pay ₹{totalAmount.toFixed(2)}
+                  <CreditCard className="w-4 h-4" /> Pay ₹{totalAmount.toFixed(2)}
                 </>
               )}
             </button>
@@ -362,7 +406,7 @@ function RegistrationForm({ onClose, eventName, eventId, eventPrice }) {
   );
 }
 
-/* ─── Outer wrapper — provides Stripe Elements context ─── */
+/* ─── Outer wrapper ─── */
 export default function RegistrationModal({ isOpen, onClose, eventName, eventId, eventPrice }) {
   if (!isOpen) return null;
 
@@ -402,15 +446,12 @@ export default function RegistrationModal({ isOpen, onClose, eventName, eventId,
           )}
         </div>
 
-        {/* Form body wrapped in Stripe Elements */}
-        <Elements stripe={stripePromise}>
-          <RegistrationForm
-            onClose={onClose}
-            eventName={eventName}
-            eventId={eventId}
-            eventPrice={eventPrice}
-          />
-        </Elements>
+        <RegistrationForm
+          onClose={onClose}
+          eventName={eventName}
+          eventId={eventId}
+          eventPrice={eventPrice}
+        />
       </div>
     </div>
   );

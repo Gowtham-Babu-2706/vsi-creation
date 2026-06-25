@@ -262,7 +262,7 @@ export default function EventDetail() {
               </button>
 
               <p className="text-[10px] text-text-muted text-center">
-                {event.price > 0 ? 'Secure Stripe payment · Limited availability' : 'Free registration · Limited availability'}
+                {event.price > 0 ? 'Secure Razorpay payment · Limited availability' : 'Free registration · Limited availability'}
               </p>
             </div>
           </div>
