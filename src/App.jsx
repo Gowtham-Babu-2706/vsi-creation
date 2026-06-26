@@ -73,7 +73,7 @@ function App() {
             alt="VSI Creations"
             className="h-10 md:h-11 rounded-full w-auto object-contain transition-transform duration-500 group-hover:rotate-[360deg]"
           />
-          <span className="text-lg md:text-xl font-display tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-accent-secondary via-accent-gold to-accent-rose bg-[size:200%] hover:animate-text-shine">
+          <span className="text-lg md:text-xl font-display tracking-tight text-transparent bg-clip-text bg-white from-accent-secondary via-accent-gold to-accent-rose bg-[size:200%] hover:animate-text-shine">
             VSI CREATIONS
           </span>
         </Link>
@@ -84,9 +84,9 @@ function App() {
             <Link
               key={to}
               to={to}
-              className={`relative py-1 transition-colors hover:text-accent-secondary
+              className={`relative py-1 transition-colors hover:text-white
                 ${location.pathname === to
-                  ? 'text-accent-secondary after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-accent-primary after:rounded-full'
+                  ? 'text-white after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-accent-primary after:rounded-full'
                   : 'text-text-muted'
                 }`}
             >

@@ -5,7 +5,7 @@
   --color-bg-main:        #09080f;
   --color-bg-surface:     #110f1e;
   --color-bg-card:        #1a1730;
-  --color-accent-primary: #7c3aed;   /* vibrant violet */
+  --color-accent-primary: #9b6bed;   /* vibrant violet */
   --color-accent-secondary:#a855f7;  /* lighter purple */
   --color-accent-gold:    #f59e0b;   /* amber/gold */
   --color-accent-rose:    #ec4899;   /* hot-pink pop */
@@ -14,7 +14,7 @@
   --color-border-color:   #2e2850;
 
   /* ── Font Families ── */
-  --font-display: 'Black Ops One', system-ui; 
+  --font-display: 'Archivo Black', sans-serif;
   --font-body:    'Inter', sans-serif;
 
   /* ── Animations ── */
