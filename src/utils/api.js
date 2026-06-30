@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://ec2-54-167-104-105.compute-1.amazonaws.com:8080/api';
+const API_BASE_URL = 'https://vsibackend-4zlw.onrender.com/api';
 
 const getHeaders = (secured = false) => {
   const headers = {
