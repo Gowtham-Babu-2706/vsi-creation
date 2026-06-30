@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowUpRight, Zap, MapPin, Calendar, Star,
   ChevronRight, CalendarDays, Sparkles, Users, Award, Clock
 } from 'lucide-react';
 import { api } from '../utils/api';
+import { useGSAP, useMagnetic, SplitText } from '../hooks/useGSAP';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 /* ── Static Data ── */
 const PORTFOLIO_ITEMS = [
@@ -36,6 +39,49 @@ const GALLERY_ITEMS = [
   { src: 'https://images.unsplash.com/photo-1489641493513-ba4ee84ccea9?w=800', title: 'Gala Accolades' },
   { src: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800', title: 'Laser Illumination' },
   { src: 'https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=800', title: 'Crowd Capture' }
+];
+
+const CAROUSEL_SLIDES = [
+  {
+    img: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1600',
+    title: 'Prestigious Awards Functions',
+    category: 'Awards Function'
+  },
+  {
+    img: 'https://res.cloudinary.com/dfjsh2zel/image/upload/hero_section_background_image_for_202606291753_icypn0.jpg',
+    title: 'High-Octane Sports Events',
+    category: 'Sports Event'
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=1600',
+    title: 'Spectacular Music Festivals',
+    category: 'Music Festival'
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1600',
+    title: 'Grand Arena Concert Shows',
+    category: 'Concert Shows'
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1600',
+    title: 'Exclusive Celebrity Management',
+    category: 'Celebrity Management'
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=1600',
+    title: 'Impactful CSR Initiatives & Projects',
+    category: 'CSR Projects'
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1600',
+    title: 'Keynote Summits & Corporate Projects',
+    category: 'Corporate Projects'
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1509099836639-18ba1795216d?q=80&w=1600',
+    title: 'Empowering Social Awareness Projects',
+    category: 'Awareness Projects'
+  }
 ];
 
 // UPCOMING_EVENTS is now loaded dynamically from the backend API
@@ -169,6 +215,31 @@ export default function Home() {
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [eventsLoading, setEventsLoading] = useState(true);
 
+  const cta1Ref = useRef(null);
+  const cta2Ref = useRef(null);
+  const submitBtnRef = useRef(null);
+  
+  // Carousel state
+  const [carouselIndex, setCarouselIndex] = useState(0);
+  const carouselTrackRef = useRef(null);
+  const carouselPaused = useRef(false);
+
+  useMagnetic(cta1Ref, 0.2);
+  useMagnetic(cta2Ref, 0.2);
+  useMagnetic(submitBtnRef, 0.15);
+
+  // Auto-advance carousel every 3s
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (carouselPaused.current) return;
+      setCarouselIndex(prev => (prev + 1) % CAROUSEL_SLIDES.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Animate slide transition (now handled by CSS opacity/scale transitions)
+  // carouselTrackRef no longer needed for GSAP translateX
+
   useEffect(() => {
     const fetchUpcoming = async () => {
       try {
@@ -200,106 +271,309 @@ export default function Home() {
     setFormData({ name: '', email: '', phone: '', domain: '', message: '' });
   };
 
+  useGSAP(() => {
+    // Floating ambient orbs animation
+    gsap.to('.ambient-orb-1', { y: 25, x: 15, duration: 6, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+    gsap.to('.ambient-orb-2', { y: -30, x: -20, duration: 8, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+    gsap.to('.ambient-orb-3', { y: 20, x: -10, duration: 7, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+
+    // Hero entrance timeline
+    const tl = gsap.timeline();
+    tl.fromTo('.hero-eyebrow', { opacity: 0, y: -15 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' })
+      .fromTo('.hero-title .char-span', 
+        { opacity: 0, y: 40, rotateX: -60, filter: 'blur(4px)' },
+        { opacity: 1, y: 0, rotateX: 0, filter: 'blur(0px)', duration: 0.8, stagger: 0.02, ease: 'power4.out' },
+        '-=0.4'
+      )
+      .fromTo('.hero-desc', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, '-=0.5')
+      .fromTo('.hero-stat-pill', { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.5, stagger: 0.1, ease: 'back.out(1.2)' }, '-=0.4')
+      .fromTo('.hero-cta', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: 'power3.out' }, '-=0.3')
+      .fromTo('.hero-scroll-indicator', { opacity: 0 }, { opacity: 1, duration: 0.5 });
+
+    // Hero carousel entrance
+    gsap.fromTo('.hero-carousel',
+      { opacity: 0, x: 60, scale: 0.95 },
+      {
+        opacity: 1, x: 0, scale: 1, duration: 1, ease: 'power3.out', delay: 0.6
+      }
+    );
+
+    // About grid countup and entry
+    const aboutTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#about',
+        start: 'top 80%',
+        once: true
+      }
+    });
+    aboutTl.fromTo('.about-text-content > *',
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: 'power3.out' }
+    ).fromTo('.about-stat-card',
+      { opacity: 0, scale: 0.93 },
+      { opacity: 1, scale: 1, duration: 0.6, stagger: 0.1, ease: 'back.out(1.1)' },
+      '-=0.5'
+    );
+
+    // Dynamic number counter animation for stats
+    document.querySelectorAll('.stat-number').forEach(el => {
+      const targetVal = parseInt(el.getAttribute('data-target'), 10);
+      const isPercent = el.textContent.includes('%');
+      const isPlus = el.textContent.includes('+');
+      const isK = el.textContent.includes('k');
+      
+      const countObj = { val: 0 };
+      gsap.to(countObj, {
+        val: targetVal,
+        duration: 1.8,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 85%',
+          once: true
+        },
+        onUpdate: () => {
+          let suffix = '';
+          if (isPercent) suffix = '%';
+          if (isPlus) suffix = '+';
+          if (isK) suffix = 'k+';
+          el.textContent = Math.floor(countObj.val) + suffix;
+        }
+      });
+    });
+
+    // Portfolio Cards scrolltrigger entry
+    gsap.fromTo('.portfolio-card',
+      { opacity: 0, y: 50 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: '#portfolio',
+          start: 'top 75%',
+          once: true
+        }
+      }
+    );
+
+    // Gallery Masonry items fade & zoom in
+    gsap.fromTo('.gallery-item-home',
+      { opacity: 0, scale: 0.9 },
+      {
+        opacity: 1,
+        scale: 1,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: '#gallery',
+          start: 'top 75%',
+          once: true
+        }
+      }
+    );
+
+    // Upcoming Experiences stagger entry
+    gsap.fromTo('.upcoming-event-row',
+      { opacity: 0, x: -30 },
+      {
+        opacity: 1,
+        x: 0,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: '#upcoming-events',
+          start: 'top 75%',
+          once: true
+        }
+      }
+    );
+
+    // Services grid entries
+    gsap.fromTo('.service-card-home',
+      { opacity: 0, y: 40 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '#services',
+          start: 'top 75%',
+          once: true
+        }
+      }
+    );
+
+    // Testimonials reviews stagger entry
+    gsap.fromTo('.review-card-home',
+      { opacity: 0, y: 30 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: '#reviews-section',
+          start: 'top 75%',
+          once: true
+        }
+      }
+    );
+
+    // Contact form card entry
+    gsap.fromTo('.contact-card-home',
+      { opacity: 0, y: 50 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.9,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: '#contact',
+          start: 'top 75%',
+          once: true
+        }
+      }
+    );
+  }, []);
+
   return (
     <div className="bg-bg-main text-text-main relative overflow-hidden">
 
-      {/* ── Global Ambient Glows ── */}
-      <div className="fixed top-[10vh] right-[8%]  w-[500px] h-[500px] bg-accent-primary/8 rounded-full blur-[160px] pointer-events-none -z-10" />
-      <div className="fixed top-[60vh] left-[5%]   w-[400px] h-[400px] bg-accent-rose/5   rounded-full blur-[140px] pointer-events-none -z-10" />
-      <div className="fixed top-[130vh] right-[15%] w-[450px] h-[450px] bg-accent-gold/4  rounded-full blur-[150px] pointer-events-none -z-10" />
+      {/* ── Global Ambient Glows (subtle on white) ── */}
+      <div className="ambient-orb-1 fixed top-[10vh] right-[8%]  w-[500px] h-[500px] bg-accent-primary/5 rounded-full blur-[160px] pointer-events-none -z-10" />
+      <div className="ambient-orb-2 fixed top-[60vh] left-[5%]   w-[400px] h-[400px] bg-accent-rose/5   rounded-full blur-[140px] pointer-events-none -z-10" />
+      <div className="ambient-orb-3 fixed top-[130vh] right-[15%] w-[450px] h-[450px] bg-accent-primary/3 rounded-full blur-[150px] pointer-events-none -z-10" />
 
       {/* ══════════════════════════════════════════
-          HERO
+          HERO — Full-screen Background Carousel
       ══════════════════════════════════════════ */}
       <section
-        className="min-h-screen relative flex items-center px-6 md:px-[8%] pt-28 pb-16 bg-cover bg-center overflow-hidden"
-        style={{
-          backgroundImage: `linear-gradient(to bottom, rgba(9,8,15,0.55), #09080f 92%), url("https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1800")`
-        }}
+        className="hero-carousel relative min-h-screen flex items-center overflow-hidden"
+        onMouseEnter={() => (carouselPaused.current = true)}
+        onMouseLeave={() => (carouselPaused.current = false)}
       >
-        {/* Radial spotlights */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_75%_20%,rgba(124,58,237,0.2),transparent_60%)] pointer-events-none" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_80%,rgba(236,72,153,0.08),transparent_60%)] pointer-events-none" />
-
-        <div className="relative max-w-5xl z-10 space-y-7">
-          {/* Eyebrow */}
-          <div className="flex items-center gap-2">
-            <span className="flex items-center gap-1.5 text-xs font-semibold text-accent-secondary uppercase tracking-[4px]">
-              <Sparkles className="w-3.5 h-3.5 text-accent-primary animate-pulse" />
-              Crafting Experiences · Building Brands
-            </span>
-          </div>
-
-          {/* Headline */}
-          <h1 className="font-display text-5xl md:text-7xl lg:text-8xl text-text-main leading-[1.02]">
-            <span className='lobster'>Creating Memories.</span><br />
-            <span className="text-shine-grad"><span className='lobster'>Capturing Milestones.</span></span>
-          </h1>
-
-          {/* Sub */}
-          <p className="text-text-muted text-base md:text-xl max-w-2xl leading-relaxed font-light">
-            High-end event management, premium multi-camera cinema coverage, and production excellence engineered to preserve life's grandest spectacles.
-          </p>
-
-          {/* Stats strip */}
-          <div className="flex flex-wrap gap-6 py-2">
-            {[
-              { icon: CalendarDays, value: '150+', label: 'Events Managed' },
-              { icon: Users,        value: '50k+', label: 'Guests Served'  },
-              { icon: Award,        value: '100%', label: 'Client Satisfaction' }
-            ].map(({ icon: Icon, value, label }) => (
-              <div key={label} className="flex items-center gap-2 text-sm">
-                <Icon className="w-4 h-4 text-accent-gold" />
-                <span className="font-display text-text-main text-base">{value}</span>
-                <span className="text-text-muted text-xs">{label}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* CTAs */}
-          <div className="flex flex-wrap gap-4 pt-2">
-            <a
-              href="#portfolio"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-accent-primary to-accent-secondary
-                text-white font-semibold rounded-xl border border-white/10
-                hover:shadow-xl hover:shadow-accent-primary/35 hover:-translate-y-0.5 transition-all text-sm cursor-pointer"
+        {/* ── Background Slides ── */}
+        <div 
+          className="absolute inset-0 flex transition-transform duration-1000 ease-in-out z-0"
+          style={{ transform: `translateX(-${carouselIndex * 100}%)` }}
+        >
+          {CAROUSEL_SLIDES.map((slide, i) => (
+            <div
+              key={i}
+              className="w-full h-full flex-shrink-0 relative"
             >
-              Explore Portfolio <ArrowUpRight className="w-4 h-4" />
-            </a>
-            <a
-              href="#contact"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-white/5 border border-border-color
-                text-text-main hover:text-accent-secondary hover:border-accent-primary/50 font-semibold rounded-xl
-                backdrop-blur-md hover:bg-white/8 transition-all text-sm cursor-pointer"
-            >
-              Book Your Event
-            </a>
-          </div>
+              <img
+                src={slide.img}
+                alt={slide.title}
+                className="w-full h-full object-cover"
+                loading={i < 2 ? 'eager' : 'lazy'}
+              />
+            </div>
+          ))}
         </div>
 
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-text-muted/50 animate-bounce">
-          <div className="w-[1px] h-8 bg-gradient-to-b from-transparent to-accent-primary/60 mx-auto" />
-          <span className="text-[9px] uppercase tracking-[3px]">Scroll</span>
+        {/* ── Gradient overlays for readability ── */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/55 to-black/30 z-[1]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30 z-[1]" />
+
+        {/* ── Slide category badge (top-right) ── */}
+        <div className="absolute top-28 right-6 md:right-[8%] z-20">
+          <span className="hero-slide-badge inline-flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-widest px-4 py-2 rounded-full bg-white/15 backdrop-blur-md text-white border border-white/20 shadow-lg transition-all duration-500">
+            <Sparkles className="w-3 h-3 text-accent-primary" />
+            {CAROUSEL_SLIDES[carouselIndex]?.category}
+          </span>
+        </div>
+
+        {/* ── Text Content ── */}
+        <div className="relative z-10 w-full px-6 md:px-[8%] pt-28 pb-24 flex items-center justify-center text-center">
+          <div className="max-w-4xl space-y-7 mx-auto flex flex-col items-center">
+            {/* Eyebrow */}
+            <div className="hero-eyebrow flex items-center gap-2 justify-center">
+              <span className="flex items-center gap-1.5 text-xs font-bold text-accent-primary uppercase tracking-[4px]">
+                <Sparkles className="w-3.5 h-3.5 text-accent-primary animate-pulse" />
+                Crafting Experiences · Building Brands
+              </span>
+            </div>
+
+            {/* Headline */}
+            <h1 className="hero-title font-display text-5xl md:text-7xl lg:text-8xl text-white leading-[1.05] tracking-tight font-extrabold drop-shadow-lg text-center">
+              <SplitText className="block">Creating Memories.</SplitText><br />
+              <SplitText className="text-accent-primary block mt-1">Capturing Milestones.</SplitText>
+            </h1>
+
+            {/* Sub */}
+            <p className="hero-desc text-white/75 text-base md:text-xl max-w-2xl leading-relaxed font-light drop-shadow-md text-center mx-auto">
+              High-end event management, premium multi-camera cinema coverage, and production excellence engineered to preserve life's grandest spectacles.
+            </p>
+
+            {/* Current slide title */}
+            <div className="hero-slide-title text-white/50 text-xs font-bold uppercase tracking-[3px] flex items-center gap-3 justify-center transition-all duration-500">
+              <div className="w-8 h-px bg-accent-primary" />
+              {CAROUSEL_SLIDES[carouselIndex]?.title}
+            </div>
+
+            {/* Stats strip */}
+            <div className="flex flex-wrap gap-3 py-1 justify-center">
+              {[
+                { icon: CalendarDays, value: '150+', label: 'Events Managed' },
+                { icon: Users,        value: '50k+', label: 'Guests Served'  },
+                { icon: Award,        value: '100%', label: 'Client Satisfaction' }
+              ].map(({ icon: Icon, value, label }) => (
+                <div key={label} className="hero-stat-pill flex items-center gap-3 border border-white/15 px-4 py-2.5 rounded-full bg-white/10 backdrop-blur-sm">
+                  <Icon className="w-4 h-4 text-accent-primary" />
+                  <span className="font-display text-white text-sm font-extrabold">{value}</span>
+                  <span className="text-white/60 text-[10px] uppercase font-bold tracking-wider">{label}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* CTAs */}
+            <div className="flex flex-wrap gap-4 pt-2 justify-center">
+              <a
+                ref={cta1Ref}
+                href="#portfolio"
+                className="hero-cta inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-accent-primary to-accent-secondary hover:from-accent-secondary hover:to-accent-primary
+                  text-white font-bold rounded-xl btn-glow
+                  hover:shadow-xl hover:shadow-accent-primary/40 transition-all text-xs uppercase tracking-widest cursor-pointer"
+              >
+                Explore Portfolio <ArrowUpRight className="w-4 h-4" />
+              </a>
+              <a
+                ref={cta2Ref}
+                href="#contact"
+                className="hero-cta inline-flex items-center gap-2 px-8 py-4 bg-white/10 backdrop-blur-md border border-white/20
+                  text-white hover:text-accent-primary hover:border-accent-primary/50 font-bold rounded-xl
+                  hover:bg-white/15 transition-all text-xs uppercase tracking-widest cursor-pointer hover:shadow-lg"
+              >
+                Book Your Event
+              </a>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════
-          ABOUT / STATS
-      ══════════════════════════════════════════ */}
+      {/* ─── ABOUT / STATS ─── */}
       <section id="about" className="py-24 px-6 md:px-[8%]">
-        <div className="bg-gradient-to-br from-bg-surface to-bg-card border border-border-color rounded-3xl p-8 md:p-16 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-7 space-y-5">
-            <span className="text-xs text-accent-secondary font-semibold uppercase tracking-[4px]">Who We Are</span>
-            <h2 className="font-display text-3xl md:text-4xl text-text-main leading-tight">
-              We turn large-scale concepts into flawless, elite realities.
+        <div className="bg-white border border-border-color rounded-[32px] p-8 md:p-16 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center shadow-xl shadow-black/5">
+          <div className="about-text-content lg:col-span-7 space-y-6">
+            <span className="text-xs text-accent-primary font-extrabold uppercase tracking-[4px]">Who We Are</span>
+            <h2 className="font-display text-3xl md:text-4xl text-text-main leading-tight font-extrabold tracking-tight">
+              We turn large-scale concepts into flawless realities.
             </h2>
-            <p className="text-text-muted text-sm md:text-base leading-relaxed">
+            <p className="text-text-muted text-sm md:text-base leading-relaxed font-light">
               VSI Creations operates as a premium, multi-disciplinary entertainment and production house. From pristine gala award ceremonies to explosive multi-stage music festivals and luxury wedding visual stories — our crew coordinates aesthetics, sound design, high-end illumination, and world-class cinematography with absolute elite execution.
             </p>
             <Link
               to="/services"
-              className="inline-flex items-center gap-2 text-sm text-accent-secondary font-semibold hover:text-accent-gold transition-colors"
+              className="inline-flex items-center gap-2 text-xs font-bold text-accent-primary hover:text-accent-secondary transition-colors uppercase tracking-wider"
             >
               View Our Services <ChevronRight className="w-4 h-4" />
             </Link>
@@ -312,10 +586,10 @@ export default function Home() {
               { val: '10+',  label: 'Years of Excellence',  icon: Award        },
               { val: '50k+', label: 'Guests Delighted',     icon: Users        }
             ].map(({ val, label, icon: Icon }) => (
-              <div key={label} className="bg-bg-main/50 border border-border-color p-6 rounded-2xl text-center hover:border-accent-primary/50 transition-colors group">
-                <Icon className="w-5 h-5 text-accent-secondary mx-auto mb-2 group-hover:text-accent-gold transition-colors" />
-                <span className="font-display text-3xl text-accent-gold block">{val}</span>
-                <span className="text-[11px] text-text-muted font-medium uppercase tracking-wide block mt-1">{label}</span>
+              <div key={label} className="about-stat-card bg-bg-surface p-6 rounded-[20px] text-center group border border-border-color hover:border-accent-primary/30 transition-all hover:shadow-md">
+                <Icon className="w-5 h-5 text-accent-primary mx-auto mb-2 group-hover:text-accent-secondary transition-colors" />
+                <span className="stat-number font-display text-3xl text-accent-primary font-extrabold block" data-target={parseInt(val, 10)}>{val}</span>
+                <span className="text-[10px] text-text-muted font-bold uppercase tracking-wider block mt-1">{label}</span>
               </div>
             ))}
           </div>
@@ -325,13 +599,14 @@ export default function Home() {
       {/* ══════════════════════════════════════════
           PORTFOLIO
       ══════════════════════════════════════════ */}
-      <section id="portfolio" className="py-24 px-6 md:px-[8%] border-t border-border-color/40">
+      <section id="portfolio" className="py-24 px-6 md:px-[8%] relative">
+        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-accent-primary/20 to-transparent" />
         <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-12 gap-4">
           <div>
-            <span className="text-xs text-accent-secondary font-semibold uppercase tracking-[4px]">Our Portfolio</span>
-            <h2 className="font-display text-3xl md:text-4xl text-text-main mt-2">Featured Highlights</h2>
+            <span className="text-xs text-accent-secondary font-extrabold uppercase tracking-[4px]">Our Portfolio</span>
+            <h2 className="font-display text-3xl md:text-4xl text-text-main font-extrabold mt-2">Featured Highlights</h2>
           </div>
-          <Link to="/gallery" className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-accent-secondary transition-colors font-medium">
+          <Link to="/gallery" className="inline-flex items-center gap-2 text-xs font-bold text-text-muted hover:text-accent-secondary transition-colors uppercase tracking-wider">
             View Full Gallery <ArrowUpRight className="w-4 h-4" />
           </Link>
         </div>
@@ -341,26 +616,24 @@ export default function Home() {
             <Link
               key={project.id}
               to={`/portfolio/${project.id}`}
-              className="bg-bg-card border border-border-color rounded-2xl overflow-hidden
-                hover:border-accent-primary/45 hover:-translate-y-2
-                hover:shadow-2xl hover:shadow-accent-primary/12 transition-all duration-300 group flex flex-col"
+              className="portfolio-card bg-white border border-border-color rounded-[28px] overflow-hidden
+                flex flex-col group hover:shadow-xl hover:shadow-accent-primary/5 hover:-translate-y-1 transition-all duration-300"
             >
               <div className="h-56 overflow-hidden relative">
                 <img
                   src={project.img}
                   alt={project.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-bg-card/80 to-transparent" />
-                <span className="absolute top-3 left-3 badge-pill">{project.tag}</span>
-                <div className="absolute top-3 right-3 bg-bg-main/80 backdrop-blur-md p-2 rounded-full border border-border-color text-accent-secondary opacity-0 group-hover:opacity-100 transition-opacity">
-                  <ArrowUpRight className="w-3.5 h-3.5" />
+                <span className="absolute top-4 left-4 badge-pill backdrop-blur-md">{project.tag}</span>
+                <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md p-2.5 rounded-full border border-border-color text-accent-primary opacity-0 group-hover:opacity-100 transition-all duration-300">
+                  <ArrowUpRight className="w-4 h-4" />
                 </div>
               </div>
-              <div className="p-6 flex flex-col flex-grow">
-                <h3 className="font-display text-lg text-text-main group-hover:text-accent-secondary transition-colors">{project.title}</h3>
-                <p className="text-sm text-text-muted mt-2 leading-relaxed flex-grow">{project.desc}</p>
-                <div className="flex items-center gap-1 text-xs text-accent-secondary font-semibold uppercase tracking-wider mt-5">
+              <div className="p-6 flex flex-col flex-grow space-y-3">
+                <h3 className="font-display text-lg text-text-main group-hover:text-accent-primary transition-colors font-extrabold tracking-tight">{project.title}</h3>
+                <p className="text-xs text-text-muted font-light leading-relaxed flex-grow">{project.desc}</p>
+                <div className="flex items-center gap-1.5 text-xs font-bold text-accent-primary hover:text-accent-secondary uppercase tracking-wider pt-3">
                   View Project <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                 </div>
               </div>
@@ -369,16 +642,17 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════
+      {/* ── ══════════════════════════════════════════
           GALLERY PREVIEW
       ══════════════════════════════════════════ */}
-      <section id="gallery" className="py-24 px-6 md:px-[8%] border-t border-border-color/40 bg-bg-surface/20">
+      <section id="gallery" className="py-24 px-6 md:px-[8%] relative">
+        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-accent-primary/20 to-transparent" />
         <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-12 gap-4">
           <div>
-            <span className="text-xs text-accent-secondary font-semibold uppercase tracking-[4px]">Snapshots</span>
-            <h2 className="font-display text-3xl md:text-4xl text-text-main mt-2">Media Gallery</h2>
+            <span className="text-xs text-accent-secondary font-extrabold uppercase tracking-[4px]">Snapshots</span>
+            <h2 className="font-display text-3xl md:text-4xl text-text-main font-extrabold mt-2">Media Gallery</h2>
           </div>
-          <Link to="/gallery" className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-accent-secondary transition-colors font-medium">
+          <Link to="/gallery" className="inline-flex items-center gap-2 text-xs font-bold text-text-muted hover:text-accent-secondary transition-colors uppercase tracking-wider">
             Full Gallery <ArrowUpRight className="w-4 h-4" />
           </Link>
         </div>
@@ -388,32 +662,33 @@ export default function Home() {
             <Link
               key={idx}
               to="/gallery"
-              className={`rounded-2xl overflow-hidden border border-border-color relative group cursor-pointer
+              className={`gallery-item-home rounded-[24px] overflow-hidden border border-border-color relative group cursor-pointer shadow-md transition-all duration-500 hover:scale-[1.02] hover:border-accent-primary/30 hover:shadow-xl hover:shadow-accent-primary/5
                 ${idx === 0 ? 'md:col-span-2 md:row-span-2 h-56 md:h-auto' : 'h-44'}`}
             >
               <img
                 src={item.src}
                 alt={item.title}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-bg-main/80 via-accent-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-5">
-                <span className="font-display text-sm text-text-main">{item.title}</span>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-5">
+                <span className="font-display text-sm text-white font-extrabold tracking-wide">{item.title}</span>
               </div>
             </Link>
           ))}
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════
+      {/* ── ══════════════════════════════════════════
           UPCOMING EVENTS
       ══════════════════════════════════════════ */}
-      <section id="upcoming-events" className="py-24 px-6 md:px-[8%] border-t border-border-color/40">
+      <section id="upcoming-events" className="py-24 px-6 md:px-[8%] relative">
+        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-accent-primary/30 to-transparent" />
         <div className="flex flex-col md:flex-row md:justify-between md:items-end mb-12 gap-4">
           <div>
-            <span className="text-xs text-accent-secondary font-semibold uppercase tracking-[4px]">Schedule</span>
-            <h2 className="font-display text-3xl md:text-4xl text-text-main mt-2">Upcoming Experiences</h2>
+            <span className="text-xs text-accent-secondary font-extrabold uppercase tracking-[4px]">Schedule</span>
+            <h2 className="font-display text-3xl md:text-4xl text-text-main font-extrabold mt-2">Upcoming Experiences</h2>
           </div>
-          <Link to="/events" className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-accent-secondary transition-colors font-medium">
+          <Link to="/events" className="inline-flex items-center gap-2 text-xs font-bold text-text-muted hover:text-accent-secondary transition-colors uppercase tracking-wider">
             All Events <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
@@ -422,13 +697,13 @@ export default function Home() {
           {eventsLoading ? (
             /* Skeleton loaders while events are fetching */
             [1, 2, 3].map(n => (
-              <div key={n} className="bg-bg-card border border-border-color border-l-4 border-l-accent-primary/30 rounded-2xl p-5 md:p-7 animate-pulse flex gap-6 items-center">
-                <div className="w-14 h-14 bg-bg-surface rounded-xl shrink-0" />
+              <div key={n} className="bg-bg-surface border border-border-color border-l-4 border-l-accent-primary/30 rounded-2xl p-5 md:p-7 animate-pulse flex gap-6 items-center">
+                <div className="w-14 h-14 bg-border-color rounded-xl shrink-0" />
                 <div className="flex-1 space-y-3">
-                  <div className="h-4 bg-bg-surface rounded w-2/3" />
-                  <div className="h-3 bg-bg-surface rounded w-1/2" />
+                  <div className="h-4 bg-border-color rounded w-2/3" />
+                  <div className="h-3 bg-border-color rounded w-1/2" />
                 </div>
-                <div className="w-28 h-9 bg-bg-surface rounded-xl shrink-0" />
+                <div className="w-28 h-9 bg-border-color rounded-xl shrink-0" />
               </div>
             ))
           ) : upcomingEvents.length > 0 ? (
@@ -438,25 +713,25 @@ export default function Home() {
               return (
                 <div
                   key={event.id}
-                  className="bg-bg-card border border-border-color border-l-4 border-l-accent-primary rounded-2xl p-5 md:p-7
-                    grid grid-cols-1 md:grid-cols-12 items-center gap-5
-                    hover:border-l-accent-secondary hover:shadow-xl hover:shadow-accent-primary/8
-                    hover:scale-[1.005] transition-all group"
+                  className="upcoming-event-row bg-white border border-border-color border-l-4 border-l-accent-primary rounded-[24px] p-6 md:p-7
+                    grid grid-cols-1 md:grid-cols-12 items-center gap-6
+                    hover:border-l-accent-rose hover:shadow-xl hover:shadow-accent-primary/5
+                    hover:scale-[1.01] transition-all duration-300 group"
                 >
                   {/* Date block */}
                   <div className="md:col-span-2 flex md:flex-col items-center md:items-start gap-3 md:gap-0">
-                    <span className="font-display text-4xl text-accent-gold leading-none">{day}</span>
-                    <span className="text-xs text-text-muted font-semibold uppercase tracking-wider md:mt-1">{month}</span>
+                    <span className="font-display text-4xl text-accent-primary font-extrabold leading-none">{day}</span>
+                    <span className="text-xs text-text-muted font-bold uppercase tracking-wider md:mt-1.5">{month}</span>
                   </div>
 
                   {/* Info */}
-                  <div className="md:col-span-7 space-y-2">
-                    <h3 className="font-display text-lg text-text-main group-hover:text-accent-secondary transition-colors">{event.title}</h3>
-                    <p className="text-xs md:text-sm text-text-muted">{event.description}</p>
+                  <div className="md:col-span-7 space-y-2.5">
+                    <h3 className="font-display text-lg text-text-main group-hover:text-accent-primary transition-colors font-extrabold leading-snug tracking-tight">{event.title}</h3>
+                    <p className="text-xs text-text-muted font-light leading-relaxed">{event.description}</p>
                     <div className="flex items-center gap-3 flex-wrap">
                       <span className="badge-pill">{badge}</span>
                       {event.price != null && (
-                        <span className="text-[11px] font-bold text-accent-gold bg-accent-gold/10 border border-accent-gold/30 px-2.5 py-0.5 rounded-full">
+                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-accent-primary bg-accent-primary/8 border border-accent-primary/20 px-3 py-1 rounded-full">
                           ₹{event.price.toFixed(2)} / seat
                         </span>
                       )}
@@ -467,11 +742,11 @@ export default function Home() {
                   <div className="md:col-span-3 md:text-right">
                     <Link
                       to={`/events/${event.id}?register=true`}
-                      className="inline-flex items-center justify-center gap-2 px-5 py-3 text-xs font-semibold uppercase tracking-wider
-                        bg-accent-primary/15 border border-accent-primary/35 text-accent-secondary rounded-xl
-                        hover:bg-accent-primary hover:border-accent-primary hover:text-white transition-all cursor-pointer"
+                      className="inline-flex items-center justify-center gap-2 px-6 py-3.5 text-xs font-bold uppercase tracking-widest
+                        bg-accent-primary text-white rounded-xl btn-glow
+                        hover:bg-accent-secondary transition-all cursor-pointer shadow-md"
                     >
-                      <CalendarDays className="w-3.5 h-3.5" />
+                      <CalendarDays className="w-4 h-4" />
                       Reserve Spot
                     </Link>
                   </div>
@@ -482,7 +757,7 @@ export default function Home() {
             <div className="text-center py-12 bg-bg-surface border border-border-color rounded-2xl">
               <Clock className="w-8 h-8 text-accent-primary mx-auto mb-3 animate-pulse" />
               <p className="text-sm text-text-muted">No upcoming events scheduled. Check back soon.</p>
-              <Link to="/events" className="mt-4 inline-flex items-center gap-2 text-xs font-semibold text-accent-secondary hover:text-accent-gold transition-colors">
+              <Link to="/events" className="mt-4 inline-flex items-center gap-2 text-xs font-semibold text-accent-secondary hover:text-accent-primary transition-colors">
                 View All Events <ChevronRight className="w-3.5 h-3.5" />
               </Link>
             </div>
@@ -493,10 +768,11 @@ export default function Home() {
       {/* ══════════════════════════════════════════
           SERVICES
       ══════════════════════════════════════════ */}
-      <section id="services" className="py-24 px-6 md:px-[8%] border-t border-border-color/40 bg-bg-surface/15">
+      <section id="services" className="py-24 px-6 md:px-[8%] bg-bg-surface relative">
+        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-accent-primary/30 to-transparent" />
         <div className="mb-12">
-          <span className="text-xs text-accent-secondary font-semibold uppercase tracking-[4px]">Capabilities</span>
-          <h2 className="font-display text-3xl md:text-4xl text-text-main mt-2">Production Ecosystem</h2>
+          <span className="text-xs text-accent-secondary font-extrabold uppercase tracking-[4px]">Capabilities</span>
+          <h2 className="font-display text-3xl md:text-4xl text-text-main font-extrabold mt-2">Production Ecosystem</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
@@ -504,68 +780,69 @@ export default function Home() {
             <Link
               key={service.id}
               to={`/services/${service.id}`}
-              className="bg-bg-card border border-border-color rounded-2xl p-8 flex flex-col justify-between
-                hover:border-accent-primary/50 hover:-translate-y-2 hover:shadow-2xl hover:shadow-accent-primary/12
-                transition-all group text-left"
+              className="service-card-home bg-white border border-border-color rounded-[28px] p-8 flex flex-col justify-between
+                glass-card-hover text-left group"
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-3xl">{service.icon}</span>
-                  <span className="font-display text-4xl text-border-color group-hover:text-accent-primary/20 transition-colors">{service.num}</span>
+                  <span className="font-display text-4xl text-border-color group-hover:text-accent-primary/20 transition-colors font-extrabold">{service.num}</span>
                 </div>
-                <h3 className="font-display text-xl text-text-main group-hover:text-accent-secondary transition-colors">{service.title}</h3>
-                <p className="text-sm text-text-muted leading-relaxed">{service.desc}</p>
+                <h3 className="font-display text-lg text-text-main group-hover:text-accent-primary transition-colors font-extrabold tracking-tight">{service.title}</h3>
+                <p className="text-xs text-text-muted font-light leading-relaxed">{service.desc}</p>
               </div>
-              <div className="flex items-center gap-1 text-xs text-accent-secondary font-semibold uppercase tracking-wider mt-7">
-                Learn More <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              <div className="flex items-center gap-1.5 text-xs text-accent-primary font-bold uppercase tracking-widest mt-7">
+                Learn More <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1.5 transition-transform" />
               </div>
             </Link>
           ))}
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════
+      {/* ── ══════════════════════════════════════════
           REVIEWS
       ══════════════════════════════════════════ */}
-      <section className="py-24 px-6 md:px-[8%] border-t border-border-color/40">
+      <section id="reviews-section" className="py-24 px-6 md:px-[8%] relative">
+        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-accent-primary/20 to-transparent" />
         <div className="mb-12">
-          <span className="text-xs text-accent-secondary font-semibold uppercase tracking-[4px]">Testimonials</span>
-          <h2 className="font-display text-3xl md:text-4xl text-text-main mt-2">Client Reviews</h2>
+          <span className="text-xs text-accent-secondary font-extrabold uppercase tracking-[4px]">Testimonials</span>
+          <h2 className="font-display text-3xl md:text-4xl text-text-main font-extrabold mt-2">Client Reviews</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
           {REVIEWS.map((review, idx) => (
-            <div key={idx} className="bg-bg-card border border-border-color rounded-2xl p-8 space-y-4 relative overflow-hidden group hover:border-accent-primary/40 transition-colors">
+            <div key={idx} className="review-card-home bg-white border border-border-color rounded-[28px] p-8 space-y-4 relative overflow-hidden glass-card-gold-hover">
               <div className="absolute -top-4 -right-4 text-8xl opacity-[0.04] select-none">{review.avatar}</div>
               {/* Stars */}
               <div className="flex gap-1">
                 {[...Array(review.stars)].map((_, s) => (
-                  <Star key={s} className="w-4 h-4 fill-accent-gold text-accent-gold" />
+                  <Star key={s} className="w-3.5 h-3.5 fill-accent-primary text-accent-primary" />
                 ))}
               </div>
-              <p className="text-base text-text-main italic leading-relaxed">"{review.text}"</p>
-              <div className="flex items-center gap-2 pt-2">
-                <span className="text-xl">{review.avatar}</span>
-                <span className="text-xs text-text-muted uppercase font-semibold tracking-wider">{review.client}</span>
+              <p className="text-sm text-text-muted italic leading-relaxed font-light">"{review.text}"</p>
+              <div className="flex items-center gap-2.5 pt-3 border-t border-border-color">
+                <span className="text-lg">{review.avatar}</span>
+                <span className="text-[10px] text-text-muted uppercase font-bold tracking-wider">{review.client}</span>
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════
+      {/* ── ══════════════════════════════════════════
           CONTACT FORM
       ══════════════════════════════════════════ */}
-      <section id="contact" className="py-24 px-6 md:px-[8%] border-t border-border-color/40 bg-bg-surface/10">
-        <div className="max-w-3xl mx-auto bg-bg-surface border border-border-color rounded-3xl p-8 md:p-14 relative overflow-hidden">
+      <section id="contact" className="py-24 px-6 md:px-[8%] bg-bg-surface relative">
+        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-accent-primary/30 to-transparent" />
+        <div className="contact-card-home max-w-3xl mx-auto bg-white border border-border-color rounded-[32px] p-8 md:p-14 relative overflow-hidden shadow-xl shadow-black/5">
           {/* Decorative glows */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-accent-primary/8 rounded-full blur-[80px] pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-accent-rose/6 rounded-full blur-[60px] pointer-events-none" />
+          <div className="absolute top-0 right-0 w-64 h-64 bg-accent-primary/4 rounded-full blur-[80px] pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-accent-rose/4 rounded-full blur-[60px] pointer-events-none" />
 
-          <div className="text-center max-w-xl mx-auto mb-10 space-y-2 relative z-10">
-            <span className="text-xs text-accent-secondary font-semibold uppercase tracking-[4px]">Inquire Now</span>
-            <h2 className="font-display text-3xl md:text-4xl text-text-main">Start Your Project</h2>
-            <p className="text-sm text-text-muted">Fill out the form below to secure VSI engineering and camera assets for your event.</p>
+          <div className="text-center max-w-xl mx-auto mb-10 space-y-3 relative z-10">
+            <span className="text-xs text-accent-primary font-extrabold uppercase tracking-[4px]">Inquire Now</span>
+            <h2 className="font-display text-3xl md:text-4xl text-text-main font-extrabold">Start Your Project</h2>
+            <p className="text-sm text-text-muted font-light">Fill out the form below to secure VSI engineering and camera assets for your event.</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5 relative z-10">
@@ -573,36 +850,37 @@ export default function Home() {
               <input
                 type="text" name="name" placeholder="Your Name"
                 value={formData.name} onChange={handleInputChange} required
-                className="w-full bg-bg-main border border-border-color text-sm text-text-main px-5 py-4 rounded-xl transition-all placeholder-text-muted/60"
+                className="w-full bg-bg-surface border border-border-color text-sm text-text-main px-5 py-4 rounded-xl focus:border-accent-primary transition-all placeholder:text-text-muted/60 outline-none hover:border-accent-primary/35"
               />
               <input
                 type="email" name="email" placeholder="Email Address"
                 value={formData.email} onChange={handleInputChange} required
-                className="w-full bg-bg-main border border-border-color text-sm text-text-main px-5 py-4 rounded-xl transition-all placeholder-text-muted/60"
+                className="w-full bg-bg-surface border border-border-color text-sm text-text-main px-5 py-4 rounded-xl focus:border-accent-primary transition-all placeholder:text-text-muted/60 outline-none hover:border-accent-primary/35"
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <input
                 type="tel" name="phone" placeholder="Phone Number"
                 value={formData.phone} onChange={handleInputChange}
-                className="w-full bg-bg-main border border-border-color text-sm text-text-main px-5 py-4 rounded-xl transition-all placeholder-text-muted/60"
+                className="w-full bg-bg-surface border border-border-color text-sm text-text-main px-5 py-4 rounded-xl focus:border-accent-primary transition-all placeholder:text-text-muted/60 outline-none hover:border-accent-primary/35"
               />
               <input
                 type="text" name="domain" placeholder="Event Type (e.g., Gala, DJ Festival)"
                 value={formData.domain} onChange={handleInputChange}
-                className="w-full bg-bg-main border border-border-color text-sm text-text-main px-5 py-4 rounded-xl transition-all placeholder-text-muted/60"
+                className="w-full bg-bg-surface border border-border-color text-sm text-text-main px-5 py-4 rounded-xl focus:border-accent-primary transition-all placeholder:text-text-muted/60 outline-none hover:border-accent-primary/35"
               />
             </div>
             <textarea
               rows="5" name="message" placeholder="Tell us about your event vision and requirements…"
               value={formData.message} onChange={handleInputChange} required
-              className="w-full bg-bg-main border border-border-color text-sm text-text-main px-5 py-4 rounded-xl transition-all placeholder-text-muted/60 resize-none"
+              className="w-full bg-bg-surface border border-border-color text-sm text-text-main px-5 py-4 rounded-xl focus:border-accent-primary transition-all placeholder:text-text-muted/60 outline-none resize-none hover:border-accent-primary/35"
             />
             <button
+              ref={submitBtnRef}
               type="submit"
               id="contact-submit"
-              className="w-full py-4 bg-gradient-to-r from-accent-primary to-accent-secondary text-white font-semibold rounded-xl
-                hover:shadow-xl hover:shadow-accent-primary/40 hover:-translate-y-0.5 transition-all text-sm uppercase tracking-wider cursor-pointer"
+              className="w-full py-4 bg-gradient-to-r from-accent-primary to-accent-rose hover:from-accent-rose hover:to-accent-secondary text-white font-bold rounded-xl
+                hover:shadow-xl hover:shadow-accent-primary/25 hover:-translate-y-0.5 btn-glow transition-all text-xs uppercase tracking-widest cursor-pointer"
             >
               Send Project Brief ✉️
             </button>

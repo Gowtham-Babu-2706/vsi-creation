@@ -3,6 +3,10 @@ import { Search, SlidersHorizontal, Images, Sparkles } from 'lucide-react';
 import { GALLERY_EVENTS } from '../utils/galleryData';
 import GalleryCard from '../components/GalleryCard';
 import { api } from '../utils/api';
+import { useGSAP, SplitText } from '../hooks/useGSAP';
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
+gsap.registerPlugin(ScrollTrigger);
 
 const CATEGORIES = [
   { id: 'all',                   label: 'All Events' },
@@ -51,6 +55,27 @@ export default function GalleryPage() {
     return matchSearch && matchCat;
   });
 
+  useGSAP(() => {
+    const tl = gsap.timeline();
+    tl.fromTo('.gal-eyebrow', { opacity: 0, y: -12 }, { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' })
+      .fromTo('.gal-title .char-span',
+        { opacity: 0, y: 32, rotateX: -40 },
+        { opacity: 1, y: 0, rotateX: 0, duration: 0.7, stagger: 0.02, ease: 'power4.out' },
+        '-=0.35'
+      )
+      .fromTo('.gal-desc', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' }, '-=0.5')
+      .fromTo('.gal-filter-box', { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 0.65, ease: 'power3.out' }, '-=0.3');
+  }, []);
+
+  // Animate cards on first load
+  useEffect(() => {
+    if (loading) return;
+    gsap.fromTo('.gal-card-anim',
+      { opacity: 0, y: 38, scale: 0.96 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.7, stagger: 0.08, ease: 'power3.out' }
+    );
+  }, [loading, filtered.length]);
+
   return (
     <div className="bg-bg-main text-text-main min-h-screen pt-24 pb-16 relative">
       {/* Ambient lighting */}
@@ -59,52 +84,52 @@ export default function GalleryPage() {
 
       <div className="max-w-7xl mx-auto px-6 md:px-8 space-y-12">
 
-        {/* ── Page header ─────────────────────────────── */}
+        {/* ── Page header ─────────────────────────── */}
         <div className="text-center md:text-left space-y-3 max-w-2xl">
-          <span className="text-xs text-accent-gold font-bold uppercase tracking-[4px] glow-gold flex items-center justify-center md:justify-start gap-1.5">
-            <Sparkles className="w-4 h-4 text-accent-primary" />
+          <span className="gal-eyebrow text-xs text-accent-gold font-bold uppercase tracking-[4px] glow-gold flex items-center justify-center md:justify-start gap-1.5">
+            <Sparkles className="w-4 h-4 text-accent-gold" />
             Visual Archive
           </span>
-          <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">
-            Event Gallery
+          <h1 className="gal-title text-4xl md:text-5xl font-extrabold text-black tracking-tight font-display">
+            <SplitText>Event Gallery</SplitText>
           </h1>
-          <p className="text-sm md:text-base text-text-muted leading-relaxed">
+          <p className="gal-desc text-sm md:text-base text-text-muted leading-relaxed font-light">
             A curated showcase of every spectacle VSI Creations has engineered — from royal weddings and arena concerts to intimate cultural galas.
           </p>
         </div>
 
-        {/* ── Filter toolbar ───────────────────────────── */}
-        <div className="bg-bg-surface border border-border-color rounded-[24px] p-6 md:p-8 shadow-xl space-y-5">
+        {/* ── Filter toolbar ───────────────────────── */}
+        <div className="gal-filter-box bg-bg-surface/55 backdrop-blur-md border border-white/5 rounded-[28px] p-6 md:p-8 shadow-xl shadow-black/30 space-y-5">
           {/* Search + sort row */}
           <div className="flex flex-col md:flex-row gap-4 items-center">
             <div className="relative w-full md:max-w-sm">
-              <Search className="absolute left-4 top-3.5 w-4 h-4 text-gray-500" />
+              <Search className="absolute left-4 top-3.5 w-4 h-4 text-slate-500" />
               <input
                 type="text"
                 placeholder="Search event name, venue or keyword..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full bg-bg-card border border-border-color text-xs text-white pl-12 pr-4 py-3.5 rounded-xl focus:border-accent-gold outline-none transition-all placeholder-gray-600"
+                className="w-full bg-bg-card/45 border border-border-color/80 text-xs text-white pl-12 pr-4 py-3.5 rounded-xl focus:border-accent-primary outline-none transition-all placeholder:text-slate-655 focus:bg-bg-main/80 hover:border-accent-primary/25"
               />
             </div>
             <div className="flex items-center gap-2 w-full md:w-auto ml-auto">
               <SlidersHorizontal className="w-4 h-4 text-accent-gold shrink-0 hidden md:block" />
-              <span className="text-xs text-text-muted font-bold uppercase tracking-wider">
+              <span className="text-xs text-text-muted font-bold uppercase tracking-widest">
                 {filtered.length} event{filtered.length !== 1 ? 's' : ''} found
               </span>
             </div>
           </div>
 
           {/* Category tabs */}
-          <div className="flex flex-wrap gap-2 pt-3 border-t border-border-color/40">
+          <div className="flex flex-wrap gap-2 pt-3 border-t border-border-color/30">
             {CATEGORIES.map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => setCategory(cat.id)}
                 className={`px-4 py-2.5 text-[10px] md:text-xs font-bold uppercase tracking-wider rounded-xl border transition-all cursor-pointer ${
                   category === cat.id
-                    ? 'bg-accent-gold border-accent-gold text-bg-main font-black shadow-md shadow-accent-gold/10'
-                    : 'bg-bg-card border-border-color hover:border-accent-primary text-text-muted hover:text-white'
+                    ? 'cat-active'
+                    : 'bg-bg-card border-border-color/85 hover:border-accent-primary text-text-muted hover:text-white'
                 }`}
               >
                 {cat.label}
@@ -131,19 +156,21 @@ export default function GalleryPage() {
         ) : filtered.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filtered.map((ev) => (
-              <GalleryCard key={ev.id} event={ev} />
+              <div key={ev.id} className="gal-card-anim">
+                <GalleryCard event={ev} />
+              </div>
             ))}
           </div>
         ) : (
-          <div className="text-center py-24 bg-bg-surface border border-border-color rounded-[32px] space-y-4">
+          <div className="text-center py-24 bg-bg-surface/55 backdrop-blur-md border border-white/5 rounded-[32px] space-y-4 shadow-xl shadow-black/25">
             <Images className="w-12 h-12 text-accent-primary mx-auto animate-pulse" />
-            <h3 className="text-lg font-bold text-white">No Events Found</h3>
-            <p className="text-xs text-text-muted max-w-sm mx-auto">
+            <h3 className="text-lg font-bold text-white tracking-tight">No Events Found</h3>
+            <p className="text-xs text-text-muted max-w-sm mx-auto font-light">
               No gallery records match your search or category filter. Try clearing the search or switching categories.
             </p>
             <button
               onClick={() => { setSearch(''); setCategory('all'); }}
-              className="px-6 py-2.5 bg-bg-card hover:bg-accent-primary border border-border-color hover:border-accent-primary text-xs font-bold text-white rounded-xl uppercase tracking-wider transition-all cursor-pointer"
+              className="px-6 py-2.5 bg-bg-card/70 hover:bg-accent-primary border border-border-color hover:border-accent-primary text-xs font-bold text-white rounded-xl uppercase tracking-wider transition-all cursor-pointer btn-glow"
             >
               Reset Filters
             </button>

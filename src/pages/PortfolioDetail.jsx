@@ -1,6 +1,10 @@
 import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, CheckCircle2, ShieldCheck, Flame, Zap, Camera, Award, Star } from 'lucide-react';
+import { useGSAP, SplitText } from '../hooks/useGSAP';
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
+gsap.registerPlugin(ScrollTrigger);
 
 const PORTFOLIO_DATA = {
   'music-festivals': {
@@ -85,6 +89,50 @@ export default function PortfolioDetail() {
     window.scrollTo(0, 0);
   }, [id]);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    alert(`Thank you for inquiring about ${project?.title}. Our executive producer will contact you in 24 hours.`);
+  };
+
+  useGSAP(() => {
+    if (!project) return;
+    // Hero image scale-in
+    gsap.fromTo('.pd-hero-img',
+      { scale: 1.1 },
+      { scale: 1, duration: 1.8, ease: 'power2.out' }
+    );
+    // Hero content stagger
+    const tl = gsap.timeline({ delay: 0.2 });
+    tl.fromTo('.pd-back-link', { opacity: 0, x: -18 }, { opacity: 1, x: 0, duration: 0.5, ease: 'power2.out' })
+      .fromTo('.pd-eyebrow', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' }, '-=0.2')
+      .fromTo('.pd-title .char-span',
+        { opacity: 0, y: 38, rotateX: -42 },
+        { opacity: 1, y: 0, rotateX: 0, duration: 0.8, stagger: 0.018, ease: 'power4.out' },
+        '-=0.3'
+      )
+      .fromTo('.pd-subtitle', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.55');
+
+    // Body sections scroll-triggered
+    gsap.utils.toArray('.pd-section').forEach((el) => {
+      gsap.fromTo(el,
+        { opacity: 0, y: 42 },
+        {
+          opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
+        }
+      );
+    });
+
+    // Stats counter stagger
+    gsap.fromTo('.pd-stat',
+      { opacity: 0, y: 24, scale: 0.92 },
+      {
+        opacity: 1, y: 0, scale: 1, duration: 0.6, stagger: 0.1, ease: 'back.out(1.5)',
+        scrollTrigger: { trigger: '.pd-stats-row', start: 'top 90%', toggleActions: 'play none none none' }
+      }
+    );
+  }, [project]);
+
   if (!project) {
     return (
       <div className="min-height-screen bg-bg-main text-white flex flex-col justify-center items-center py-20 px-8">
@@ -96,28 +144,24 @@ export default function PortfolioDetail() {
     );
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert(`Thank you for inquiring about ${project.title}. Our executive producer will contact you in 24 hours.`);
-  };
-
   return (
     <div className="bg-bg-main text-text-main min-h-screen pt-24 pb-16">
       {/* Hero Banner */}
-      <div 
-        className="relative h-[60vh] bg-cover bg-center flex items-end"
-        style={{ backgroundImage: `linear-gradient(to top, #090506 100%, rgba(9, 5, 6, 0.4) 0%), url(${project.heroImage})` }}
-      >
+      <div className="relative h-[60vh] flex items-end overflow-hidden">
+        <div
+          className="pd-hero-img absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${project.heroImage})` }}
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-bg-main via-bg-main/50 to-transparent"></div>
         <div className="relative max-w-7xl mx-auto w-full px-8 pb-12 z-10">
-          <Link to="/" className="inline-flex items-center text-accent-gold hover:text-white mb-6 text-sm font-semibold transition-colors">
+          <Link to="/" className="pd-back-link inline-flex items-center text-accent-primary hover:text-white mb-6 text-xs font-bold uppercase tracking-widest transition-colors cursor-pointer">
             <ArrowLeft className="w-4 h-4 mr-2" /> Back to Masterpieces
           </Link>
-          <span className="text-xs text-accent-gold tracking-widest uppercase font-bold bg-accent-primary/20 border border-accent-primary/40 px-3 py-1 rounded-full">{project.tags[0]}</span>
-          <h1 className="text-4xl md:text-6xl font-extrabold text-white mt-4 tracking-tight leading-tight">
-            {project.title}
+          <span className="pd-eyebrow text-[10px] text-accent-gold tracking-widest uppercase font-extrabold bg-accent-primary/20 border border-accent-primary/40 px-3 py-1.5 rounded-full">{project.tags[0]}</span>
+          <h1 className="pd-title text-4xl md:text-6xl font-extrabold text-white mt-4 tracking-tight leading-tight">
+            <SplitText>{project.title}</SplitText>
           </h1>
-          <p className="text-accent-gold text-lg md:text-xl font-medium mt-2 max-w-2xl">{project.subtitle}</p>
+          <p className="pd-subtitle text-accent-gold text-lg md:text-xl font-medium mt-2 max-w-2xl">{project.subtitle}</p>
         </div>
       </div>
 
@@ -126,14 +170,14 @@ export default function PortfolioDetail() {
         {/* Left 2 Columns: Details */}
         <div className="lg:col-span-2 space-y-12">
           {/* Detailed Summary */}
-          <section className="bg-bg-surface border border-border-color p-8 rounded-3xl">
-            <h2 className="text-2xl font-bold text-white mb-4 border-b border-border-color pb-3">Project Overview</h2>
-            <p className="text-text-muted text-base leading-relaxed">{project.description}</p>
+          <section className="pd-section bg-bg-surface/55 backdrop-blur-md border border-white/5 p-8 rounded-[32px] shadow-xl shadow-black/30">
+            <h2 className="text-xl font-extrabold text-white mb-4 border-b border-border-color/20 pb-3 font-display tracking-tight">Project Overview</h2>
+            <p className="text-text-muted text-sm leading-relaxed font-light">{project.description}</p>
             
             {/* Tags list */}
             <div className="flex flex-wrap gap-2 mt-6">
               {project.tags.map((tag, idx) => (
-                <span key={idx} className="bg-bg-card text-text-main border border-border-color text-xs px-3 py-1.5 rounded-lg font-semibold">
+                <span key={idx} className="bg-bg-card/45 text-white border border-white/5 text-[10px] px-3 py-1.5 rounded-lg font-bold uppercase tracking-wider">
                   #{tag}
                 </span>
               ))}
@@ -141,13 +185,13 @@ export default function PortfolioDetail() {
           </section>
 
           {/* Key Deliverables/Specs */}
-          <section className="bg-bg-surface border border-border-color p-8 rounded-3xl">
-            <h2 className="text-2xl font-bold text-white mb-6 border-b border-border-color pb-3">Engineering Specifications</h2>
+          <section className="bg-bg-surface/55 backdrop-blur-md border border-white/5 p-8 rounded-[32px] shadow-xl shadow-black/30">
+            <h2 className="text-xl font-extrabold text-white mb-6 border-b border-border-color/20 pb-3 font-display tracking-tight">Engineering Specifications</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {project.features.map((feature, idx) => (
-                <div key={idx} className="flex items-start space-x-3 bg-bg-card p-4 rounded-xl border border-border-color/50">
+                <div key={idx} className="flex items-start space-x-3 bg-bg-card/45 backdrop-blur-md p-4 rounded-xl border border-white/5 hover:border-accent-primary/25 transition-all">
                   <CheckCircle2 className="w-5 h-5 text-accent-gold shrink-0 mt-0.5" />
-                  <span className="text-sm text-text-muted">{feature}</span>
+                  <span className="text-xs text-text-muted font-light leading-relaxed">{feature}</span>
                 </div>
               ))}
             </div>
@@ -155,17 +199,17 @@ export default function PortfolioDetail() {
 
           {/* Photo Gallery Grid */}
           <section className="space-y-6">
-            <h2 className="text-2xl font-bold text-white border-b border-border-color pb-3">Project Visuals</h2>
+            <h2 className="text-xl font-extrabold text-white border-b border-border-color/20 pb-3 font-display tracking-tight">Project Visuals</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {project.gallery.map((img, idx) => (
-                <div key={idx} className="h-64 rounded-2xl overflow-hidden border border-border-color group relative">
+                <div key={idx} className="h-64 rounded-[20px] overflow-hidden border border-white/5 group relative shadow-lg hover:border-accent-primary/30 transition-all">
                   <img 
                     src={img} 
                     alt={`${project.title} mockup ${idx + 1}`} 
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-bg-main/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                    <span className="text-xs text-accent-gold uppercase font-bold">VSI Production Render</span>
+                    <span className="text-[10px] text-accent-gold uppercase font-extrabold tracking-wider">VSI Production Render</span>
                   </div>
                 </div>
               ))}
@@ -176,14 +220,14 @@ export default function PortfolioDetail() {
         {/* Right 1 Column: Stats & Inquiry Card */}
         <div className="space-y-8">
           {/* Stats Box */}
-          <div className="bg-gradient-to-br from-bg-surface to-bg-card border border-border-color p-6 rounded-3xl">
-            <h3 className="text-lg font-bold text-white mb-4 flex items-center">
+          <div className="bg-gradient-to-br from-bg-surface/55 to-bg-card/65 backdrop-blur-md border border-white/5 p-6 rounded-[28px] shadow-xl shadow-black/30">
+            <h3 className="text-base font-extrabold text-white mb-4 flex items-center font-display tracking-tight">
               <Zap className="w-5 h-5 text-accent-gold mr-2" /> Production Metrics
             </h3>
             <div className="grid grid-cols-2 gap-4">
               {project.stats.map((stat, idx) => (
-                <div key={idx} className="bg-bg-main/60 p-4 rounded-xl border border-border-color text-center">
-                  <span className="text-2xl font-bold text-accent-gold block">{stat.value}</span>
+                <div key={idx} className="bg-bg-main/60 backdrop-blur-md p-4 rounded-xl border border-white/5 text-center hover:border-accent-gold/25 transition-all">
+                  <span className="text-2xl font-black text-accent-gold block glow-gold">{stat.value}</span>
                   <span className="text-[10px] text-text-muted uppercase font-bold tracking-wider">{stat.label}</span>
                 </div>
               ))}
@@ -191,12 +235,12 @@ export default function PortfolioDetail() {
           </div>
 
           {/* Intake Inquire Form Card */}
-          <div className="bg-bg-surface border border-border-color p-8 rounded-3xl shadow-xl relative overflow-hidden">
+          <div className="bg-bg-surface/55 backdrop-blur-md border border-white/5 p-8 rounded-[28px] shadow-xl shadow-black/30 relative overflow-hidden">
             <div className="absolute -top-12 -right-12 w-24 h-24 bg-accent-primary/10 rounded-full blur-2xl"></div>
-            <h3 className="text-xl font-bold text-white mb-2 flex items-center">
+            <h3 className="text-base font-extrabold text-white mb-2 flex items-center font-display tracking-tight">
               <Flame className="w-5 h-5 text-accent-primary mr-2" /> Book This Layout
             </h3>
-            <p className="text-xs text-text-muted mb-6">Coordinate our structural resources and media crew for your upcoming execution.</p>
+            <p className="text-xs text-text-muted mb-6 font-light">Coordinate our structural resources and media crew for your upcoming execution.</p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
@@ -204,7 +248,7 @@ export default function PortfolioDetail() {
                   type="text" 
                   placeholder="Contact Person" 
                   required 
-                  className="w-full bg-bg-card border border-border-color text-sm text-white px-4 py-3 rounded-xl focus:border-accent-gold outline-none transition-all placeholder-gray-600"
+                  className="w-full bg-bg-card/45 border border-border-color/80 text-sm text-white px-4 py-3.5 rounded-xl focus:border-accent-primary focus:bg-bg-main/80 outline-none transition-all placeholder:text-slate-600 hover:border-accent-primary/25"
                 />
               </div>
               <div>
@@ -212,7 +256,7 @@ export default function PortfolioDetail() {
                   type="email" 
                   placeholder="Email Address" 
                   required 
-                  className="w-full bg-bg-card border border-border-color text-sm text-white px-4 py-3 rounded-xl focus:border-accent-gold outline-none transition-all placeholder-gray-600"
+                  className="w-full bg-bg-card/45 border border-border-color/80 text-sm text-white px-4 py-3.5 rounded-xl focus:border-accent-primary focus:bg-bg-main/80 outline-none transition-all placeholder:text-slate-600 hover:border-accent-primary/25"
                 />
               </div>
               <div>
@@ -220,7 +264,7 @@ export default function PortfolioDetail() {
                   type="text" 
                   placeholder="Target Date / Season" 
                   required 
-                  className="w-full bg-bg-card border border-border-color text-sm text-white px-4 py-3 rounded-xl focus:border-accent-gold outline-none transition-all placeholder-gray-600"
+                  className="w-full bg-bg-card/45 border border-border-color/80 text-sm text-white px-4 py-3.5 rounded-xl focus:border-accent-primary focus:bg-bg-main/80 outline-none transition-all placeholder:text-slate-600 hover:border-accent-primary/25"
                 />
               </div>
               <div>
@@ -228,12 +272,12 @@ export default function PortfolioDetail() {
                   rows="3" 
                   placeholder="Special requests or spatial details..." 
                   required 
-                  className="w-full bg-bg-card border border-border-color text-sm text-white px-4 py-3 rounded-xl focus:border-accent-gold outline-none transition-all placeholder-gray-600"
+                  className="w-full bg-bg-card/45 border border-border-color/80 text-sm text-white px-4 py-3.5 rounded-xl focus:border-accent-primary focus:bg-bg-main/80 outline-none transition-all placeholder:text-slate-600 resize-none hover:border-accent-primary/25"
                 ></textarea>
               </div>
               <button 
                 type="submit" 
-                className="w-full py-4 bg-gradient-to-r from-accent-primary to-[#700016] text-sm text-white font-bold rounded-xl border border-accent-gold/20 hover:border-accent-gold shadow-lg shadow-accent-primary/20 hover:shadow-accent-primary/40 hover:-translate-y-0.5 transition-all cursor-pointer"
+                className="w-full py-4 bg-gradient-to-r from-accent-primary to-accent-rose hover:from-accent-rose hover:to-accent-secondary text-xs text-white font-bold rounded-xl border border-white/10 shadow-lg shadow-accent-primary/25 hover:shadow-accent-secondary/35 hover:-translate-y-0.5 btn-glow transition-all cursor-pointer uppercase tracking-widest"
               >
                 Request Production Slot
               </button>

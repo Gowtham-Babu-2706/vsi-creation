@@ -8,6 +8,10 @@ import { getGalleryEventById } from '../utils/galleryData';
 import VideoPlayer from '../components/VideoPlayer';
 import Lightbox from '../components/Lightbox';
 import { api } from '../utils/api';
+import { useGSAP, SplitText } from '../hooks/useGSAP';
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
+gsap.registerPlugin(ScrollTrigger);
 
 export default function GalleryDetail() {
   const { id } = useParams();
@@ -46,6 +50,40 @@ export default function GalleryDetail() {
 
   const closeLightbox = () => setLightboxIndex(null);
 
+  const formatDate = (d) =>
+    new Date(d).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+  const allEventPhotos = event?.photos || [];
+  const allBtsPhotos   = event?.btsPhotos || [];
+
+  useGSAP(() => {
+    if (!event) return;
+    // Hero scale-in
+    gsap.fromTo('.gd-hero-img',
+      { scale: 1.1 },
+      { scale: 1, duration: 1.8, ease: 'power2.out' }
+    );
+    const tl = gsap.timeline({ delay: 0.25 });
+    tl.fromTo('.gd-back-link', { opacity: 0, x: -18 }, { opacity: 1, x: 0, duration: 0.5, ease: 'power2.out' })
+      .fromTo('.gd-eyebrow', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' }, '-=0.2')
+      .fromTo('.gd-title .char-span',
+        { opacity: 0, y: 36, rotateX: -42 },
+        { opacity: 1, y: 0, rotateX: 0, duration: 0.8, stagger: 0.018, ease: 'power4.out' },
+        '-=0.3'
+      )
+      .fromTo('.gd-meta', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' }, '-=0.55');
+
+    gsap.utils.toArray('.gd-section').forEach((el) => {
+      gsap.fromTo(el,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 87%', toggleActions: 'play none none none' }
+        }
+      );
+    });
+  }, [event]);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-bg-main flex flex-col items-center justify-center gap-4">
@@ -57,7 +95,7 @@ export default function GalleryDetail() {
 
   if (!event) {
     return (
-      <div className="min-h-screen bg-bg-main text-white flex flex-col items-center justify-center gap-4 px-8 py-20">
+      <div className="min-h-screen bg-bg-main text-black flex flex-col items-center justify-center gap-4 px-8 py-20">
         <h2 className="text-2xl font-black text-accent-primary uppercase tracking-wider">Event Not Found</h2>
         <p className="text-sm text-text-muted text-center max-w-sm">
           No gallery record matches this ID. The event may have been removed or the link is incorrect.
@@ -69,71 +107,64 @@ export default function GalleryDetail() {
     );
   }
 
-  const formatDate = (d) =>
-    new Date(d).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-
-  const allEventPhotos = event.photos || [];
-  const allBtsPhotos   = event.btsPhotos || [];
-
   return (
     <div className="bg-bg-main text-text-main min-h-screen pb-16 relative">
       {/* Ambient */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-accent-primary/10 rounded-full blur-[120px] pointer-events-none -z-10" />
-
-      {/* ── Hero Banner ─────────────────────────────── */}
-      <div
-        className="relative h-[60vh] md:h-[70vh] bg-cover bg-center overflow-hidden"
-        style={{ backgroundImage: `url(${event.banner})` }}
-      >
+      <div className="absolute top-0 right-0 w-96 h-96 bg-accent-primary/10 rounded-full blur-[120px] pointer-events-none -z-10" />      {/* ── Hero Banner ─────────────────────────── */}
+      <div className="relative h-[60vh] md:h-[70vh] overflow-hidden">
+        <div
+          className="gd-hero-img absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${event.banner})` }}
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-bg-main via-bg-main/50 to-black/30" />
 
         <div className="absolute inset-x-0 bottom-0 max-w-7xl mx-auto px-6 md:px-8 pb-12 z-10">
-          <Link to="/gallery" className="inline-flex items-center gap-2 text-accent-gold hover:text-white text-xs font-bold uppercase tracking-wider mb-6 transition-colors cursor-pointer">
+          <Link to="/gallery" className="gd-back-link inline-flex items-center gap-2 text-accent-primary hover:text-black text-xs font-bold uppercase tracking-widest mb-6 transition-colors cursor-pointer">
             <ArrowLeft className="w-4 h-4" /> Back to Gallery
           </Link>
 
           <div className="space-y-3">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-accent-gold bg-accent-primary/20 border border-accent-primary/40 px-3.5 py-1.5 rounded-full inline-block">
+            <span className="gd-eyebrow text-[10px] font-bold uppercase tracking-widest text-accent-gold bg-accent-primary/20 border border-accent-primary/40 px-3.5 py-1.5 rounded-full inline-block">
               {event.categoryLabel}
             </span>
-            <h1 className="text-3xl md:text-5xl font-black text-white leading-tight tracking-tight max-w-3xl">
-              {event.name}
+            <h1 className="gd-title text-3xl md:text-5xl font-extrabold text-black leading-tight tracking-tight font-display max-w-3xl">
+              <SplitText>{event.name}</SplitText>
             </h1>
-            <div className="flex flex-wrap gap-5 text-sm text-text-muted font-semibold mt-2">
+            <div className="gd-meta flex flex-wrap gap-5 text-xs text-text-muted font-bold uppercase tracking-wider mt-3">
               <span className="flex items-center gap-1.5"><Calendar className="w-4 h-4 text-accent-gold" />{formatDate(event.date)}</span>
-              <span className="flex items-center gap-1.5"><MapPin className="w-4 h-4 text-accent-gold" />{event.location}</span>
+              <span className="flex items-center gap-1.5"><MapPin className="w-4 h-4 text-accent-rose" />{event.location}</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* ── Main Content ─────────────────────────────── */}
+      {/* ── Main Content ── */}
       <div className="max-w-7xl mx-auto px-6 md:px-8 grid grid-cols-1 lg:grid-cols-3 gap-12 mt-12">
 
         {/* Left column (2-span) */}
         <div className="lg:col-span-2 space-y-14">
 
           {/* Description */}
-          <section className="bg-bg-surface border border-border-color p-8 rounded-3xl space-y-4">
-            <h2 className="text-xl font-bold text-white border-b border-border-color pb-3 flex items-center gap-2">
+          <section className="gd-section bg-bg-surface/55 backdrop-blur-md border border-white/5 p-8 rounded-[32px] space-y-4 shadow-xl shadow-black/30">
+            <h2 className="text-xl font-extrabold text-text-muted border-b border-border-color/20 pb-3 flex items-center gap-2 tracking-tight font-display">
               <Star className="w-5 h-5 text-accent-gold" /> Event Overview
             </h2>
-            <p className="text-sm md:text-base text-text-muted leading-relaxed">
+            <p className="text-sm md:text-base text-text-muted font-light leading-relaxed">
               {event.fullDescription}
             </p>
           </section>
 
           {/* Highlights */}
           {event.highlights?.length > 0 && (
-            <section className="bg-bg-surface border border-border-color p-8 rounded-3xl space-y-5">
-              <h2 className="text-xl font-bold text-white border-b border-border-color pb-3 flex items-center gap-2">
+            <section className="bg-bg-surface/55 backdrop-blur-md border border-white/5 p-8 rounded-[32px] space-y-5 shadow-xl shadow-black/30">
+              <h2 className="text-xl font-extrabold text-text-muted border-b border-border-color/20 pb-3 flex items-center gap-2 tracking-tight font-display">
                 <CheckCircle2 className="w-5 h-5 text-accent-gold" /> Production Highlights
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {event.highlights.map((h, i) => (
-                  <div key={i} className="flex items-start gap-3 bg-bg-card border border-border-color/60 p-4 rounded-xl">
-                    <CheckCircle2 className="w-4 h-4 text-accent-gold shrink-0 mt-0.5" />
-                    <span className="text-xs text-text-muted leading-relaxed">{h}</span>
+                  <div key={i} className="flex items-start gap-3 bg-bg-card/45 backdrop-blur-md border border-white/5 p-4 rounded-xl hover:border-accent-primary/25 transition-all">
+                    <CheckCircle2 className="w-4 h-4 text-accent-primary shrink-0 mt-0.5" />
+                    <span className="text-xs text-text-muted leading-relaxed font-light">{h}</span>
                   </div>
                 ))}
               </div>
@@ -143,23 +174,23 @@ export default function GalleryDetail() {
           {/* Event Photo Gallery */}
           {allEventPhotos.length > 0 && (
             <section className="space-y-5">
-              <h2 className="text-xl font-bold text-white border-b border-border-color pb-3 flex items-center gap-2">
-                <Images className="w-5 h-5 text-accent-gold" /> Event Gallery
+              <h2 className="text-xl font-extrabold text-text-muted border-b border-border-color/20 pb-3 flex items-center gap-2 tracking-tight font-display">
+                <Images className="w-5 h-5 text-accent-primary" /> Event Gallery
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {allEventPhotos.map((img, i) => (
                   <div
                     key={i}
                     onClick={() => openLightbox(allEventPhotos, i)}
-                    className="h-44 md:h-52 rounded-2xl overflow-hidden border border-border-color group cursor-pointer relative"
+                    className="h-44 md:h-52 rounded-[20px] overflow-hidden border border-white/5 group cursor-pointer relative shadow-lg hover:border-accent-primary/30 transition-all"
                   >
                     <img
                       src={img}
                       alt={`Event photo ${i + 1}`}
-                      className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110 group-hover:brightness-75"
+                      className="w-full h-full object-cover transition-all duration-550 group-hover:scale-110 group-hover:brightness-50"
                     />
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <div className="bg-black/60 border border-accent-gold/30 text-accent-gold text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg">
+                      <div className="bg-black/60 border border-accent-primary/30 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-lg">
                         View Full
                       </div>
                     </div>
@@ -172,8 +203,8 @@ export default function GalleryDetail() {
           {/* Video */}
           {event.videoUrl && (
             <section className="space-y-5">
-              <h2 className="text-xl font-bold text-white border-b border-border-color pb-3 flex items-center gap-2">
-                <Film className="w-5 h-5 text-accent-gold" /> Production Video
+              <h2 className="text-xl font-extrabold text-black border-b border-border-color/20 pb-3 flex items-center gap-2 tracking-tight font-display">
+                <Film className="w-5 h-5 text-accent-primary" /> Production Video
               </h2>
               <VideoPlayer
                 videoUrl={event.videoUrl}
@@ -187,23 +218,23 @@ export default function GalleryDetail() {
           {/* Behind-the-scenes */}
           {allBtsPhotos.length > 0 && (
             <section className="space-y-5">
-              <h2 className="text-xl font-bold text-white border-b border-border-color pb-3 flex items-center gap-2">
-                <Camera className="w-5 h-5 text-accent-gold" /> Behind the Scenes
+              <h2 className="text-xl font-extrabold text-white border-b border-border-color/20 pb-3 flex items-center gap-2 tracking-tight font-display">
+                <Camera className="w-5 h-5 text-accent-primary" /> Behind the Scenes
               </h2>
               <div className="grid grid-cols-2 gap-4">
                 {allBtsPhotos.map((img, i) => (
                   <div
                     key={i}
                     onClick={() => openLightbox(allBtsPhotos, i)}
-                    className="h-48 rounded-2xl overflow-hidden border border-border-color group cursor-pointer relative"
+                    className="h-48 rounded-[20px] overflow-hidden border border-white/5 group cursor-pointer relative shadow-lg hover:border-accent-primary/30 transition-all"
                   >
                     <img
                       src={img}
                       alt={`BTS photo ${i + 1}`}
-                      className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110 group-hover:brightness-75"
+                      className="w-full h-full object-cover transition-all duration-550 group-hover:scale-110 group-hover:brightness-50"
                     />
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <div className="bg-black/60 border border-accent-gold/30 text-accent-gold text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg">
+                      <div className="bg-black/60 border border-accent-primary/30 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-lg">
                         View Full
                       </div>
                     </div>
@@ -217,43 +248,43 @@ export default function GalleryDetail() {
 
         {/* Right column — Event info card */}
         <div className="space-y-8">
-          <div className="bg-bg-surface border border-border-color p-8 rounded-3xl space-y-6 sticky top-28">
-            <div className="flex items-center justify-between border-b border-border-color pb-4">
-              <h3 className="text-base font-bold text-white">Event Details</h3>
-              <span className="text-[10px] text-accent-gold font-bold uppercase tracking-widest bg-accent-primary/20 border border-accent-primary/40 px-2.5 py-1 rounded-full">
+          <div className="bg-bg-surface/55 backdrop-blur-md border border-white/5 p-8 rounded-[28px] space-y-6 shadow-xl shadow-black/30 sticky top-28">
+            <div className="flex items-center justify-between border-b border-border-color/20 pb-4">
+              <h3 className="text-base font-extrabold text-white tracking-tight">Event Details</h3>
+              <span className="text-[10px] text-accent-gold font-extrabold uppercase tracking-widest bg-accent-primary/20 border border-accent-primary/40 px-2.5 py-1 rounded-full">
                 Archived
               </span>
             </div>
 
             <dl className="space-y-4 text-xs">
               <div>
-                <dt className="text-text-muted uppercase tracking-wider font-bold mb-1">Category</dt>
-                <dd className="text-white font-semibold">{event.categoryLabel}</dd>
+                <dt className="text-text-muted uppercase tracking-widest font-bold mb-1">Category</dt>
+                <dd className="text-black font-semibold">{event.categoryLabel}</dd>
               </div>
               <div>
-                <dt className="text-text-muted uppercase tracking-wider font-bold mb-1">Date</dt>
-                <dd className="text-white font-semibold">{formatDate(event.date)}</dd>
+                <dt className="text-text-muted uppercase tracking-widest font-bold mb-1">Date</dt>
+                <dd className="text-black font-semibold">{formatDate(event.date)}</dd>
               </div>
               <div>
-                <dt className="text-text-muted uppercase tracking-wider font-bold mb-1">Venue</dt>
-                <dd className="text-white font-semibold">{event.location}</dd>
+                <dt className="text-text-muted uppercase tracking-widest font-bold mb-1">Venue</dt>
+                <dd className="text-black font-semibold">{event.location}</dd>
               </div>
               <div>
-                <dt className="text-text-muted uppercase tracking-wider font-bold mb-1">Photos Captured</dt>
-                <dd className="text-white font-semibold">{allEventPhotos.length + allBtsPhotos.length} images</dd>
+                <dt className="text-text-muted uppercase tracking-widest font-bold mb-1">Photos Captured</dt>
+                <dd className="text-black font-semibold">{allEventPhotos.length + allBtsPhotos.length} images</dd>
               </div>
             </dl>
 
-            <div className="pt-4 border-t border-border-color space-y-3">
+            <div className="pt-4 border-t border-border-color/20 space-y-3">
               <Link
                 to="/contact"
-                className="w-full py-3.5 bg-gradient-to-r from-accent-primary to-[#700016] text-white font-bold rounded-xl border border-accent-gold/20 hover:border-accent-gold shadow-lg shadow-accent-primary/20 hover:shadow-accent-primary/40 hover:-translate-y-0.5 transition-all text-xs uppercase tracking-wider flex items-center justify-center cursor-pointer"
+                className="w-full py-4 bg-gradient-to-r from-accent-primary to-accent-rose hover:from-accent-rose hover:to-accent-secondary text-white font-bold rounded-xl btn-glow shadow-lg shadow-accent-primary/25 hover:shadow-accent-secondary/35 hover:-translate-y-0.5 transition-all text-xs uppercase tracking-widest flex items-center justify-center cursor-pointer"
               >
                 Book Similar Event
               </Link>
               <Link
                 to="/gallery"
-                className="w-full py-3 bg-bg-card border border-border-color hover:border-accent-primary text-white font-bold rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer"
+                className="w-full py-3 bg-bg-card/50 backdrop-blur-md border border-white/5 hover:border-accent-primary/35 text-text-muted font-bold rounded-xl text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md hover:shadow-white/5"
               >
                 <ArrowLeft className="w-3.5 h-3.5" /> All Gallery Events
               </Link>

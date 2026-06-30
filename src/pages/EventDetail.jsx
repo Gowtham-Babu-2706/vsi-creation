@@ -6,6 +6,10 @@ import {
 } from 'lucide-react';
 import { api } from '../utils/api';
 import RegistrationModal from '../components/RegistrationModal';
+import { useGSAP, SplitText } from '../hooks/useGSAP';
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
+gsap.registerPlugin(ScrollTrigger);
 
 export default function EventDetail() {
   const { id } = useParams();
@@ -34,6 +38,43 @@ export default function EventDetail() {
     loadEvent();
   }, [id, searchParams]);
 
+  const formatDate = (dateStr) =>
+    new Date(dateStr).toLocaleDateString('en-US', {
+      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+    });
+
+  const isUpcoming = event ? new Date(event.date) >= new Date() : false;
+
+  useGSAP(() => {
+    if (!event) return;
+    // Hero image scale-in
+    gsap.fromTo('.ed-hero-img',
+      { scale: 1.08 },
+      { scale: 1, duration: 1.6, ease: 'power2.out' }
+    );
+    // Hero content stagger
+    const tl = gsap.timeline({ delay: 0.3 });
+    tl.fromTo('.ed-back-link', { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.5, ease: 'power2.out' })
+      .fromTo('.ed-badges', { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.2')
+      .fromTo('.ed-title .char-span',
+        { opacity: 0, y: 40, rotateX: -45 },
+        { opacity: 1, y: 0, rotateX: 0, duration: 0.8, stagger: 0.018, ease: 'power4.out' },
+        '-=0.3'
+      )
+      .fromTo('.ed-meta', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, '-=0.5');
+
+    // Scroll-triggered body sections
+    gsap.utils.toArray('.ed-section').forEach((el, i) => {
+      gsap.fromTo(el,
+        { opacity: 0, y: 45 },
+        {
+          opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
+        }
+      );
+    });
+  }, [event]);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-bg-main text-white flex flex-col justify-center items-center py-20 px-8 select-none gap-4">
@@ -59,13 +100,6 @@ export default function EventDetail() {
     );
   }
 
-  const formatDate = (dateStr) =>
-    new Date(dateStr).toLocaleDateString('en-US', {
-      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
-    });
-
-  const isUpcoming = new Date(event.date) >= new Date();
-
   return (
     <div className="bg-bg-main text-text-main min-h-screen relative overflow-hidden">
 
@@ -75,48 +109,51 @@ export default function EventDetail() {
 
       {/* ── Hero Banner ── */}
       <div
-        className="relative h-[60vh] min-h-[380px] bg-cover bg-center flex items-end overflow-hidden"
-        style={{ backgroundImage: `url(${event.banner || 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1800'})` }}
+        className="relative h-[65vh] min-h-[420px] flex items-end overflow-hidden"
       >
+        <div
+          className="ed-hero-img absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${event.banner || 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1800'})` }}
+        />
         {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-bg-main via-bg-main/60 to-bg-main/20" />
-        <div className="absolute inset-0 bg-gradient-to-r from-bg-main/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-bg-main via-bg-main/55 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-bg-main/40 to-transparent pointer-events-none" />
 
-        <div className="relative max-w-7xl mx-auto w-full px-6 md:px-8 pb-12 z-10 space-y-4">
+        <div className="relative max-w-7xl mx-auto w-full px-6 md:px-8 pb-12 z-10 space-y-5">
           {/* Back link */}
           <Link
             to="/events"
-            className="inline-flex items-center gap-2 text-text-muted hover:text-accent-secondary text-xs font-semibold uppercase tracking-wider transition-colors mb-2"
+            className="ed-back-link inline-flex items-center gap-2 text-text-muted hover:text-accent-secondary text-xs font-bold uppercase tracking-widest transition-colors mb-2 cursor-pointer"
           >
             <ArrowLeft className="w-3.5 h-3.5" /> Back to Events
           </Link>
 
           {/* Status + Category */}
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="badge-pill">
+          <div className="ed-badges flex flex-wrap items-center gap-3">
+            <span className="badge-pill backdrop-blur-md">
               {event.category || 'Special Edition'}
             </span>
-            <span className={`text-[10px] font-bold uppercase px-3 py-1 rounded-full border
+            <span className={`text-[9px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full border backdrop-blur-md
               ${isUpcoming
-                ? 'bg-emerald-500/15 border-emerald-400/30 text-emerald-300'
-                : 'bg-bg-card/80 border-border-color text-text-muted'
+                ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+                : 'bg-bg-card/85 border-border-color text-text-muted'
               }`}>
               {isUpcoming ? '🟢 Upcoming Event' : '✓ Past Event'}
             </span>
           </div>
 
           {/* Event Title */}
-          <h1 className="font-display text-3xl md:text-5xl lg:text-6xl text-text-main leading-tight max-w-4xl">
-            {event.title}
+          <h1 className="ed-title font-display text-4xl md:text-6xl text-text-main leading-tight max-w-4xl font-extrabold tracking-tight">
+            <SplitText>{event.title}</SplitText>
           </h1>
 
           {/* Meta */}
-          <div className="flex flex-wrap gap-5 text-sm text-text-muted">
-            <span className="flex items-center gap-1.5 font-medium">
+          <div className="ed-meta flex flex-wrap gap-6 text-sm text-text-muted">
+            <span className="flex items-center gap-2 font-medium">
               <Calendar className="w-4 h-4 text-accent-gold" />
               {formatDate(event.date)}
             </span>
-            <span className="flex items-center gap-1.5 font-medium">
+            <span className="flex items-center gap-2 font-medium">
               <MapPin className="w-4 h-4 text-accent-rose" />
               {event.location}
             </span>
@@ -128,27 +165,27 @@ export default function EventDetail() {
       <div className="max-w-7xl mx-auto px-6 md:px-8 grid grid-cols-1 lg:grid-cols-3 gap-10 mt-10 pb-20">
 
         {/* ── Left (2-col): Overview + Video + Timeline ── */}
-        <div className="lg:col-span-2 space-y-8">
+        <div className="lg:col-span-2 space-y-10">
 
           {/* Overview */}
-          <section className="bg-bg-surface border border-border-color rounded-2xl p-7 space-y-4">
-            <h2 className="font-display text-xl text-text-main flex items-center gap-2 pb-3 border-b border-border-color/60">
-              <FileText className="w-5 h-5 text-accent-secondary" />
+          <section className="ed-section bg-bg-surface/55 backdrop-blur-md border border-white/5 rounded-[32px] p-8 space-y-4 shadow-xl shadow-black/30">
+            <h2 className="font-display text-xl text-white flex items-center gap-2.5 pb-4 border-b border-border-color/30 font-extrabold tracking-tight">
+              <FileText className="w-5 h-5 text-accent-primary" />
               Event Overview
             </h2>
-            <p className="text-sm text-text-muted leading-relaxed">
+            <p className="text-sm md:text-base text-text-muted font-light leading-relaxed">
               {event.fullDescription || event.description}
             </p>
           </section>
 
           {/* Video */}
           {event.videoUrl && (
-            <section className="space-y-3">
-              <h2 className="font-display text-xl text-text-main flex items-center gap-2 pb-3 border-b border-border-color/60">
-                <Film className="w-5 h-5 text-accent-secondary" />
+            <section className="space-y-4">
+              <h2 className="font-display text-xl text-white flex items-center gap-2.5 pb-4 border-b border-border-color/30 font-extrabold tracking-tight">
+                <Film className="w-5 h-5 text-accent-primary" />
                 Production Highlight
               </h2>
-              <div className="aspect-video rounded-2xl overflow-hidden border border-border-color bg-bg-surface relative group shadow-2xl shadow-bg-main/60">
+              <div className="aspect-video rounded-[32px] overflow-hidden border border-white/5 bg-bg-surface relative group shadow-2xl shadow-black/40">
                 {!isVideoPlaying ? (
                   <div
                     className="absolute inset-0 flex flex-col items-center justify-center z-10 cursor-pointer select-none"
@@ -160,10 +197,10 @@ export default function EventDetail() {
                       className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-bg-main/60 to-transparent" />
-                    <div className="bg-accent-primary hover:bg-accent-secondary border border-white/20 p-5 rounded-full text-white shadow-2xl shadow-accent-primary/40 z-20 group-hover:scale-110 transition-all">
+                    <div className="bg-gradient-to-r from-accent-primary to-accent-rose hover:from-accent-rose hover:to-accent-secondary p-5.5 rounded-full text-white shadow-2xl shadow-accent-primary/45 z-20 group-hover:scale-110 active:scale-95 transition-all">
                       <Play className="w-7 h-7 fill-white text-white ml-0.5" />
                     </div>
-                    <span className="text-[10px] text-accent-gold uppercase tracking-[3px] font-bold mt-4 z-20 drop-shadow">
+                    <span className="text-[10px] text-accent-gold uppercase tracking-[3px] font-extrabold mt-5 z-20 drop-shadow">
                       Play Highlight Reel
                     </span>
                   </div>
@@ -176,20 +213,20 @@ export default function EventDetail() {
 
           {/* Schedule Timeline */}
           {event.schedule && event.schedule.length > 0 && (
-            <section className="bg-bg-surface border border-border-color rounded-2xl p-7">
-              <h2 className="font-display text-xl text-text-main flex items-center gap-2 pb-3 mb-6 border-b border-border-color/60">
-                <Clock className="w-5 h-5 text-accent-secondary" />
+            <section className="bg-bg-surface/55 backdrop-blur-md border border-white/5 rounded-[32px] p-8 shadow-xl shadow-black/30">
+              <h2 className="font-display text-xl text-white flex items-center gap-2.5 pb-4 mb-6 border-b border-border-color/30 font-extrabold tracking-tight">
+                <Clock className="w-5 h-5 text-accent-primary" />
                 Event Timeline
               </h2>
-              <div className="space-y-5 relative before:absolute before:left-[18px] before:top-2 before:bottom-2 before:w-[2px] before:bg-gradient-to-b before:from-accent-primary before:via-accent-secondary/50 before:to-transparent">
+              <div className="space-y-6 relative before:absolute before:left-[18px] before:top-2.5 before:bottom-2.5 before:w-[2px] before:bg-gradient-to-b before:from-accent-primary before:via-accent-rose/50 before:to-transparent">
                 {event.schedule.map((item, idx) => (
-                  <div key={idx} className="flex items-start gap-5 relative">
-                    <div className="w-9 h-9 bg-accent-primary/20 border-2 border-accent-primary rounded-full flex items-center justify-center text-xs font-bold text-accent-secondary z-10 shrink-0">
+                  <div key={idx} className="flex items-start gap-5 relative animate-fade-in" style={{ animationDelay: `${idx * 0.05}s` }}>
+                    <div className="w-9 h-9 bg-accent-primary/10 border-2 border-accent-primary rounded-full flex items-center justify-center text-xs font-extrabold text-white z-10 shrink-0 shadow-[0_0_12px_rgba(225,29,72,0.3)]">
                       {idx + 1}
                     </div>
                     <div className="pt-1">
-                      <span className="text-xs text-accent-gold font-semibold block">{item.time}</span>
-                      <h4 className="text-sm font-semibold text-text-main mt-0.5">{item.title}</h4>
+                      <span className="text-xs text-accent-gold font-extrabold uppercase tracking-wider block">{item.time}</span>
+                      <h4 className="text-sm font-bold text-white mt-1 block">{item.title}</h4>
                     </div>
                   </div>
                 ))}
@@ -202,66 +239,66 @@ export default function EventDetail() {
         <div className="space-y-6">
 
           {/* Venue & Guidelines */}
-          <div className="bg-bg-surface border border-border-color rounded-2xl p-6 space-y-5">
-            <h3 className="font-display text-lg text-text-main flex items-center gap-2 pb-3 border-b border-border-color/60">
-              <Info className="w-5 h-5 text-accent-secondary" />
+          <div className="bg-bg-surface/55 backdrop-blur-md border border-white/5 rounded-[28px] p-6 space-y-5 shadow-xl shadow-black/30">
+            <h3 className="font-display text-base text-white flex items-center gap-2.5 pb-3 border-b border-border-color/20 font-extrabold tracking-tight">
+              <Info className="w-5 h-5 text-accent-primary" />
               Venue & Details
             </h3>
 
             {event.venueDetails && (
               <div className="space-y-1">
-                <span className="text-[10px] text-text-muted font-bold uppercase tracking-wider block">Location Details</span>
-                <p className="text-sm text-text-main leading-relaxed">{event.venueDetails}</p>
+                <span className="text-[10px] text-text-muted font-extrabold uppercase tracking-wider block">Location Details</span>
+                <p className="text-xs text-text-muted font-light leading-relaxed">{event.venueDetails}</p>
               </div>
             )}
 
             {event.participationInfo && (
-              <div className="space-y-1 pt-4 border-t border-border-color/50">
-                <span className="text-[10px] text-text-muted font-bold uppercase tracking-wider block">Participation</span>
-                <p className="text-sm text-text-main leading-relaxed">{event.participationInfo}</p>
+              <div className="space-y-1 pt-4 border-t border-border-color/25">
+                <span className="text-[10px] text-text-muted font-extrabold uppercase tracking-wider block">Participation</span>
+                <p className="text-xs text-text-muted font-light leading-relaxed">{event.participationInfo}</p>
               </div>
             )}
           </div>
 
           {/* Registration CTA */}
-          <div className="relative bg-gradient-to-br from-accent-primary/20 to-bg-surface border border-accent-primary/30 rounded-2xl p-6 overflow-hidden shadow-xl shadow-accent-primary/10">
+          <div className="relative bg-gradient-to-br from-accent-primary/10 to-bg-surface/70 backdrop-blur-md border border-accent-primary/25 rounded-[30px] p-6 overflow-hidden shadow-2xl shadow-accent-primary/10">
             {/* Decorative glow */}
-            <div className="absolute -top-10 -right-10 w-32 h-32 bg-accent-primary/20 rounded-full blur-2xl pointer-events-none" />
-            <div className="absolute -bottom-8 -left-8 w-24 h-24 bg-accent-rose/15 rounded-full blur-2xl pointer-events-none" />
+            <div className="absolute -top-10 -right-10 w-32 h-32 bg-accent-primary/15 rounded-full blur-2xl pointer-events-none" />
+            <div className="absolute -bottom-8 -left-8 w-24 h-24 bg-accent-rose/10 rounded-full blur-2xl pointer-events-none" />
 
-            <div className="relative z-10 space-y-4">
+            <div className="relative z-10 space-y-5">
               <div className="flex items-center gap-2">
-                <Ticket className="w-5 h-5 text-accent-gold" />
-                <h3 className="font-display text-lg text-text-main">Secure Your Spot</h3>
+                <Ticket className="w-5 h-5 text-accent-gold animate-pulse" />
+                <h3 className="font-display text-base text-white font-extrabold tracking-tight">Secure Your Spot</h3>
               </div>
 
               {/* Price display */}
               {event.price != null && event.price > 0 ? (
-                <div className="flex items-center justify-between bg-bg-main/40 border border-accent-gold/20 rounded-xl px-4 py-2.5">
-                  <span className="text-xs text-text-muted">Price per seat</span>
-                  <span className="text-accent-gold font-black text-lg">₹{event.price.toFixed(2)}</span>
+                <div className="flex items-center justify-between bg-bg-main/40 border border-accent-gold/25 rounded-xl px-4 py-3">
+                  <span className="text-xs text-text-muted font-medium">Price per seat</span>
+                  <span className="text-accent-gold font-black text-lg">₹{event.price.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                 </div>
               ) : (
-                <div className="bg-emerald-500/10 border border-emerald-400/20 rounded-xl px-4 py-2.5 text-xs text-emerald-400 font-semibold text-center">
+                <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-4 py-3 text-xs text-emerald-400 font-bold text-center">
                   🎟 Free Entry Event
                 </div>
               )}
 
-              <p className="text-xs text-text-muted leading-relaxed">
+              <p className="text-xs text-text-muted leading-relaxed font-light">
                 Reserve your entry to this exclusive VSI experience. Limited seats available — don't miss out.
               </p>
 
               <button
                 id="register-event-btn"
                 onClick={() => setIsModalOpen(true)}
-                className="w-full py-4 bg-gradient-to-r from-accent-primary to-accent-secondary text-white font-semibold rounded-xl
-                  hover:shadow-lg hover:shadow-accent-primary/40 hover:-translate-y-0.5 transition-all
-                  flex items-center justify-center gap-2 cursor-pointer text-sm"
+                className="w-full py-4 bg-gradient-to-r from-accent-primary to-accent-rose hover:from-accent-rose hover:to-accent-secondary text-white font-bold rounded-xl btn-glow
+                  hover:shadow-lg hover:shadow-accent-primary/20 hover:-translate-y-0.5 transition-all
+                  flex items-center justify-center gap-2 cursor-pointer text-xs uppercase tracking-widest"
               >
                 Register Now <ChevronRight className="w-4 h-4" />
               </button>
 
-              <p className="text-[10px] text-text-muted text-center">
+              <p className="text-[10px] text-text-muted text-center font-light">
                 {event.price > 0 ? 'Secure Razorpay payment · Limited availability' : 'Free registration · Limited availability'}
               </p>
             </div>
@@ -270,9 +307,9 @@ export default function EventDetail() {
           {/* Quick nav back */}
           <Link
             to="/events"
-            className="flex items-center justify-center gap-2 py-3 px-5 bg-bg-card border border-border-color
-              hover:border-accent-primary/40 rounded-xl text-xs font-semibold text-text-muted hover:text-text-main
-              transition-all cursor-pointer"
+            className="flex items-center justify-center gap-2 py-3.5 px-5 bg-bg-card/50 backdrop-blur-md border border-white/5
+              hover:border-accent-primary/35 rounded-xl text-xs font-bold text-text-muted hover:text-white
+              transition-all cursor-pointer uppercase tracking-widest shadow-md hover:shadow-white/5"
           >
             <ArrowLeft className="w-3.5 h-3.5" /> Browse All Events
           </Link>

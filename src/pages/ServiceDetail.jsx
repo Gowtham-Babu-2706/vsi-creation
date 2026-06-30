@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import * as Icons from 'lucide-react';
 import { api } from '../utils/api';
+import { useGSAP, useMagnetic, SplitText } from '../hooks/useGSAP';
+import gsap from 'gsap';
 
 const SERVICE_DATA = {
   'event-management': {
@@ -593,40 +595,118 @@ export default function ServiceDetail() {
     alert(`Inquiry sent for ${service.title} (${selectedPkg} Package). Our production unit will coordinate staging specifications and scheduling shortly.`);
   };
 
+  const submitBtnRef = useRef(null);
+  useMagnetic(submitBtnRef, 0.2);
+
+  useGSAP(() => {
+    if (!service) return;
+
+    // Hero timeline
+    const tl = gsap.timeline();
+    tl.fromTo('.service-icon-box', { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(1.4)' })
+      .fromTo('.service-title .char-span', 
+        { opacity: 0, y: 30, rotateX: -30 },
+        { opacity: 1, y: 0, rotateX: 0, duration: 0.7, stagger: 0.02, ease: 'power3.out' },
+        '-=0.3'
+      )
+      .fromTo('.service-tagline', { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.4')
+      .fromTo('.service-desc', { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.4')
+      .fromTo('.tech-card-item', 
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out' },
+        '-=0.3'
+      );
+
+    // Hero visual showcase entry
+    gsap.fromTo('.service-hero-showcase',
+      { opacity: 0, x: 40, scale: 0.95 },
+      { opacity: 1, x: 0, scale: 1, duration: 0.9, ease: 'power3.out', delay: 0.2 }
+    );
+
+    // Packages list entry
+    gsap.fromTo('.pkg-card-item',
+      { opacity: 0, y: 40 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        stagger: 0.12,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: '.packages-section',
+          start: 'top 80%',
+          once: true
+        }
+      }
+    );
+
+    // FAQ & Booking details entry
+    gsap.fromTo('.faq-box-item',
+      { opacity: 0, y: 20 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '.faqs-section',
+          start: 'top 80%',
+          once: true
+        }
+      }
+    );
+
+    gsap.fromTo('.booking-card-item',
+      { opacity: 0, y: 35 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: '.booking-card-item',
+          start: 'top 85%',
+          once: true
+        }
+      }
+    );
+  }, [service]);
+
   return (
     <div className="bg-bg-main text-text-main min-h-screen pt-24 pb-16">
       {/* Background Gradient Elements */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-accent-primary/10 rounded-full blur-3xl -z-10"></div>
-      <div className="absolute top-1/2 left-0 w-96 h-96 bg-accent-gold/5 rounded-full blur-3xl -z-10"></div>
+      <div className="absolute top-0 right-0 w-96 h-96 bg-accent-primary/8 rounded-full blur-3xl -z-10 animate-pulse"></div>
+      <div className="absolute top-1/2 left-0 w-96 h-96 bg-accent-gold/3 rounded-full blur-3xl -z-10"></div>
 
-      <div className="max-w-7xl mx-auto px-8">
+      <div className="max-w-7xl mx-auto px-6 md:px-8">
         {/* Navigation */}
-        <Link to="/services" className="inline-flex items-center text-accent-gold hover:text-white mb-8 text-sm font-semibold transition-colors">
+        <Link to="/services" className="inline-flex items-center text-accent-gold hover:text-white mb-8 text-xs font-bold uppercase tracking-widest transition-colors cursor-pointer">
           <Icons.ArrowLeft className="w-4 h-4 mr-2" /> Back to Capabilities
         </Link>
 
         {/* Hero Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
-          <div>
-            <div className="inline-flex items-center justify-center p-3 bg-accent-primary/10 border border-accent-primary/30 rounded-2xl text-accent-gold mb-6">
+          <div className="space-y-6">
+            <div className="service-icon-box inline-flex items-center justify-center p-3 bg-accent-primary/10 border border-accent-primary/30 rounded-2xl text-accent-gold">
               <IconComponent className="w-8 h-8" />
             </div>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
-              {service.title}
+            <h1 className="service-title text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight font-display">
+              <SplitText>{service.title}</SplitText>
             </h1>
-            <p className="text-accent-gold text-lg md:text-xl font-medium mt-2">{service.tagline}</p>
-            <p className="text-text-muted mt-6 leading-relaxed text-base">{service.description}</p>
+            <p className="service-tagline text-accent-gold text-lg md:text-xl font-medium mt-2">{service.tagline}</p>
+            <p className="service-desc text-text-muted mt-6 leading-relaxed text-sm font-light">{service.description}</p>
 
             {/* Core Capabilities */}
-            <div className="mt-8 space-y-3">
-              <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center">
+            <div className="mt-8 space-y-4">
+              <h3 className="text-xs font-bold text-white uppercase tracking-widest flex items-center">
                 <Icons.Sparkles className="w-4 h-4 text-accent-gold mr-2" /> Core Expertise & Capabilities
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                 {service.techStack && service.techStack.map((tech, idx) => (
-                  <div key={idx} className="bg-bg-surface border border-border-color p-4 rounded-xl">
-                    <span className="text-xs text-text-muted block font-semibold">{tech.name}</span>
-                    <span className="text-sm text-white font-medium mt-1 block">{tech.detail}</span>
+                  <div key={idx} className="tech-card-item bg-bg-surface/50 border border-border-color/60 p-4 rounded-2xl shadow-sm">
+                    <span className="text-xs text-text-muted block font-bold uppercase tracking-wider">{tech.name}</span>
+                    <span className="text-sm text-white font-semibold mt-1 block">{tech.detail}</span>
                   </div>
                 ))}
               </div>
@@ -634,7 +714,7 @@ export default function ServiceDetail() {
           </div>
 
           {/* Visual Showcase */}
-          <div className="h-[400px] rounded-3xl overflow-hidden border border-border-color shadow-2xl relative group">
+          <div className="service-hero-showcase h-[400px] rounded-3xl overflow-hidden border border-border-color/60 shadow-2xl relative group">
             <img 
               src={service.banner} 
               alt={service.title} 
@@ -642,46 +722,46 @@ export default function ServiceDetail() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-bg-main via-bg-main/30 to-transparent"></div>
             <div className="absolute bottom-6 left-6 right-6">
-              <div className="bg-bg-card/90 backdrop-blur-md p-4 rounded-2xl border border-border-color">
+              <div className="bg-bg-card/90 backdrop-blur-md p-5 rounded-2xl border border-border-color/60">
                 <span className="text-xs text-accent-gold uppercase font-bold tracking-wider flex items-center">
                   <Icons.Sparkles className="w-3.5 h-3.5 mr-1" /> Premium Quality Execution
                 </span>
-                <span className="text-xs text-text-muted mt-1 block">Deploying certified resources for flawless operational performance.</span>
+                <span className="text-xs text-text-muted mt-1.5 block font-light leading-relaxed">Deploying certified resources for flawless operational performance.</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Packages Grid */}
-        <section className="mb-16">
-          <div className="text-center max-w-xl mx-auto mb-10">
-            <h2 className="text-3xl font-extrabold text-white">Staging & Service Options</h2>
-            <p className="text-text-muted mt-2 text-sm">Select the operational scale and service depth required for your concept.</p>
+        <section className="packages-section mb-16">
+          <div className="text-center max-w-xl mx-auto mb-12 space-y-2">
+            <h2 className="text-3xl font-extrabold text-white font-display">Staging & Service Options</h2>
+            <p className="text-text-muted text-sm font-light">Select the operational scale and service depth required for your concept.</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {service.packages && service.packages.map((pkg, idx) => (
               <div 
                 key={idx} 
-                className={`border rounded-3xl p-8 flex flex-col justify-between transition-all relative ${
+                className={`pkg-card-item border rounded-[28px] p-8 flex flex-col justify-between transition-all relative backdrop-blur-md ${
                   pkg.name.includes('Premier') || pkg.name.includes('Arena') || pkg.name.includes('Bespoke') || pkg.name.includes('Elite') || pkg.name.includes('Grand') || pkg.name.includes('Premium')
-                    ? 'bg-bg-card border-accent-gold shadow-accent-gold/5' 
-                    : 'bg-bg-surface border-border-color hover:border-accent-primary'
+                    ? 'bg-gradient-to-br from-accent-primary/15 to-bg-card/75 border-accent-gold/45 shadow-[0_15px_30px_rgba(245,158,11,0.08)]' 
+                    : 'bg-bg-surface/55 border-white/5 hover:border-accent-primary/45 hover:shadow-lg hover:shadow-accent-primary/5'
                 }`}
               >
                 {pkg.name.includes('Premier') || pkg.name.includes('Arena') || pkg.name.includes('Bespoke') || pkg.name.includes('Elite') || pkg.name.includes('Grand') || pkg.name.includes('Premium') ? (
-                  <span className="absolute -top-3.5 right-6 bg-accent-gold text-bg-main font-extrabold text-[10px] tracking-widest uppercase px-3 py-1 rounded-full border border-bg-main">
+                  <span className="absolute -top-3.5 right-6 bg-accent-gold text-bg-main font-extrabold text-[9px] tracking-widest uppercase px-3.5 py-1 rounded-full border border-bg-main shadow-md">
                     Highly Requested
                   </span>
                 ) : null}
                 <div>
-                  <h3 className="text-xl font-bold text-white">{pkg.name}</h3>
-                  <p className="text-xs text-text-muted mt-1">{pkg.duration}</p>
+                  <h3 className="font-display text-lg font-extrabold text-white">{pkg.name}</h3>
+                  <p className="text-[10px] text-text-muted mt-1 uppercase font-bold tracking-wider">{pkg.duration}</p>
                   
-                  <ul className="mt-6 space-y-3 border-t border-border-color/60 pt-6">
+                  <ul className="mt-6 space-y-3.5 border-t border-border-color/30 pt-6">
                     {pkg.details.map((detail, dIdx) => (
-                      <li key={dIdx} className="text-sm text-text-muted flex items-center">
-                        <span className="w-1.5 h-1.5 bg-accent-primary rounded-full mr-2"></span>
+                      <li key={dIdx} className="text-xs text-text-muted flex items-center font-light">
+                        <span className="w-1.5 h-1.5 bg-accent-primary rounded-full mr-2.5"></span>
                         {detail}
                       </li>
                     ))}
@@ -689,10 +769,10 @@ export default function ServiceDetail() {
                 </div>
                 <button 
                   onClick={() => setSelectedPkg(pkg.name)}
-                  className={`w-full mt-8 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all cursor-pointer ${
+                  className={`w-full mt-8 py-3.5 rounded-xl font-bold text-xs uppercase tracking-widest transition-all cursor-pointer btn-glow ${
                     selectedPkg === pkg.name 
-                      ? 'bg-accent-gold text-bg-main font-black border border-accent-gold shadow-md' 
-                      : 'bg-bg-main text-white border border-border-color hover:border-accent-primary'
+                      ? 'bg-accent-gold text-bg-main border border-accent-gold shadow-lg shadow-accent-gold/20' 
+                      : 'bg-bg-card/60 backdrop-blur-md border border-border-color/80 text-white hover:border-accent-primary'
                   }`}
                 >
                   {selectedPkg === pkg.name ? 'Selected for Inquiry' : 'Choose Package'}
@@ -705,21 +785,21 @@ export default function ServiceDetail() {
         {/* FAQs & Booking Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* FAQ Accordion */}
-          <section className="bg-bg-surface border border-border-color p-8 rounded-3xl">
-            <h2 className="text-2xl font-bold text-white mb-6">Service FAQ</h2>
+          <section className="faqs-section bg-bg-surface/55 backdrop-blur-md border border-white/5 p-8 rounded-[32px] shadow-xl shadow-black/30">
+            <h2 className="text-xl font-extrabold text-white mb-6 font-display tracking-tight">Service FAQ</h2>
             <div className="space-y-6">
               {service.faqs && service.faqs.map((faq, idx) => (
-                <div key={idx} className="border-b border-border-color pb-4 last:border-0 last:pb-0">
-                  <h4 className="text-base font-semibold text-white">{faq.q}</h4>
-                  <p className="text-sm text-text-muted mt-2 leading-relaxed">{faq.a}</p>
+                <div key={idx} className="faq-box-item border-b border-border-color/25 pb-4 last:border-0 last:pb-0">
+                  <h4 className="text-sm font-bold text-white">{faq.q}</h4>
+                  <p className="text-xs text-text-muted mt-2 leading-relaxed font-light">{faq.a}</p>
                 </div>
               ))}
             </div>
           </section>
 
           {/* Contact Inquiry Card */}
-          <section className="bg-gradient-to-br from-bg-surface to-bg-card border border-border-color p-8 rounded-3xl relative">
-            <h2 className="text-2xl font-bold text-white mb-2">Initiate Brief</h2>
+          <section className="booking-card-item bg-gradient-to-br from-bg-surface/55 to-bg-card/65 backdrop-blur-md border border-white/5 p-8 rounded-[32px] relative shadow-2xl shadow-black/40">
+            <h2 className="text-xl font-extrabold text-white mb-2 font-display tracking-tight">Initiate Brief</h2>
             <p className="text-xs text-text-muted mb-6">Confirm equipment schedules and configure operational crew details.</p>
             <form onSubmit={handleBook} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -727,16 +807,16 @@ export default function ServiceDetail() {
                   type="text" 
                   placeholder="Your Name" 
                   required 
-                  className="w-full bg-bg-main border border-border-color text-sm text-white px-4 py-3 rounded-xl focus:border-accent-gold outline-none transition-all placeholder-gray-600"
+                  className="w-full bg-bg-card/45 border border-border-color/80 text-sm text-white px-4 py-3.5 rounded-xl focus:border-accent-primary focus:bg-bg-main/80 outline-none transition-all placeholder:text-slate-600 hover:border-accent-primary/25"
                 />
                 <input 
                   type="email" 
                   placeholder="Email Address" 
                   required 
-                  className="w-full bg-bg-main border border-border-color text-sm text-white px-4 py-3 rounded-xl focus:border-accent-gold outline-none transition-all placeholder-gray-600"
+                  className="w-full bg-bg-card/45 border border-border-color/80 text-sm text-white px-4 py-3.5 rounded-xl focus:border-accent-primary focus:bg-bg-main/80 outline-none transition-all placeholder:text-slate-600 hover:border-accent-primary/25"
                 />
               </div>
-              <div className="p-3 bg-bg-main border border-border-color rounded-xl flex items-center justify-between">
+              <div className="p-3.5 bg-bg-main/70 border border-border-color/60 rounded-xl flex items-center justify-between">
                 <span className="text-xs text-text-muted">Selected Configuration:</span>
                 <span className="text-xs text-accent-gold font-bold uppercase">{selectedPkg}</span>
               </div>
@@ -744,11 +824,12 @@ export default function ServiceDetail() {
                 rows="4" 
                 placeholder="Details about staging dimensions, timeline constraints, or spatial coverage requirements..." 
                 required 
-                className="w-full bg-bg-main border border-border-color text-sm text-white px-4 py-3 rounded-xl focus:border-accent-gold outline-none transition-all placeholder-gray-600"
+                className="w-full bg-bg-card/45 border border-border-color/80 text-sm text-white px-4 py-3.5 rounded-xl focus:border-accent-primary focus:bg-bg-main/80 outline-none transition-all placeholder:text-slate-600 resize-none hover:border-accent-primary/25"
               ></textarea>
               <button 
+                ref={submitBtnRef}
                 type="submit" 
-                className="w-full py-4 bg-gradient-to-r from-accent-primary to-[#700016] text-sm text-white font-bold rounded-xl border border-accent-gold/20 hover:border-accent-gold shadow-lg shadow-accent-primary/20 hover:shadow-accent-primary/40 hover:-translate-y-0.5 transition-all flex items-center justify-center cursor-pointer"
+                className="w-full py-4 bg-gradient-to-r from-accent-primary to-accent-rose hover:from-accent-rose hover:to-accent-secondary text-xs text-white font-bold rounded-xl border border-white/10 shadow-lg shadow-accent-primary/25 hover:shadow-accent-secondary/35 hover:-translate-y-0.5 btn-glow transition-all flex items-center justify-center cursor-pointer uppercase tracking-widest"
               >
                 <Icons.Send className="w-4 h-4 mr-2" /> Send Production Brief
               </button>

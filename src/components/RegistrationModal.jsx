@@ -200,35 +200,35 @@ function RegistrationForm({ onClose, eventName, eventId, eventPrice }) {
             <CheckCircle2 className="w-10 h-10 text-emerald-400" />
           </div>
           <div className="space-y-2">
-            <h3 className="text-2xl font-black text-white">Booking Confirmed!</h3>
+            <h3 className="text-2xl font-black text-black">Booking Confirmed!</h3>
             <p className="text-sm text-text-muted max-w-md mx-auto">
               Your pass for <span className="text-accent-gold font-bold">{eventName}</span> is secured.
               A confirmation will be sent to <span className="text-accent-gold font-bold">{formData.email}</span>.
             </p>
           </div>
 
-          {/* Transaction details */}
-          <div className="bg-bg-card border border-border-color rounded-xl p-4 text-left space-y-2 text-xs">
-            <div className="flex justify-between">
-              <span className="text-text-muted">Transaction ID</span>
-              <span className="font-mono text-accent-gold break-all text-right max-w-[60%]">{txId}</span>
+            {/* Transaction details */}
+          <div className="bg-bg-card/60 backdrop-blur-md border border-border-color/85 rounded-2xl p-5 text-left space-y-3.5 text-xs">
+            <div className="flex justify-between items-center">
+              <span className="text-text-muted font-medium">Transaction ID</span>
+              <span className="font-mono text-accent-gold font-bold select-all break-all text-right max-w-[65%]">{txId}</span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-text-muted">Amount Paid</span>
-              <span className="text-emerald-400 font-bold">
-                {pricePerSeat === 0 ? 'Free' : `₹${totalAmount.toFixed(2)}`}
+            <div className="flex justify-between items-center">
+              <span className="text-text-muted font-medium">Amount Paid</span>
+              <span className="text-emerald-400 font-extrabold text-sm">
+                {pricePerSeat === 0 ? 'Free Entry' : `₹${totalAmount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
               </span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-text-muted">Status</span>
-              <span className={`font-bold uppercase tracking-wider ${isMock ? 'text-yellow-400' : 'text-emerald-400'}`}>
-                {isMock ? '⚠ Mock (Test Mode)' : '✓ Payment Successful'}
+            <div className="flex justify-between items-center">
+              <span className="text-text-muted font-medium">Payment Status</span>
+              <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md ${isMock ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'}`}>
+                {isMock ? 'Mock (Test Mode)' : 'Successful'}
               </span>
             </div>
           </div>
 
           <button onClick={handleReset}
-            className="px-8 py-3 bg-gradient-to-r from-accent-primary to-accent-secondary text-white font-bold rounded-xl border border-white/10 hover:shadow-lg hover:shadow-accent-primary/30 cursor-pointer text-sm transition-all">
+            className="w-full py-4 bg-gradient-to-r from-accent-primary to-accent-rose hover:from-accent-rose hover:to-accent-secondary text-black font-bold rounded-xl shadow-lg shadow-accent-primary/20 hover:shadow-accent-secondary/35 btn-glow cursor-pointer text-xs uppercase tracking-widest transition-all">
             Return to Event Page
           </button>
         </div>
@@ -236,62 +236,62 @@ function RegistrationForm({ onClose, eventName, eventId, eventPrice }) {
 
       {/* ── Step 1: Personal Details ── */}
       {step === 'details' && (
-        <form onSubmit={handleNextToPayment} className="space-y-4">
+        <form onSubmit={handleNextToPayment} className="space-y-5">
           {/* Event badge */}
-          <div className="bg-bg-card border border-border-color p-3 rounded-xl flex items-center justify-between text-xs">
-            <span className="text-text-muted uppercase tracking-wider font-bold">Selected Event:</span>
-            <span className="text-accent-gold font-bold uppercase">{eventName}</span>
+          <div className="bg-bg-card/60 border border-border-color/60 p-4 rounded-xl flex items-center justify-between text-xs">
+            <span className="text-text-muted uppercase tracking-wider font-extrabold">Selected Event</span>
+            <span className="text-accent-gold font-extrabold uppercase tracking-wide">{eventName}</span>
           </div>
 
           {errors.submit && (
-            <div className="bg-red-500/10 border border-red-500/30 text-red-400 p-3 rounded-xl text-xs font-semibold flex items-center gap-2">
+            <div className="bg-red-500/10 border border-red-500/30 text-red-400 p-3.5 rounded-xl text-xs font-semibold flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 shrink-0" />{errors.submit}
             </div>
           )}
 
           {/* Full Name */}
-          <div className="space-y-1">
-            <label className="text-[10px] text-text-muted uppercase font-bold tracking-wider block">Full Name *</label>
+          <div className="space-y-1.5">
+            <label className="text-[10px] text-text-muted uppercase font-extrabold tracking-wider block">Full Name *</label>
             <div className="relative">
-              <User className="absolute left-4 top-3.5 w-4 h-4 text-gray-600" />
+              <User className="absolute left-4 top-3.5 w-4 h-4 text-slate-500" />
               <input type="text" name="fullName" value={formData.fullName} onChange={handleInputChange}
                 placeholder="e.g. John Doe"
-                className={`w-full bg-bg-card/60 border text-sm text-white pl-12 pr-4 py-3.5 rounded-xl outline-none focus:border-accent-gold transition-all ${errors.fullName ? 'border-red-600' : 'border-border-color'}`} />
+                className={`w-full bg-bg-card/45 border text-sm text-black pl-12 pr-4 py-3.5 rounded-xl outline-none focus:border-accent-primary transition-all placeholder:text-slate-600 ${errors.fullName ? 'border-red-500' : 'border-border-color/80'}`} />
             </div>
-            {errors.fullName && <p className="text-[10px] text-red-500 font-semibold">{errors.fullName}</p>}
+            {errors.fullName && <p className="text-[10px] text-red-400 font-semibold">{errors.fullName}</p>}
           </div>
 
           {/* Email */}
-          <div className="space-y-1">
-            <label className="text-[10px] text-text-muted uppercase font-bold tracking-wider block">Email Address *</label>
+          <div className="space-y-1.5">
+            <label className="text-[10px] text-text-muted uppercase font-extrabold tracking-wider block">Email Address *</label>
             <div className="relative">
-              <Mail className="absolute left-4 top-3.5 w-4 h-4 text-gray-600" />
+              <Mail className="absolute left-4 top-3.5 w-4 h-4 text-slate-500" />
               <input type="email" name="email" value={formData.email} onChange={handleInputChange}
                 placeholder="e.g. john@example.com"
-                className={`w-full bg-bg-card/60 border text-sm text-white pl-12 pr-4 py-3.5 rounded-xl outline-none focus:border-accent-gold transition-all ${errors.email ? 'border-red-600' : 'border-border-color'}`} />
+                className={`w-full bg-bg-card/45 border text-sm text-black pl-12 pr-4 py-3.5 rounded-xl outline-none focus:border-accent-primary transition-all placeholder:text-slate-600 ${errors.email ? 'border-red-500' : 'border-border-color/80'}`} />
             </div>
-            {errors.email && <p className="text-[10px] text-red-500 font-semibold">{errors.email}</p>}
+            {errors.email && <p className="text-[10px] text-red-400 font-semibold">{errors.email}</p>}
           </div>
 
           {/* Phone + City */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <label className="text-[10px] text-text-muted uppercase font-bold tracking-wider block">Mobile Number *</label>
+            <div className="space-y-1.5">
+              <label className="text-[10px] text-text-muted uppercase font-extrabold tracking-wider block">Mobile Number *</label>
               <div className="relative">
-                <Phone className="absolute left-4 top-3.5 w-4 h-4 text-gray-600" />
+                <Phone className="absolute left-4 top-3.5 w-4 h-4 text-slate-500" />
                 <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange}
-                  placeholder="+91 9876543210"
-                  className={`w-full bg-bg-card/60 border text-sm text-white pl-12 pr-4 py-3.5 rounded-xl outline-none focus:border-accent-gold transition-all ${errors.phone ? 'border-red-600' : 'border-border-color'}`} />
+                  placeholder="+91 98765 43210"
+                  className={`w-full bg-bg-card/45 border text-sm text-black pl-12 pr-4 py-3.5 rounded-xl outline-none focus:border-accent-primary transition-all placeholder:text-slate-600 ${errors.phone ? 'border-red-500' : 'border-border-color/80'}`} />
               </div>
-              {errors.phone && <p className="text-[10px] text-red-500 font-semibold">{errors.phone}</p>}
+              {errors.phone && <p className="text-[10px] text-red-400 font-semibold">{errors.phone}</p>}
             </div>
-            <div className="space-y-1">
-              <label className="text-[10px] text-text-muted uppercase font-bold tracking-wider block">City *</label>
+            <div className="space-y-1.5">
+              <label className="text-[10px] text-text-muted uppercase font-extrabold tracking-wider block">City *</label>
               <div className="relative">
-                <MapPin className="absolute left-4 top-3.5 w-4 h-4 text-gray-600" />
+                <MapPin className="absolute left-4 top-3.5 w-4 h-4 text-slate-500" />
                 <input type="text" name="city" value={formData.city} onChange={handleInputChange}
                   placeholder="e.g. Mumbai"
-                  className={`w-full bg-bg-card/60 border text-sm text-white pl-12 pr-4 py-3.5 rounded-xl outline-none focus:border-accent-gold transition-all ${errors.city ? 'border-red-600' : 'border-border-color'}`} />
+                  className={`w-full bg-bg-card/45 border text-sm text-black pl-12 pr-4 py-3.5 rounded-xl outline-none focus:border-accent-primary transition-all placeholder:text-slate-600 ${errors.city ? 'border-red-500' : 'border-border-color/80'}`} />
               </div>
               {errors.city && <p className="text-[10px] text-red-500 font-semibold">{errors.city}</p>}
             </div>
@@ -299,47 +299,47 @@ function RegistrationForm({ onClose, eventName, eventId, eventPrice }) {
 
           {/* Age + Participants */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <label className="text-[10px] text-text-muted uppercase font-bold tracking-wider block">Age *</label>
+            <div className="space-y-1.5">
+              <label className="text-[10px] text-text-muted uppercase font-extrabold tracking-wider block">Age *</label>
               <input type="number" name="age" value={formData.age} onChange={handleInputChange}
                 placeholder="Min 13"
-                className={`w-full bg-bg-card/60 border text-sm text-white px-4 py-3.5 rounded-xl outline-none focus:border-accent-gold transition-all ${errors.age ? 'border-red-600' : 'border-border-color'}`} />
+                className={`w-full bg-bg-card/45 border text-sm text-black px-4 py-3.5 rounded-xl outline-none focus:border-accent-primary transition-all placeholder:text-slate-600 ${errors.age ? 'border-red-500' : 'border-border-color/80'}`} />
               {errors.age && <p className="text-[10px] text-red-500 font-semibold">{errors.age}</p>}
             </div>
-            <div className="space-y-1">
-              <label className="text-[10px] text-text-muted uppercase font-bold tracking-wider block">Number of Attendees *</label>
+            <div className="space-y-1.5">
+              <label className="text-[10px] text-text-muted uppercase font-extrabold tracking-wider block">Attendees Count *</label>
               <input type="number" name="participants" min="1" max="10" value={formData.participants} onChange={handleInputChange}
-                className={`w-full bg-bg-card/60 border text-sm text-white px-4 py-3.5 rounded-xl outline-none focus:border-accent-gold transition-all ${errors.participants ? 'border-red-600' : 'border-border-color'}`} />
+                className={`w-full bg-bg-card/45 border text-sm text-black px-4 py-3.5 rounded-xl outline-none focus:border-accent-primary transition-all ${errors.participants ? 'border-red-500' : 'border-border-color/80'}`} />
               {errors.participants && <p className="text-[10px] text-red-500 font-semibold">{errors.participants}</p>}
             </div>
           </div>
 
           {/* Notes */}
-          <div className="space-y-1">
-            <label className="text-[10px] text-text-muted uppercase font-bold tracking-wider block">Additional Notes</label>
+          <div className="space-y-1.5">
+            <label className="text-[10px] text-text-muted uppercase font-extrabold tracking-wider block">Additional Specifications</label>
             <textarea name="notes" rows="2" value={formData.notes} onChange={handleInputChange}
-              placeholder="Special needs, seating preferences, invitation codes…"
-              className="w-full bg-bg-card/60 border border-border-color text-sm text-white px-4 py-3.5 rounded-xl outline-none focus:border-accent-gold transition-all" />
+              placeholder="Acoustic assistance, access cards, visual clearances..."
+              className="w-full bg-bg-card/45 border border-border-color/80 text-sm text-black px-4 py-3.5 rounded-xl outline-none focus:border-accent-primary transition-all placeholder:text-slate-650 resize-none" />
           </div>
 
           {/* Price summary */}
           {pricePerSeat > 0 && (
-            <div className="bg-accent-gold/5 border border-accent-gold/20 rounded-xl px-4 py-3 flex items-center justify-between text-sm">
-              <span className="text-text-muted">
-                <Ticket className="w-4 h-4 inline mr-1.5 text-accent-gold" />
-                {formData.participants || 1} × ₹{pricePerSeat.toFixed(2)}
+            <div className="bg-accent-gold/5 border border-accent-gold/20 rounded-xl px-4 py-3.5 flex items-center justify-between text-sm">
+              <span className="text-text-muted font-medium flex items-center gap-1.5">
+                <Ticket className="w-4 h-4 text-accent-gold" />
+                {formData.participants || 1} × ₹{pricePerSeat.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
               </span>
-              <span className="text-accent-gold font-black text-base">₹{(pricePerSeat * Number(formData.participants || 1)).toFixed(2)}</span>
+              <span className="text-accent-gold font-black text-base">₹{(pricePerSeat * Number(formData.participants || 1)).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
             </div>
           )}
           {pricePerSeat === 0 && (
-            <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-xl px-4 py-3 text-xs text-emerald-400 font-semibold text-center">
-              🎟 Free Event — No payment required
+            <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-xl px-4 py-3.5 text-xs text-emerald-450 font-bold text-center">
+              🎟 Free Admission — No billing coordinates required
             </div>
           )}
 
           <button type="submit"
-            className="w-full py-4 bg-gradient-to-r from-accent-primary to-accent-secondary text-white font-bold rounded-xl border border-white/10 hover:shadow-lg hover:shadow-accent-primary/30 hover:-translate-y-0.5 transition-all text-sm uppercase tracking-wider cursor-pointer">
+            className="w-full py-4 bg-gradient-to-r from-accent-primary to-accent-rose hover:from-accent-rose hover:to-accent-secondary text-black font-bold rounded-xl shadow-lg shadow-accent-primary/20 hover:shadow-accent-secondary/35 btn-glow cursor-pointer text-xs uppercase tracking-widest transition-all">
             {pricePerSeat > 0 ? 'Continue to Payment →' : 'Confirm Registration'}
           </button>
         </form>
@@ -349,53 +349,53 @@ function RegistrationForm({ onClose, eventName, eventId, eventPrice }) {
       {step === 'payment' && (
         <form onSubmit={handlePaymentSubmit} className="space-y-5">
           {/* Summary */}
-          <div className="bg-bg-card border border-border-color rounded-xl p-4 space-y-2 text-sm">
+          <div className="bg-bg-card border border-border-color/85 rounded-xl p-5 space-y-3.5 text-sm">
             <div className="flex justify-between text-text-muted">
-              <span>Event</span>
-              <span className="text-white font-semibold">{eventName}</span>
+              <span>Selected Pass</span>
+              <span className="text-black font-bold">{eventName}</span>
             </div>
             <div className="flex justify-between text-text-muted">
-              <span>Attendees</span>
-              <span className="text-white font-semibold">{formData.participants}</span>
+              <span>Attendees Count</span>
+              <span className="text-black font-bold">{formData.participants}</span>
             </div>
-            <div className="border-t border-border-color/40 pt-2 flex justify-between">
-              <span className="text-text-muted font-semibold">Total Amount</span>
-              <span className="text-accent-gold font-black text-base">₹{totalAmount.toFixed(2)}</span>
+            <div className="border-t border-border-color/30 pt-3 flex justify-between">
+              <span className="text-text-muted font-semibold">Total Amount Due</span>
+              <span className="text-accent-gold font-black text-base">₹{totalAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
             </div>
           </div>
 
           {errors.submit && (
-            <div className="bg-red-500/10 border border-red-500/30 text-red-400 p-3 rounded-xl text-xs font-semibold flex items-center gap-2">
+            <div className="bg-red-500/10 border border-red-500/30 text-red-400 p-3.5 rounded-xl text-xs font-semibold flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 shrink-0" />{errors.submit}
             </div>
           )}
 
           {/* Secure Payment Info */}
-          <div className="bg-bg-card/40 border border-border-color rounded-xl p-4 space-y-3">
-            <div className="flex items-center gap-3 text-xs text-text-muted">
-              <Lock className="w-4.5 h-4.5 text-emerald-400 shrink-0" />
+          <div className="bg-bg-card/45 border border-border-color/80 rounded-xl p-5 space-y-3">
+            <div className="flex items-center gap-3.5 text-xs text-text-muted">
+              <Lock className="w-5 h-5 text-emerald-400 shrink-0" />
               <div>
-                <p className="font-bold text-white">Secured by Razorpay</p>
-                <p className="text-[10px]">UPI, Credit/Debit Cards, Netbanking, and Wallets are supported.</p>
+                <p className="font-bold text-black">Secured via Razorpay Network</p>
+                <p className="text-[10px] font-light mt-0.5">Fully encrypted transaction channel supporting card, UPI, wallet configurations.</p>
               </div>
             </div>
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex gap-4">
             <button type="button" onClick={() => setStep('details')}
-              className="flex-1 py-3.5 bg-bg-card border border-border-color text-text-muted hover:text-white hover:border-accent-primary/50 font-semibold rounded-xl transition-all text-sm cursor-pointer">
+              className="flex-1 py-3.5 bg-bg-card/60 border border-border-color/80 text-text-muted hover:text-black hover:border-accent-primary/45 font-bold rounded-xl transition-all text-xs uppercase tracking-widest cursor-pointer">
               ← Back
             </button>
             <button type="submit" disabled={processing}
-              className="flex-[2] py-3.5 bg-gradient-to-r from-accent-primary to-accent-secondary text-white font-bold rounded-xl border border-white/10 hover:shadow-lg hover:shadow-accent-primary/30 hover:-translate-y-0.5 transition-all text-sm uppercase tracking-wider cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+              className="flex-[2] py-3.5 bg-gradient-to-r from-accent-primary to-accent-rose hover:from-accent-rose hover:to-accent-secondary text-black font-bold rounded-xl border border-white/10 shadow-lg shadow-accent-primary/20 hover:shadow-accent-secondary/35 btn-glow transition-all text-xs uppercase tracking-widest cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2">
               {processing ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Initializing Razorpay…
+                  Staging Gateway…
                 </>
               ) : (
                 <>
-                  <CreditCard className="w-4 h-4" /> Pay ₹{totalAmount.toFixed(2)}
+                  <CreditCard className="w-4 h-4" /> Pay ₹{totalAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                 </>
               )}
             </button>
@@ -412,36 +412,36 @@ export default function RegistrationModal({ isOpen, onClose, eventName, eventId,
 
   return (
     <div className="fixed inset-0 z-[10000] bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-      <div className="bg-bg-surface border border-border-color rounded-3xl w-full max-w-xl overflow-hidden relative shadow-2xl animate-scale-up">
+      <div className="bg-bg-surface border border-border-color/80 rounded-3xl w-full max-w-xl overflow-hidden relative shadow-2xl animate-fade-in">
         {/* Glow corners */}
-        <div className="absolute top-0 right-0 w-32 h-32 bg-accent-primary/10 rounded-full blur-2xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-32 h-32 bg-accent-gold/5 rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-32 h-32 bg-accent-primary/8 rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-32 h-32 bg-accent-gold/4 rounded-full blur-2xl pointer-events-none" />
 
         {/* Header */}
-        <div className="border-b border-border-color/60 px-6 py-5 flex justify-between items-center relative z-10">
+        <div className="border-b border-border-color/40 px-6 py-5 flex justify-between items-center relative z-10">
           <div>
-            <h2 className="text-xl font-bold text-white flex items-center gap-2">
+            <h2 className="text-xl font-extrabold text-black flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-accent-gold" /> Secure Your Pass
             </h2>
             <p className="text-xs text-text-muted mt-0.5">Register for <span className="text-accent-secondary font-semibold">{eventName}</span></p>
           </div>
           <button onClick={onClose}
-            className="p-1.5 hover:bg-bg-card border border-border-color/60 text-text-muted hover:text-white rounded-xl transition-all cursor-pointer">
+            className="p-2 hover:bg-bg-card border border-border-color/60 text-text-muted hover:text-black rounded-xl transition-all cursor-pointer">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Step indicator */}
-        <div className="px-6 pt-4 flex items-center gap-3">
+        <div className="px-6 pt-5 flex items-center gap-3">
           <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider">
-            <span className="w-5 h-5 bg-accent-primary text-white rounded-full flex items-center justify-center text-[10px]">1</span>
-            <span className="text-text-main">Details</span>
+            <span className="w-5 h-5 bg-accent-primary text-black rounded-full flex items-center justify-center text-[10px] font-extrabold">1</span>
+            <span className="text-text-main font-extrabold">Details</span>
           </div>
-          <div className="flex-1 h-px bg-border-color/40" />
+          <div className="flex-1 h-px bg-border-color/30" />
           {eventPrice > 0 && (
             <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider">
-              <span className="w-5 h-5 bg-bg-card border border-border-color text-text-muted rounded-full flex items-center justify-center text-[10px]">2</span>
-              <span className="text-text-muted">Payment</span>
+              <span className="w-5 h-5 bg-bg-card border border-border-color/85 text-text-muted rounded-full flex items-center justify-center text-[10px] font-extrabold">2</span>
+              <span className="text-text-muted font-extrabold">Payment</span>
             </div>
           )}
         </div>
