@@ -98,7 +98,7 @@ export default function EventsPage() {
           <span className="events-eyebrow text-xs text-accent-gold font-bold uppercase tracking-[4px] glow-gold flex items-center justify-center md:justify-start gap-1.5">
             <Sparkles className="w-4 h-4 text-accent-gold" /> Staging the Spectacle
           </span>
-          <h1 className="events-title text-4xl md:text-5xl font-extrabold text-white tracking-tight font-display">
+          <h1 className="events-title text-4xl md:text-5xl font-extrabold text-black tracking-tight font-display">
             <SplitText>Upcoming Experiences</SplitText>
           </h1>
           <p className="events-desc text-sm md:text-base text-text-muted leading-relaxed font-body font-light">
@@ -111,13 +111,13 @@ export default function EventsPage() {
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
             {/* Search Bar */}
             <div className="relative w-full md:max-w-sm">
-              <Search className="absolute left-4 top-3.5 w-4 h-4 text-slate-500" />
+              <Search className="absolute left-4 top-3.5 w-6 h-6 text-slate-500" />
               <input 
                 type="text" 
                 placeholder="Search event title, description or venue..." 
                 value={search}
                 onChange={handleSearchChange}
-                className="w-full bg-bg-card/45 border border-border-color/80 text-xs text-white pl-12 pr-4 py-3.5 rounded-xl focus:border-accent-primary outline-none transition-all placeholder:text-slate-605 focus:bg-bg-main/80 hover:border-accent-primary/30"
+                className="w-full bg-bg-card/45 border border-border-color/80 text-lg text-text-muted pl-12 pr-4 py-3.5 rounded-xl focus:border-accent-primary outline-none transition-all placeholder:text-slate-605 focus:bg-bg-main/80 hover:border-accent-primary/30"
               />
             </div>
 
@@ -128,7 +128,7 @@ export default function EventsPage() {
                 <select 
                   value={dateFilter}
                   onChange={(e) => setDateFilter(e.target.value)}
-                  className="w-full sm:w-44 bg-bg-card/45 border border-border-color/80 text-xs text-white px-4 py-3.5 rounded-xl focus:border-accent-primary outline-none transition-all cursor-pointer font-bold hover:border-accent-primary/30"
+                  className="w-full sm:w-44 bg-bg-card/45 border border-border-color/80 text-xs text-text-muted px-4 py-3.5 rounded-xl focus:border-accent-primary outline-none transition-all cursor-pointer font-bold hover:border-accent-primary/30"
                 >
                   <option value="all">📅 All Dates</option>
                   <option value="upcoming">📅 Upcoming Events</option>
@@ -138,27 +138,12 @@ export default function EventsPage() {
 
               {/* Grid / List View Toggle */}
               <div className="flex bg-bg-card/45 border border-border-color/80 rounded-xl p-1 shrink-0 self-end sm:self-auto hover:border-accent-primary/20 transition-all">
-                <button
-                  onClick={() => setViewMode('grid')}
-                  className={`p-2 rounded-lg cursor-pointer transition-all ${
-                    viewMode === 'grid'
-                      ? 'bg-accent-primary text-white shadow-md'
-                      : 'text-text-muted hover:text-white'
-                  }`}
-                  title="Grid View"
-                >
-                  <Grid className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => setViewMode('list')}
-                  className={`p-2 rounded-lg cursor-pointer transition-all ${
-                    viewMode === 'list'
-                      ? 'bg-accent-primary text-white shadow-md'
-                      : 'text-text-muted hover:text-white'
-                  }`}
-                  title="List View"
-                >
+                <button onClick={() => setViewMode('list')}
+                  className={`p-2 rounded-lg cursor-pointer transition-all ${viewMode === 'list' ? 'bg-accent-primary text-text-muted shadow-md' : 'text-text-muted hover:text-text-muted'}`} title="List View">
                   <List className="w-4 h-4" />
+                </button>
+                <button onClick={() => setViewMode('grid')} className={`p-2 rounded-lg cursor-pointer transition-all ${ viewMode === 'grid' ? 'bg-accent-primary text-text-muted shadow-md': 'text-text-muted hover:text-text-muted'}`} title="Grid View">
+                  <Grid className="w-4 h-4" />
                 </button>
               </div>
             </div>
@@ -166,25 +151,7 @@ export default function EventsPage() {
 
           {/* Category Tabs */}
           <div className="flex flex-wrap gap-2 pt-3 border-t border-border-color/30">
-            {[
-              { id: 'all', label: '✨ All Events' },
-              { id: 'concert', label: '🎵 Concerts & DJ Sets' },
-              { id: 'gala', label: '🏆 Gala Awards' },
-              { id: 'private', label: '🥂 Bespoke Private' },
-              { id: 'showcase', label: '🚀 Product Launches' }
-            ].map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setCategoryFilter(cat.id)}
-                className={`px-4 py-2.5 text-[10px] md:text-xs font-bold uppercase tracking-wider rounded-xl border transition-all cursor-pointer ${
-                  categoryFilter === cat.id
-                    ? 'cat-active'
-                    : 'bg-bg-card border-border-color/85 hover:border-accent-primary text-text-muted hover:text-white'
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
+
           </div>
         </div>
 
@@ -293,11 +260,11 @@ export default function EventsPage() {
           /* Empty Search Result */
           <div className="text-center py-20 bg-bg-surface/55 backdrop-blur-md border border-white/5 rounded-[32px] space-y-4 animate-fade-in shadow-xl shadow-black/20">
             <Calendar className="w-12 h-12 text-accent-primary mx-auto animate-pulse" />
-            <h3 className="text-lg font-bold text-white tracking-tight">No Experiences Found</h3>
+            <h3 className="text-lg font-bold text-text-muted tracking-tight">No Experiences Found</h3>
             <p className="text-xs text-text-muted max-w-sm mx-auto font-light">No events matching your search or filters could be verified. Clear your keywords or try another category.</p>
             <button 
               onClick={handleResetFilters}
-              className="px-6 py-2.5 bg-bg-card hover:bg-accent-primary hover:border-accent-primary border border-border-color text-xs font-bold text-white rounded-xl uppercase tracking-wider transition-all cursor-pointer btn-glow"
+              className="px-6 py-2.5 bg-bg-card hover:bg-accent-primary hover:border-accent-primary border border-border-color text-xs font-bold text-text-muted rounded-xl uppercase tracking-wider transition-all cursor-pointer btn-glow"
             >
               Clear Filters
             </button>

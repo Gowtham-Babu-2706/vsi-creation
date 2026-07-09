@@ -4,41 +4,95 @@ import {
   ArrowUpRight, Zap, MapPin, Calendar, Star,
   ChevronRight, CalendarDays, Sparkles, Users, Award, Clock
 } from 'lucide-react';
+import * as LucideIcons from 'lucide-react';
 import { api } from '../utils/api';
+import { SERVICES } from '../utils/servicesData';
 import { useGSAP, useMagnetic, SplitText } from '../hooks/useGSAP';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import ContactPage from './ContactPage';
 
 /* ── Static Data ── */
 const PORTFOLIO_ITEMS = [
   {
+    id: 'awards-functions',
+    title: 'Prestigious Awards Functions',
+    desc: 'End-to-end planning and execution of award ceremonies with premium stage production, lighting, audiovisual systems, and seamless event coordination.',
+    img: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1000',
+    tag: '🏆 Awards Function'
+  },
+  {
+    id: 'sports-events',
+    title: 'High-Octane Sports Events',
+    desc: 'Professional management of sports tournaments, marathons, leagues, and stadium events with complete production and logistics support.',
+    img: 'https://res.cloudinary.com/dfjsh2zel/image/upload/hero_section_background_image_for_202606291753_icypn0.jpg',
+    tag: '🏅 Sports Event'
+  },
+  {
     id: 'music-festivals',
-    title: 'Music Festivals & DJ Sets',
-    desc: 'Immersive electronic stage rigs, high-intensity laser lineups, and massive structural audio design.',
-    img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1000',
-    tag: '🎵 Concerts'
+    title: 'Spectacular Music Festivals',
+    desc: 'Large-scale music festivals featuring world-class stage production, immersive lighting, premium sound systems, and audience engagement.',
+    img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=1000',
+    tag: '🎵 Music Festival'
   },
   {
-    id: 'gala-awards',
-    title: 'Gala Awards & Red Carpets',
-    desc: 'Cinematic grand ballroom configurations, custom stage backdrops, and elite presentation management.',
-    img: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=1000',
-    tag: '🏆 Corporate'
+    id: 'concert-shows',
+    title: 'Grand Arena Concert Shows',
+    desc: 'High-energy concert production with custom staging, advanced lighting, live sound engineering, and crowd management.',
+    img: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1000',
+    tag: '🎤 Concert Shows'
   },
   {
-    id: 'bespoke-celebrations',
-    title: 'Bespoke Premium Celebrations',
-    desc: 'Neon-infused milestone transformations, luxury weddings, and conceptual themes for the extraordinary.',
-    img: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1000',
-    tag: '💎 Private'
+    id: 'celebrity-management',
+    title: 'Exclusive Celebrity Management',
+    desc: 'Complete celebrity engagement services, artist coordination, hospitality, logistics, and on-ground management.',
+    img: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1000',
+    tag: '⭐ Celebrity Management'
+  },
+  {
+    id: 'csr-projects',
+    title: 'Impactful CSR Initiatives',
+    desc: 'Strategic planning and execution of Corporate Social Responsibility programs that create meaningful community impact.',
+    img: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=1000',
+    tag: '🌱 CSR Projects'
+  },
+  {
+    id: 'corporate-projects',
+    title: 'Corporate Events & Summits',
+    desc: 'Professional conferences, product launches, annual meetings, leadership summits, and corporate event production.',
+    img: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1000',
+    tag: '💼 Corporate'
+  },
+  {
+    id: 'awareness-projects',
+    title: 'Social Awareness Campaigns',
+    desc: 'Creative campaigns and public engagement initiatives designed to promote social causes and drive positive community action.',
+    img: 'https://images.unsplash.com/photo-1509099836639-18ba1795216d?q=80&w=1000',
+    tag: '📢 Awareness'
   }
 ];
 
 const GALLERY_ITEMS = [
-  { src: 'https://images.unsplash.com/photo-1506157786151-b8491531f063?w=800', title: 'Live DJ Stages' },
-  { src: 'https://images.unsplash.com/photo-1489641493513-ba4ee84ccea9?w=800', title: 'Gala Accolades' },
-  { src: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800', title: 'Laser Illumination' },
-  { src: 'https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=800', title: 'Crowd Capture' }
+  {
+    src: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800',
+    title: 'Awards Function'
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=800',
+    title: 'Live Concert'
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=800',
+    title: 'Music Festival'
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=800',
+    title: 'Corporate Summit'
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=800',
+    title: 'Celebrity Event'
+  }
 ];
 
 const CAROUSEL_SLIDES = [
@@ -86,92 +140,7 @@ const CAROUSEL_SLIDES = [
 
 // UPCOMING_EVENTS is now loaded dynamically from the backend API
 
-const SERVICES = [
-  {
-    id: 'event-management',
-    num: '01',
-    icon: '💼',
-    title: 'Event Management',
-    desc: 'End-to-end planning, execution, and coordination for premium corporate, brand and educational events.'
-  },
-  {
-    id: 'college-educational',
-    num: '02',
-    icon: '🎓',
-    title: 'College & Educational Events',
-    desc: 'High-energy cultural fests, academic symposiums, tech expos, convocations, and student events.'
-  },
-  {
-    id: 'cultural-programs',
-    num: '03',
-    icon: '🎭',
-    title: 'Cultural Programs',
-    desc: 'Grand traditional dance, music, stage plays, and community heritage festivals with specialized acoustics.'
-  },
-  {
-    id: 'wedding-planning',
-    num: '04',
-    icon: '💍',
-    title: 'Wedding Planning & Management',
-    desc: 'Immersive, luxurious wedding designs, destination logistics, and seamless on-site day coordination.'
-  },
-  {
-    id: 'birthday-celebrations',
-    num: '05',
-    icon: '🎉',
-    title: 'Birthday & Private Celebrations',
-    desc: 'Custom-tailored themes, milestone birthday celebrations, anniversaries, and high-styling private dinners.'
-  },
-  {
-    id: 'event-logistics',
-    num: '06',
-    icon: '🚚',
-    title: 'Event Coordination & Logistics',
-    desc: 'Precise crew management, vendor scheduling, permit filings, crowd management and security tracking.'
-  },
-  {
-    id: 'media-production',
-    num: '07',
-    icon: '📹',
-    title: 'Media Production',
-    desc: 'High-fidelity event photography, cinematic drone assets, commercials, and professional live-action video.'
-  },
-  {
-    id: 'creative-services',
-    num: '08',
-    icon: '🎨',
-    title: 'Creative Services',
-    desc: 'Event branding, stage LED motion graphics, social creatives, logos, brochures, and dynamic animations.'
-  },
-  {
-    id: 'digital-marketing',
-    num: '09',
-    icon: '📣',
-    title: 'Digital Marketing',
-    desc: 'Strategic social media management, Google PPC campaigns, content copy, SEO, and ticket promotion.'
-  },
-  {
-    id: 'event-production',
-    num: '10',
-    icon: '🎪',
-    title: 'Event Production',
-    desc: 'Heavy stage design, pixel-pitch LED wall solutions, concert-grade audio setup, and premium trussing rigs.'
-  },
-  {
-    id: 'talent-entertainment',
-    num: '11',
-    icon: '🌟',
-    title: 'Talent & Entertainment',
-    desc: 'Direct booking liaison for celebrity appearances, live acoustic bands, professional hosts, and DJs.'
-  },
-  {
-    id: 'equipment-rental',
-    num: '12',
-    icon: '⚙️',
-    title: 'Equipment Rental',
-    desc: 'Rent professional line-array sound systems, LED screens, projectors, and stage lights on demand.'
-  }
-];
+// SERVICES is now imported from '../utils/servicesData'
 
 const REVIEWS = [
   {
@@ -179,6 +148,12 @@ const REVIEWS = [
     text: 'Exceptional engineering across the sound design stage. The film delivery speed was impressive.',
     client: 'Music Festival Director',
     avatar: '🎵'
+  },
+  {
+    stars: 5,
+    text: 'Highly professional execution crew. Took our event media project requirements and elevated them effortlessly.',
+    client: 'Corporate Communications Lead',
+    avatar: '🏆'
   },
   {
     stars: 5,
@@ -776,26 +751,31 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
-          {SERVICES.map(service => (
-            <Link
-              key={service.id}
-              to={`/services/${service.id}`}
-              className="service-card-home bg-white border border-border-color rounded-[28px] p-8 flex flex-col justify-between
-                glass-card-hover text-left group"
-            >
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-3xl">{service.icon}</span>
-                  <span className="font-display text-4xl text-border-color group-hover:text-accent-primary/20 transition-colors font-extrabold">{service.num}</span>
+          {SERVICES.map(service => {
+            const IconComponent = LucideIcons[service.icon] || LucideIcons.HelpCircle;
+            return (
+              <Link
+                key={service.id}
+                to={`/services/${service.id}`}
+                className="service-card-home bg-white border border-border-color rounded-[28px] p-8 flex flex-col justify-between
+                  glass-card-hover text-left group"
+              >
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="p-2.5 bg-accent-primary/10 border border-accent-primary/25 rounded-xl text-accent-primary">
+                      <IconComponent className="w-6 h-6" />
+                    </div>
+                    <span className="font-display text-4xl text-border-color group-hover:text-accent-primary/20 transition-colors font-extrabold">{service.num}</span>
+                  </div>
+                  <h3 className="font-display text-lg text-text-muted group-hover:text-text-main transition-colors font-extrabold tracking-tight">{service.title}</h3>
+                  <p className="text-xs text-text-muted font-light leading-relaxed">{service.tagline}</p>
                 </div>
-                <h3 className="font-display text-lg text-text-main group-hover:text-accent-primary transition-colors font-extrabold tracking-tight">{service.title}</h3>
-                <p className="text-xs text-text-muted font-light leading-relaxed">{service.desc}</p>
-              </div>
-              <div className="flex items-center gap-1.5 text-xs text-accent-primary font-bold uppercase tracking-widest mt-7">
-                Learn More <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1.5 transition-transform" />
-              </div>
-            </Link>
-          ))}
+                <div className="flex items-center gap-1.5 text-xs text-accent-primary font-bold uppercase tracking-widest mt-7">
+                  Learn More <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1.5 transition-transform" />
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </section>
 
@@ -832,61 +812,7 @@ export default function Home() {
       {/* ── ══════════════════════════════════════════
           CONTACT FORM
       ══════════════════════════════════════════ */}
-      <section id="contact" className="py-24 px-6 md:px-[8%] bg-bg-surface relative">
-        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-accent-primary/30 to-transparent" />
-        <div className="contact-card-home max-w-3xl mx-auto bg-white border border-border-color rounded-[32px] p-8 md:p-14 relative overflow-hidden shadow-xl shadow-black/5">
-          {/* Decorative glows */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-accent-primary/4 rounded-full blur-[80px] pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-accent-rose/4 rounded-full blur-[60px] pointer-events-none" />
-
-          <div className="text-center max-w-xl mx-auto mb-10 space-y-3 relative z-10">
-            <span className="text-xs text-accent-primary font-extrabold uppercase tracking-[4px]">Inquire Now</span>
-            <h2 className="font-display text-3xl md:text-4xl text-text-main font-extrabold">Start Your Project</h2>
-            <p className="text-sm text-text-muted font-light">Fill out the form below to secure VSI engineering and camera assets for your event.</p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-5 relative z-10">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <input
-                type="text" name="name" placeholder="Your Name"
-                value={formData.name} onChange={handleInputChange} required
-                className="w-full bg-bg-surface border border-border-color text-sm text-text-main px-5 py-4 rounded-xl focus:border-accent-primary transition-all placeholder:text-text-muted/60 outline-none hover:border-accent-primary/35"
-              />
-              <input
-                type="email" name="email" placeholder="Email Address"
-                value={formData.email} onChange={handleInputChange} required
-                className="w-full bg-bg-surface border border-border-color text-sm text-text-main px-5 py-4 rounded-xl focus:border-accent-primary transition-all placeholder:text-text-muted/60 outline-none hover:border-accent-primary/35"
-              />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <input
-                type="tel" name="phone" placeholder="Phone Number"
-                value={formData.phone} onChange={handleInputChange}
-                className="w-full bg-bg-surface border border-border-color text-sm text-text-main px-5 py-4 rounded-xl focus:border-accent-primary transition-all placeholder:text-text-muted/60 outline-none hover:border-accent-primary/35"
-              />
-              <input
-                type="text" name="domain" placeholder="Event Type (e.g., Gala, DJ Festival)"
-                value={formData.domain} onChange={handleInputChange}
-                className="w-full bg-bg-surface border border-border-color text-sm text-text-main px-5 py-4 rounded-xl focus:border-accent-primary transition-all placeholder:text-text-muted/60 outline-none hover:border-accent-primary/35"
-              />
-            </div>
-            <textarea
-              rows="5" name="message" placeholder="Tell us about your event vision and requirements…"
-              value={formData.message} onChange={handleInputChange} required
-              className="w-full bg-bg-surface border border-border-color text-sm text-text-main px-5 py-4 rounded-xl focus:border-accent-primary transition-all placeholder:text-text-muted/60 outline-none resize-none hover:border-accent-primary/35"
-            />
-            <button
-              ref={submitBtnRef}
-              type="submit"
-              id="contact-submit"
-              className="w-full py-4 bg-gradient-to-r from-accent-primary to-accent-rose hover:from-accent-rose hover:to-accent-secondary text-white font-bold rounded-xl
-                hover:shadow-xl hover:shadow-accent-primary/25 hover:-translate-y-0.5 btn-glow transition-all text-xs uppercase tracking-widest cursor-pointer"
-            >
-              Send Project Brief ✉️
-            </button>
-          </form>
-        </div>
-      </section>
+      <ContactPage/>
     </div>
   );
 }

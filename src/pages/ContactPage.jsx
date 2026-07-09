@@ -102,57 +102,12 @@ export default function ContactPage() {
             <span className="ct-eyebrow text-xs text-accent-gold font-bold uppercase tracking-[4px] glow-gold">
               Get in Touch
             </span>
-            <h1 className="ct-title text-4xl md:text-5xl font-extrabold text-white tracking-tight font-display">
+            <h1 className="ct-title text-4xl md:text-5xl font-extrabold text-black tracking-tight font-display">
               <SplitText>Let's Produce Your Spectacle</SplitText>
             </h1>
             <p className="ct-desc text-sm text-text-muted leading-relaxed max-w-sm font-light">
               Connect with VSI Creations production engineers and crew. Fill out our form or contact us directly to reserve high-fidelity setups.
             </p>
-          </div>
-
-          {/* Details Card */}
-          <div className="ct-info-card bg-bg-surface/55 backdrop-blur-md border border-white/5 p-8 rounded-[28px] space-y-6 shadow-xl shadow-black/30">
-            {/* Phone details */}
-            <div className="flex items-start gap-4">
-              <div className="p-3 bg-accent-primary/10 border border-accent-primary/25 text-accent-gold rounded-xl shrink-0 shadow-md">
-                <Phone className="w-5 h-5" />
-              </div>
-              <div>
-                <span className="text-[10px] text-text-muted uppercase font-bold tracking-wider block">Call Staging Desk</span>
-                <a href="tel:+919876543210" className="text-sm text-white font-bold hover:text-accent-primary transition-colors block mt-1">+91 98765 43210</a>
-                <span className="text-[10px] text-text-muted mt-0.5 block">Mon-Sat, 10 AM - 7 PM IST</span>
-              </div>
-            </div>
-
-            {/* Email details */}
-            <div className="flex items-start gap-4">
-              <div className="p-3 bg-accent-primary/10 border border-accent-primary/25 text-accent-gold rounded-xl shrink-0 shadow-md">
-                <Mail className="w-5 h-5" />
-              </div>
-              <div>
-                <span className="text-[10px] text-text-muted uppercase font-bold tracking-wider block">Corporate Inquiries</span>
-                <a href="mailto:produce@vsicreations.com" className="text-sm text-white font-bold hover:text-accent-primary transition-colors block mt-1">produce@vsicreations.com</a>
-                <span className="text-[10px] text-text-muted mt-0.5 block">Response within 24 business hours</span>
-              </div>
-            </div>
-
-            {/* Location details */}
-            <div className="flex items-start gap-4">
-              <div className="p-3 bg-accent-primary/10 border border-accent-primary/25 text-accent-gold rounded-xl shrink-0 shadow-md">
-                <MapPin className="w-5 h-5" />
-              </div>
-              <div>
-                <span className="text-[10px] text-text-muted uppercase font-bold tracking-wider block">Production House HQ</span>
-                <span className="text-sm text-white font-bold block mt-1">4th Floor, Film Studio Complex</span>
-                <span className="text-xs text-text-muted block mt-0.5 font-light">Andheri West, Mumbai, MH - 400053</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Operational timing info */}
-          <div className="flex items-center gap-2.5 text-xs text-text-muted bg-bg-card/45 backdrop-blur-md border border-white/5 p-4.5 rounded-2xl shadow-inner">
-            <Clock className="w-4 h-4 text-accent-gold shrink-0 animate-pulse" />
-            <span>HQ Staging Operations close at 7:00 PM IST today.</span>
           </div>
         </div>
 
@@ -199,7 +154,7 @@ export default function ContactPage() {
                     value={formData.name}
                     onChange={handleInputChange}
                     placeholder="e.g. John Smith"
-                    className={`w-full bg-bg-card/45 border text-sm text-white px-4 py-3.5 rounded-xl outline-none focus:border-accent-primary focus:bg-bg-main/80 transition-all placeholder:text-slate-600 hover:border-accent-primary/25 ${
+                    className={`w-full bg-bg-card/45 border text-sm text-black px-4 py-3.5 rounded-xl outline-none focus:border-accent-primary focus:bg-bg-main/80 transition-all placeholder:text-slate-600 hover:border-accent-primary/25 ${
                       errors.name ? 'border-red-500' : 'border-border-color/80'
                     }`}
                   />
@@ -217,7 +172,7 @@ export default function ContactPage() {
                       value={formData.email}
                       onChange={handleInputChange}
                       placeholder="e.g. john@example.com"
-                      className={`w-full bg-bg-card/45 border text-sm text-white px-4 py-3.5 rounded-xl outline-none focus:border-accent-primary focus:bg-bg-main/80 transition-all placeholder:text-slate-600 hover:border-accent-primary/25 ${
+                      className={`w-full bg-bg-card/45 border text-sm text-black px-4 py-3.5 rounded-xl outline-none focus:border-accent-primary focus:bg-bg-main/80 transition-all placeholder:text-slate-600 hover:border-accent-primary/25 ${
                         errors.email ? 'border-red-500' : 'border-border-color/80'
                       }`}
                     />
@@ -233,7 +188,7 @@ export default function ContactPage() {
                       value={formData.phone}
                       onChange={handleInputChange}
                       placeholder="e.g. +91 98765 43210"
-                      className={`w-full bg-bg-card/45 border text-sm text-white px-4 py-3.5 rounded-xl outline-none focus:border-accent-primary focus:bg-bg-main/80 transition-all placeholder:text-slate-600 hover:border-accent-primary/25 ${
+                      className={`w-full bg-bg-card/45 border text-sm text-black px-4 py-3.5 rounded-xl outline-none focus:border-accent-primary focus:bg-bg-main/80 transition-all placeholder:text-slate-600 hover:border-accent-primary/25 ${
                         errors.phone ? 'border-red-500' : 'border-border-color/80'
                       }`}
                     />
@@ -248,22 +203,22 @@ export default function ContactPage() {
                     name="service"
                     value={formData.service}
                     onChange={handleInputChange}
-                    className="w-full bg-bg-card/45 border border-border-color/80 text-sm text-white px-4 py-3.5 rounded-xl outline-none focus:border-accent-primary focus:bg-bg-main/80 transition-all cursor-pointer font-bold hover:border-accent-primary/25"
+                    className="w-full bg-bg-card/45 border border-border-color/80 text-sm text-gray-500 px-4 py-3.5 rounded-xl outline-none focus:border-accent-primary focus:bg-bg-main/80 transition-all cursor-pointer font-bold hover:border-accent-primary/25"
                   >
                     <option value="general">🎬 General Inquiry</option>
-                    <option value="event-management">💼 Event Management</option>
-                    <option value="college-educational">🎓 College & Educational Events</option>
-                    <option value="cultural-programs">🎭 Cultural Programs</option>
-                    <option value="wedding-planning">💍 Wedding Planning & Management</option>
-                    <option value="birthday-celebrations">🎉 Birthday & Private Celebrations</option>
-                    <option value="event-logistics">🚚 Event Coordination & Logistics</option>
-                    <option value="media-production">📹 Media Production</option>
-                    <option value="creative-services">🎨 Creative Services</option>
-                    <option value="digital-marketing">📣 Digital Marketing</option>
-                    <option value="event-production">🎪 Event Production</option>
-                    <option value="talent-entertainment">🌟 Talent & Entertainment</option>
-                    <option value="equipment-rental">⚙️ Equipment Rental</option>
-                    <option value="other">⭐ Other Custom Concept</option>
+                    <option value="corporate-event-management">💼 Corporate Event Management</option>
+                    <option value="awards-function">🏆 Awards Function Management</option>
+                    <option value="celebrity-management">⭐ Celebrity Management</option>
+                    <option value="concert-production">🎵 Concert & Music Festival Production</option>
+                    <option value="sports-event-management">🏅 Marathon & Sports Event Management</option>
+                    <option value="csr-projects">🤝 CSR Project Management</option>
+                    <option value="awareness-campaigns">📣 Awareness Campaign Management</option>
+                    <option value="product-launch">🚀 Product Launch Events</option>
+                    <option value="exhibition-management">🏛️ Exhibition & Expo Management</option>
+                    <option value="wedding-management">💍 Wedding Event Management</option>
+                    <option value="stage-sound-lighting">💡 Stage, Sound & Lighting Solutions</option>
+                    <option value="event-photography">📸 Event Photography & Videography</option>
+                    <option value="other">✨ Other Custom Concept</option>
                   </select>
                 </div>
 
@@ -276,7 +231,7 @@ export default function ContactPage() {
                     value={formData.message}
                     onChange={handleInputChange}
                     placeholder="Tell us about the venue dimensions, timelines, acoustic requirements, or concept clearances..."
-                    className={`w-full bg-bg-card/45 border text-sm text-white px-4 py-3.5 rounded-xl outline-none focus:border-accent-primary focus:bg-bg-main/80 transition-all placeholder:text-slate-600 resize-none hover:border-accent-primary/25 ${
+                    className={`w-full bg-bg-card/45 border text-sm text-black px-4 py-3.5 rounded-xl outline-none focus:border-accent-primary focus:bg-bg-main/80 transition-all placeholder:text-slate-600 resize-none hover:border-accent-primary/25 ${
                       errors.message ? 'border-red-500' : 'border-border-color/80'
                     }`}
                   ></textarea>
@@ -287,7 +242,7 @@ export default function ContactPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-4 bg-gradient-to-r from-accent-primary to-accent-rose hover:from-accent-rose hover:to-accent-secondary text-white font-bold rounded-xl btn-glow shadow-lg shadow-accent-primary/20 hover:shadow-accent-secondary/35 hover:-translate-y-0.5 transition-all text-xs uppercase tracking-widest cursor-pointer mt-4 flex items-center justify-center gap-2"
+                  className="w-full py-4 bg-gradient-to-r from-accent-primary to-accent-rose hover:from-accent-rose hover:to-accent-secondary text-black font-bold rounded-xl btn-glow shadow-lg shadow-accent-primary/20 hover:shadow-accent-secondary/35 hover:-translate-y-0.5 transition-all text-xs uppercase tracking-widest cursor-pointer mt-4 flex items-center justify-center gap-2"
                 >
                   {loading ? (
                     <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>

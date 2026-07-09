@@ -158,9 +158,9 @@ function App() {
             </Link>
           ))}
           <Link
-            ref={bookBtnRef}
+
             to="/contact"
-            className="flex items-center gap-2 bg-gradient-to-r from-accent-primary to-accent-rose hover:from-accent-rose hover:to-accent-secondary text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition-all shadow-lg shadow-accent-primary/20 hover:shadow-accent-secondary/35"
+            className="flex items-center gap-2 bg-accent-primary text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition-all shadow-lg shadow-accent-primary/20 hover:shadow-accent-secondary/35"
           >
             <CalendarDays className="w-4 h-4" />
             Book an Event
