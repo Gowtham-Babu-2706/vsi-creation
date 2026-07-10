@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://vsibackend-4zlw.onrender.com/api';
+const API_BASE_URL = 'https://api.vsicreations.com/api';
 
 const getHeaders = (secured = false) => {
   const headers = {

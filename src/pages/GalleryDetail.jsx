@@ -11,12 +11,18 @@ import { api } from '../utils/api';
 import { useGSAP, SplitText } from '../hooks/useGSAP';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
+import { useDocumentMetadata } from '../hooks/useDocumentMetadata';
 gsap.registerPlugin(ScrollTrigger);
 
 export default function GalleryDetail() {
   const { id } = useParams();
   const [event, setEvent]       = useState(null);
   const [loading, setLoading]   = useState(true);
+
+  useDocumentMetadata(
+    event ? `${event.name} Photos` : 'Gallery Event Showcase',
+    event ? `View high-definition event snaps and behind-the-scenes production details for ${event.name} by VSI Creations.` : ''
+  );
 
   // Lightbox state — tracks which image array and index
   const [lightboxImages, setLightboxImages] = useState([]);
@@ -188,6 +194,7 @@ export default function GalleryDetail() {
                       src={img}
                       alt={`Event photo ${i + 1}`}
                       className="w-full h-full object-cover transition-all duration-550 group-hover:scale-110 group-hover:brightness-50"
+                      loading="lazy"
                     />
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                       <div className="bg-black/60 border border-accent-primary/30 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-lg">
@@ -232,6 +239,7 @@ export default function GalleryDetail() {
                       src={img}
                       alt={`BTS photo ${i + 1}`}
                       className="w-full h-full object-cover transition-all duration-550 group-hover:scale-110 group-hover:brightness-50"
+                      loading="lazy"
                     />
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                       <div className="bg-black/60 border border-accent-primary/30 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-lg">

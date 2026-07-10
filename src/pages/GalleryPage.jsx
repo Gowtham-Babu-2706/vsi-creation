@@ -6,6 +6,7 @@ import { api } from '../utils/api';
 import { useGSAP, SplitText } from '../hooks/useGSAP';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
+import { useDocumentMetadata } from '../hooks/useDocumentMetadata';
 gsap.registerPlugin(ScrollTrigger);
 
 const CATEGORIES = [
@@ -20,6 +21,7 @@ const CATEGORIES = [
 ];
 
 export default function GalleryPage() {
+  useDocumentMetadata('Media Gallery & Portfolios', 'Browse photos and behind-the-scenes captures from our high-fidelity stage productions, concerts, weddings, and corporate events.');
   const [events, setEvents]   = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch]   = useState('');

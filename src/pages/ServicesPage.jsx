@@ -1,11 +1,23 @@
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
-import * as Icons from 'lucide-react';
+import {
+  Briefcase, Trophy, Star, Music, Medal, HeartHandshake,
+  Megaphone, Rocket, Building2, Heart, Lightbulb, Camera,
+  HelpCircle, Sparkles, ChevronRight
+} from 'lucide-react';
 import { SERVICES } from '../utils/servicesData';
 import { useGSAP, SplitText } from '../hooks/useGSAP';
 import gsap from 'gsap';
+import { useDocumentMetadata } from '../hooks/useDocumentMetadata';
+
+const Icons = {
+  Briefcase, Trophy, Star, Music, Medal, HeartHandshake,
+  Megaphone, Rocket, Building2, Heart, Lightbulb, Camera,
+  HelpCircle, Sparkles, ChevronRight
+};
 
 export default function ServicesPage() {
+  useDocumentMetadata('Our Services', 'Explore our specialized event production capabilities, including corporate events, concert staging, exhibition booths, celebrity management, and sound & lighting rigs.');
   const containerRef = useRef(null);
 
   useGSAP(() => {
@@ -75,6 +87,7 @@ export default function ServicesPage() {
                       src={service.banner}
                       alt={service.title}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      loading="lazy"
                     />
                     <div className="absolute inset-0"></div>
                   </div>

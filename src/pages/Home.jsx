@@ -2,15 +2,22 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowUpRight, Zap, MapPin, Calendar, Star,
-  ChevronRight, CalendarDays, Sparkles, Users, Award, Clock
+  ChevronRight, CalendarDays, Sparkles, Users, Award, Clock,
+  Briefcase, Trophy, Music, Medal, HeartHandshake, Megaphone,
+  Rocket, Building2, Heart, Lightbulb, Camera, HelpCircle
 } from 'lucide-react';
-import * as LucideIcons from 'lucide-react';
 import { api } from '../utils/api';
 import { SERVICES } from '../utils/servicesData';
 import { useGSAP, useMagnetic, SplitText } from '../hooks/useGSAP';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ContactPage from './ContactPage';
+import { useDocumentMetadata } from '../hooks/useDocumentMetadata';
+
+const LucideIcons = {
+  Briefcase, Trophy, Star, Music, Medal, HeartHandshake, Megaphone,
+  Rocket, Building2, Heart, Lightbulb, Camera, HelpCircle
+};
 
 /* ── Static Data ── */
 const PORTFOLIO_ITEMS = [
@@ -186,6 +193,7 @@ const CATEGORY_BADGES = {
 
 /* ── Component ── */
 export default function Home() {
+  useDocumentMetadata('Premium Event Design & Production', 'VSI Creations – High-end event management, multi-camera cinema coverage, and production management for concerts, galas, corporate shows, and premium weddings.');
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', domain: '', message: '' });
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [eventsLoading, setEventsLoading] = useState(true);
@@ -599,6 +607,7 @@ export default function Home() {
                   src={project.img}
                   alt={project.title}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  loading="lazy"
                 />
                 <span className="absolute top-4 left-4 badge-pill backdrop-blur-md">{project.tag}</span>
                 <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md p-2.5 rounded-full border border-border-color text-accent-primary opacity-0 group-hover:opacity-100 transition-all duration-300">
@@ -644,6 +653,7 @@ export default function Home() {
                 src={item.src}
                 alt={item.title}
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-5">
                 <span className="font-display text-sm text-white font-extrabold tracking-wide">{item.title}</span>

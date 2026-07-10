@@ -70,6 +70,7 @@ export default function EventCard({ event }) {
           src={event.banner || 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800'}
           alt={event.title}
           className="w-full h-full object-cover transition-all duration-700 scale-100 brightness-90 group-hover:scale-105 group-hover:brightness-75"
+          loading="lazy"
         />
 
         {/* Gradient overlay */}

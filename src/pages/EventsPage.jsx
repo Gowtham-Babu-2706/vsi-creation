@@ -5,8 +5,10 @@ import { api } from '../utils/api';
 import EventCard from '../components/EventCard';
 import { useGSAP, SplitText } from '../hooks/useGSAP';
 import gsap from 'gsap';
+import { useDocumentMetadata } from '../hooks/useDocumentMetadata';
 
 export default function EventsPage() {
+  useDocumentMetadata('Upcoming Events & Experiences', 'Stay updated on spectacular live experiences, concerts, summits, and festivals organized by VSI Creations. Reserve your spot today.');
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -117,7 +119,7 @@ export default function EventsPage() {
                 placeholder="Search event title, description or venue..." 
                 value={search}
                 onChange={handleSearchChange}
-                className="w-full bg-bg-card/45 border border-border-color/80 text-lg text-text-muted pl-12 pr-4 py-3.5 rounded-xl focus:border-accent-primary outline-none transition-all placeholder:text-slate-605 focus:bg-bg-main/80 hover:border-accent-primary/30"
+                className="w-full bg-bg-card/45 border border-border-color/80 text-lg text-black pl-12 pr-4 py-3.5 rounded-xl focus:border-accent-primary outline-none transition-all placeholder:text-slate-605 focus:bg-bg-main/80 hover:border-accent-primary/30"
               />
             </div>
 
@@ -149,10 +151,6 @@ export default function EventsPage() {
             </div>
           </div>
 
-          {/* Category Tabs */}
-          <div className="flex flex-wrap gap-2 pt-3 border-t border-border-color/30">
-
-          </div>
         </div>
 
         {/* Catalog Grid Area */}
@@ -202,7 +200,8 @@ export default function EventsPage() {
                       src={event.banner || 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800'}
                       alt={event.title}
                       className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
-                    />
+                      loading="lazy"
+                      />
                     {/* Status Badge */}
                     <span className={`absolute top-3 right-3 text-[9px] font-extrabold uppercase tracking-widest px-3 py-1.5 rounded-full border backdrop-blur-md flex items-center gap-1.5
                       ${isUpcoming

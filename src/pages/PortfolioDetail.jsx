@@ -4,6 +4,7 @@ import { ArrowLeft, CheckCircle2, ShieldCheck, Flame, Zap, Camera, Award, Star }
 import { useGSAP, SplitText } from '../hooks/useGSAP';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
+import { useDocumentMetadata } from '../hooks/useDocumentMetadata';
 gsap.registerPlugin(ScrollTrigger);
 
 const PORTFOLIO_DATA = {
@@ -84,6 +85,11 @@ const PORTFOLIO_DATA = {
 export default function PortfolioDetail() {
   const { id } = useParams();
   const project = PORTFOLIO_DATA[id];
+
+  useDocumentMetadata(
+    project ? `${project.title} | Portfolio Showcase` : 'Portfolio Details',
+    project ? `Explore the technical setup, staging, sound, lighting, and cinematic highlights of the ${project.title} production by VSI Creations.` : ''
+  );
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -207,6 +213,7 @@ export default function PortfolioDetail() {
                     src={img} 
                     alt={`${project.title} mockup ${idx + 1}`} 
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-bg-main/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
                     <span className="text-[10px] text-accent-gold uppercase font-extrabold tracking-wider">VSI Production Render</span>

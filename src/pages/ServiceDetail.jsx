@@ -1,15 +1,31 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import * as Icons from 'lucide-react';
+import {
+  Briefcase, Trophy, Star, Music, Medal, HeartHandshake,
+  Megaphone, Rocket, Building2, Heart, Lightbulb, Camera,
+  HelpCircle, Sparkles, Send, ArrowLeft
+} from 'lucide-react';
 import { SERVICE_DATA_MAP } from '../utils/servicesData';
 import { useGSAP, useMagnetic, SplitText } from '../hooks/useGSAP';
 import gsap from 'gsap';
+import { useDocumentMetadata } from '../hooks/useDocumentMetadata';
+
+const Icons = {
+  Briefcase, Trophy, Star, Music, Medal, HeartHandshake,
+  Megaphone, Rocket, Building2, Heart, Lightbulb, Camera,
+  HelpCircle, Sparkles, Send, ArrowLeft
+};
 
 export default function ServiceDetail() {
   const { id } = useParams();
   const [service, setService] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedPkg, setSelectedPkg] = useState('');
+
+  useDocumentMetadata(
+    service ? `${service.title} Production` : 'Service Production',
+    service ? `Learn about our premium package solutions, tech specs, and FAQs for ${service.title}. Secure VSI camera assets and production crew.` : ''
+  );
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -189,6 +205,7 @@ export default function ServiceDetail() {
               src={service.banner} 
               alt={service.title} 
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-bg-main via-bg-main/30 to-transparent"></div>
             <div className="absolute bottom-6 left-6 right-6">

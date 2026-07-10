@@ -1,21 +1,30 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
 import { Menu, X, CalendarDays } from 'lucide-react';
-import Home from './pages/Home';
-import PortfolioDetail from './pages/PortfolioDetail';
-import EventsPage from './pages/EventsPage';
-import EventDetail from './pages/EventDetail';
-import ServiceDetail from './pages/ServiceDetail';
-import GalleryPage from './pages/GalleryPage';
-import GalleryDetail from './pages/GalleryDetail';
-import ServicesPage from './pages/ServicesPage';
-import ContactPage from './pages/ContactPage';
 import { api } from './utils/api';
 import vsiLogo from './assets/logo.png';
 import { useGSAP, useMagnetic } from './hooks/useGSAP';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './App.css';
+
+// Lazy load route pages for performance & lightweight initial bundles
+const Home = React.lazy(() => import('./pages/Home'));
+const PortfolioDetail = React.lazy(() => import('./pages/PortfolioDetail'));
+const EventsPage = React.lazy(() => import('./pages/EventsPage'));
+const EventDetail = React.lazy(() => import('./pages/EventDetail'));
+const ServiceDetail = React.lazy(() => import('./pages/ServiceDetail'));
+const GalleryPage = React.lazy(() => import('./pages/GalleryPage'));
+const GalleryDetail = React.lazy(() => import('./pages/GalleryDetail'));
+const ServicesPage = React.lazy(() => import('./pages/ServicesPage'));
+const ContactPage = React.lazy(() => import('./pages/ContactPage'));
+
+const LoadingFallback = () => (
+  <div className="min-h-[60vh] bg-bg-main flex flex-col justify-center items-center gap-4">
+    <div className="w-10 h-10 border-4 border-accent-primary border-t-transparent rounded-full animate-spin"></div>
+    <span className="text-xs text-text-muted font-bold uppercase tracking-widest animate-pulse">Loading experience...</span>
+  </div>
+);
 
 const NAV_LINKS = [
   { label: 'Home',     to: '/' },
@@ -158,7 +167,7 @@ function App() {
             </Link>
           ))}
           <Link
-
+            id="nav-book-event"
             to="/contact"
             className="flex items-center gap-2 bg-accent-primary text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition-all shadow-lg shadow-accent-primary/20 hover:shadow-accent-secondary/35"
           >
@@ -205,17 +214,19 @@ function App() {
 
       {/* ── Page Content ── */}
       <main className="flex-grow">
-        <Routes>
-          <Route path="/"             element={<Home />} />
-          <Route path="/portfolio/:id" element={<PortfolioDetail />} />
-          <Route path="/events"        element={<EventsPage />} />
-          <Route path="/events/:id"    element={<EventDetail />} />
-          <Route path="/services"      element={<ServicesPage />} />
-          <Route path="/services/:id"  element={<ServiceDetail />} />
-          <Route path="/contact"       element={<ContactPage />} />
-          <Route path="/gallery"       element={<GalleryPage />} />
-          <Route path="/gallery/:id"   element={<GalleryDetail />} />
-        </Routes>
+        <Suspense fallback={<LoadingFallback />}>
+          <Routes>
+            <Route path="/"             element={<Home />} />
+            <Route path="/portfolio/:id" element={<PortfolioDetail />} />
+            <Route path="/events"        element={<EventsPage />} />
+            <Route path="/events/:id"    element={<EventDetail />} />
+            <Route path="/services"      element={<ServicesPage />} />
+            <Route path="/services/:id"  element={<ServiceDetail />} />
+            <Route path="/contact"       element={<ContactPage />} />
+            <Route path="/gallery"       element={<GalleryPage />} />
+            <Route path="/gallery/:id"   element={<GalleryDetail />} />
+          </Routes>
+        </Suspense>
       </main>
 
       {/* ── Global Footer ── */}

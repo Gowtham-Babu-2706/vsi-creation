@@ -4,9 +4,11 @@ import { Mail, Phone, MapPin, Send, CheckCircle2, Clock, ShieldAlert } from 'luc
 import { useGSAP, SplitText } from '../hooks/useGSAP';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
+import { useDocumentMetadata } from '../hooks/useDocumentMetadata';
 gsap.registerPlugin(ScrollTrigger);
 
 export default function ContactPage() {
+  useDocumentMetadata('Inquire Now & Book Staging', 'Connect with VSI Creations production engineers and crew. Submit your project brief for customized event staging, audio-visual setups, and media production.');
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const selectedServiceParam = queryParams.get('service') || 'general';
@@ -241,6 +243,7 @@ export default function ContactPage() {
                 {/* Submit button */}
                 <button
                   type="submit"
+                  id="contact-submit"
                   disabled={loading}
                   className="w-full py-4 bg-gradient-to-r from-accent-primary to-accent-rose hover:from-accent-rose hover:to-accent-secondary text-black font-bold rounded-xl btn-glow shadow-lg shadow-accent-primary/20 hover:shadow-accent-secondary/35 hover:-translate-y-0.5 transition-all text-xs uppercase tracking-widest cursor-pointer mt-4 flex items-center justify-center gap-2"
                 >

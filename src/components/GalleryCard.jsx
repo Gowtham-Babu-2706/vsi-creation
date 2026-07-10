@@ -77,6 +77,7 @@ export default function GalleryCard({ event }) {
           src={event.banner}
           alt={event.name}
           className="w-full h-full object-cover transition-all duration-700 scale-100 brightness-75 group-hover:scale-105 group-hover:brightness-50"
+          loading="lazy"
         />
 
         {/* Category pill */}

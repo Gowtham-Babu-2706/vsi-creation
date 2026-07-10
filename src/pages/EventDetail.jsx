@@ -9,6 +9,7 @@ import RegistrationModal from '../components/RegistrationModal';
 import { useGSAP, SplitText } from '../hooks/useGSAP';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
+import { useDocumentMetadata } from '../hooks/useDocumentMetadata';
 gsap.registerPlugin(ScrollTrigger);
 
 export default function EventDetail() {
@@ -18,6 +19,11 @@ export default function EventDetail() {
   const [loading,        setLoading]        = useState(true);
   const [isModalOpen,    setIsModalOpen]    = useState(false);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+
+  useDocumentMetadata(
+    event ? event.title : 'Event Details',
+    event ? `Reserve spots for ${event.title} on ${event.date}. Details on ticket price, location, categories, and custom experiences.` : ''
+  );
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -195,6 +201,7 @@ export default function EventDetail() {
                       src={event.videoThumbnail || event.banner}
                       alt="Video preview"
                       className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
+                      loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-bg-main/60 to-transparent" />
                     <div className="bg-gradient-to-r from-accent-primary to-accent-rose hover:from-accent-rose hover:to-accent-secondary p-5.5 rounded-full text-white shadow-2xl shadow-accent-primary/45 z-20 group-hover:scale-110 active:scale-95 transition-all">
