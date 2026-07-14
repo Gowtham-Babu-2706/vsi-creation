@@ -51,36 +51,6 @@ export default function EventDetail() {
 
   const isUpcoming = event ? new Date(event.date) >= new Date() : false;
 
-  useGSAP(() => {
-    if (!event) return;
-    // Hero image scale-in
-    gsap.fromTo('.ed-hero-img',
-      { scale: 1.08 },
-      { scale: 1, duration: 1.6, ease: 'power2.out' }
-    );
-    // Hero content stagger
-    const tl = gsap.timeline({ delay: 0.3 });
-    tl.fromTo('.ed-back-link', { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.5, ease: 'power2.out' })
-      .fromTo('.ed-badges', { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.2')
-      .fromTo('.ed-title .char-span',
-        { opacity: 0, y: 40, rotateX: -45 },
-        { opacity: 1, y: 0, rotateX: 0, duration: 0.8, stagger: 0.018, ease: 'power4.out' },
-        '-=0.3'
-      )
-      .fromTo('.ed-meta', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, '-=0.5');
-
-    // Scroll-triggered body sections
-    gsap.utils.toArray('.ed-section').forEach((el, i) => {
-      gsap.fromTo(el,
-        { opacity: 0, y: 45 },
-        {
-          opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
-          scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
-        }
-      );
-    });
-  }, [event]);
-
   if (loading) {
     return (
       <div className="min-h-screen bg-bg-main text-white flex flex-col justify-center items-center py-20 px-8 select-none gap-4">
@@ -150,7 +120,7 @@ export default function EventDetail() {
 
           {/* Event Title */}
           <h1 className="ed-title font-display text-4xl md:text-6xl text-text-main leading-tight max-w-4xl font-extrabold tracking-tight">
-            <SplitText>{event.title}</SplitText>
+            {event.title}
           </h1>
 
           {/* Meta */}
@@ -175,7 +145,7 @@ export default function EventDetail() {
 
           {/* Overview */}
           <section className="ed-section bg-bg-surface/55 backdrop-blur-md border border-white/5 rounded-[32px] p-8 space-y-4 shadow-xl shadow-black/30">
-            <h2 className="font-display text-xl text-white flex items-center gap-2.5 pb-4 border-b border-border-color/30 font-extrabold tracking-tight">
+            <h2 className="font-display text-xl text-black flex items-center gap-2.5 pb-4 border-b border-border-color/30 font-extrabold tracking-tight">
               <FileText className="w-5 h-5 text-accent-primary" />
               Event Overview
             </h2>

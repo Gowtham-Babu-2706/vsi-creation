@@ -14,45 +14,7 @@ export default function EventCard({ event }) {
   // Determine if event is upcoming or past
   const isUpcoming = new Date(event.date) >= new Date();
 
-  const handleMouseMove = (e) => {
-    const el = cardRef.current;
-    if (!el) return;
-    const { left, top, width, height } = el.getBoundingClientRect();
-    const x = e.clientX - left - width / 2;
-    const y = e.clientY - top - height / 2;
-    
-    gsap.to(el, {
-      rotateY: (x / width) * 8,
-      rotateX: -(y / height) * 8,
-      transformPerspective: 1000,
-      ease: 'power2.out',
-      duration: 0.35,
-      overwrite: 'auto'
-    });
-  };
 
-  const handleMouseEnter = () => {
-    gsap.to(cardRef.current, {
-      y: -6,
-      scale: 1.025,
-      boxShadow: '0 20px 40px rgba(225, 29, 72, 0.12), 0 0 0 1px rgba(225, 29, 72, 0.2)',
-      ease: 'power2.out',
-      duration: 0.35
-    });
-  };
-
-  const handleMouseLeave = () => {
-    gsap.to(cardRef.current, {
-      y: 0,
-      scale: 1,
-      rotateX: 0,
-      rotateY: 0,
-      boxShadow: 'none',
-      ease: 'power2.out',
-      duration: 0.35,
-      overwrite: 'auto'
-    });
-  };
 
   return (
     <div
@@ -60,21 +22,16 @@ export default function EventCard({ event }) {
       className="relative bg-bg-card/40 backdrop-blur-md border border-border-color/60 rounded-[24px] overflow-hidden
         flex flex-col justify-between
         glass-card-hover group select-none origin-center"
-      onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
     >
       {/* ── Banner Image ── */}
       <div className="h-52 overflow-hidden relative select-none bg-bg-surface">
         <img
-          src={event.banner || 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800'}
+          src={event.banner}
           alt={event.title}
           className="w-full h-full object-cover transition-all duration-700 scale-100 brightness-90 group-hover:scale-105 group-hover:brightness-75"
           loading="lazy"
         />
 
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-bg-card/90 via-transparent to-transparent" />
 
         {/* Status badge */}
         <span className={`absolute top-4 right-4 text-[9px] font-extrabold uppercase tracking-widest px-3 py-1.5 rounded-full border backdrop-blur-md flex items-center gap-1.5
