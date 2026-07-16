@@ -9,7 +9,7 @@ export const GALLERY_EVENTS = [
     description: 'A luxury royal wedding story featuring custom floral structures and golden candlelit pathways.',
     fullDescription: 'This grand royal destination wedding blended traditional heritage with luxury staging. VSI Creations handled complete design blueprint: coordinating high-mast architectural wash lights on the palace walls, rigging gold-candlestick chandeliers, and delivering multi-camera cinema captures for the high-profile guests.',
     banner: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1200',
-    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
+    videoUrl: 'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/vedio+1.mp4',
     videoType: 'mp4',
     highlights: [
       '3D facade projection mapping detailing dynastic lineage.',
@@ -67,7 +67,7 @@ export const GALLERY_EVENTS = [
     description: 'Truss rigging, synchronized laser alignment, and massive line-array acoustics.',
     fullDescription: 'A colossal live music arena production. VSI Creations oversaw structural rigging plans and engineered a high-volume sound layout with 64 subwoofers stack, delivering flawless audio curves across the stadium.',
     banner: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1200',
-    videoUrl: 'https://www.w3schools.com/html/movie.mp4',
+    videoUrl: 'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/video2.mp4',
     videoType: 'mp4',
     highlights: [
       '120-piece metallic truss system certified for heavy payloads.',
@@ -125,7 +125,7 @@ export const GALLERY_EVENTS = [
     description: 'Bespoke ceiling installations and cinematic private video recap.',
     fullDescription: 'A premium birthday milestone structured around high-luxury gold and crimson geometry. VSI Creations decorated the hall with suspended golden orbits, intelligent soft-wash illumination fixtures, and captured visual narratives.',
     banner: 'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=1200',
-    videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
+    videoUrl: 'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/vedio+1.mp4',
     videoType: 'mp4',
     highlights: [
       'Custom gold spherical frames suspended on kinetic motors.',
@@ -154,7 +154,7 @@ export const GALLERY_EVENTS = [
     description: 'Multi-stage music, rock-band setups, and aerial crowd captures.',
     fullDescription: 'IITs primary spring festival hosting nationwide collegiate rock competitions. VSI coordinate complete sound-monitoring configurations, high-voltage beam lights, and aerial UAV video flight lines capturing attendee dynamics.',
     banner: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1200',
-    videoUrl: 'https://www.w3schools.com/html/movie.mp4',
+    videoUrl: 'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/video2.mp4',
     videoType: 'mp4',
     highlights: [
       'Outdoor line-arrays engineered to limit stage sound spill.',

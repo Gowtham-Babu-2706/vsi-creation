@@ -81,6 +81,11 @@ const PORTFOLIO_ITEMS = [
 
 const GALLERY_ITEMS = [
   {
+    src: 'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/vedio+1.mp4',
+    title: 'Production Showcase I',
+    isVideo: true
+  },
+  {
     src: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800',
     title: 'Awards Function'
   },
@@ -99,6 +104,11 @@ const GALLERY_ITEMS = [
   {
     src: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=800',
     title: 'Celebrity Event'
+  },
+  {
+    src: 'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/video2.mp4',
+    title: 'Production Showcase II',
+    isVideo: true
   }
 ];
 
@@ -648,14 +658,25 @@ export default function Home() {
               key={idx}
               to="/gallery"
               className={`gallery-item-home rounded-[24px] overflow-hidden border border-border-color relative group cursor-pointer shadow-md transition-all duration-500 hover:scale-[1.02] hover:border-accent-primary/30 hover:shadow-xl hover:shadow-accent-primary/5
-                ${idx === 0 ? 'md:col-span-2 md:row-span-2 h-56 md:h-auto' : 'h-44'}`}
+                ${idx === 0 ? 'md:col-span-2 md:row-span-2 h-56 md:h-auto' : idx === 6 ? 'md:col-span-2 h-44' : 'h-44'}`}
             >
-              <img
-                src={item.src}
-                alt={item.title}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                loading="lazy"
-              />
+              {item.isVideo ? (
+                <video
+                  src={item.src}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  muted
+                  loop
+                  playsInline
+                  autoPlay
+                />
+              ) : (
+                <img
+                  src={item.src}
+                  alt={item.title}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  loading="lazy"
+                />
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-5">
                 <span className="font-display text-sm text-white font-extrabold tracking-wide">{item.title}</span>
               </div>
