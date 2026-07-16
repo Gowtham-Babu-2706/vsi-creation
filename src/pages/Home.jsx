@@ -539,7 +539,7 @@ export default function Home() {
                 Book Your Event
               </a>
             </div>
-            <div className='hidden'><Link to="/admin" className='text-accent-primary'>Admin Login</Link></div>
+            <div className=''><Link to="/admin" className='text-accent-primary'>Admin Login</Link></div>
           </div>
         </div>
       </section>

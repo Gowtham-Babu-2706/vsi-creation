@@ -2,43 +2,7 @@
   "cleanUrls": true,
   "rewrites": [
     {
-      "source": "/admin",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/login",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/events",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/events/:id",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/services",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/services/:id",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/portfolio/:id",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/gallery",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/gallery/:id",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/contact",
+      "source": "/(.*)",
       "destination": "/index.html"
     }
   ]
