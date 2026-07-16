@@ -85,26 +85,7 @@ const GALLERY_ITEMS = [
     title: 'Production Showcase I',
     isVideo: true
   },
-  {
-    src: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800',
-    title: 'Awards Function'
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=800',
-    title: 'Live Concert'
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=800',
-    title: 'Music Festival'
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=800',
-    title: 'Corporate Summit'
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=800',
-    title: 'Celebrity Event'
-  },
+
   {
     src: 'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/video2.mp4',
     title: 'Production Showcase II',
@@ -657,13 +638,12 @@ export default function Home() {
             <Link
               key={idx}
               to="/gallery"
-              className={`gallery-item-home rounded-[24px] overflow-hidden border border-border-color relative group cursor-pointer shadow-md transition-all duration-500 hover:scale-[1.02] hover:border-accent-primary/30 hover:shadow-xl hover:shadow-accent-primary/5
-                ${idx === 0 ? 'md:col-span-2 md:row-span-2 h-56 md:h-auto' : idx === 6 ? 'md:col-span-2 h-44' : 'h-44'}`}
+              className={"gallery-item-home rounded-[24px] overflow-hidden border border-border-color relative group cursor-pointer shadow-md transition-all duration-500 hover:scale-[1.02] hover:border-accent-primary/30 hover:shadow-xl hover:shadow-accent-primary/5"}
             >
               {item.isVideo ? (
                 <video
                   src={item.src}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  className=" object-contain transition-transform duration-700 group-hover:scale-105"
                   muted
                   loop
                   playsInline

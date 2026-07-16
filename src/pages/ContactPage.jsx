@@ -160,17 +160,17 @@ export default function ContactPage() {
                   <CheckCircle2 className="w-10 h-10" />
                 </div>
                 <div className="space-y-3">
-                  <h3 className="text-2xl font-black text-white uppercase tracking-wider">Brief Dispatched!</h3>
+                  <h3 className="text-2xl font-black text-black uppercase tracking-wider">Brief Dispatched!</h3>
                   <p className="text-sm text-text-muted max-w-md mx-auto leading-relaxed font-light">
-                    Thank you <span className="text-white font-bold">{formData.name}</span>. Your inquiry for <span className="text-accent-gold font-bold uppercase">{formData.service.replace('-', ' ')} Production</span> has been successfully logged.
+                    Thank you <span className="text-accent-gold font-bold">{formData.name}</span>. Your inquiry for <span className="text-accent-gold font-bold uppercase">{formData.service.replace('-', ' ')} Production</span> has been successfully logged.
                   </p>
                   <p className="text-xs text-text-muted bg-bg-card/45 border border-white/5 px-4 py-2.5 rounded-xl max-w-sm mx-auto font-light">
-                    A secure confirmation token has been sent to <span className="text-white font-bold">{formData.email}</span>.
+                    A secure confirmation token has been sent to <span className="text-black  font-bold">{formData.email}</span>.
                   </p>
                 </div>
                 <button
                   onClick={handleReset}
-                  className="px-8 py-3.5 bg-gradient-to-r from-accent-primary to-accent-rose hover:from-accent-rose hover:to-accent-secondary text-white font-bold rounded-xl shadow-lg shadow-accent-primary/25 cursor-pointer text-xs uppercase tracking-widest mt-4 btn-glow"
+                  className="px-8 py-3.5 bg-gradient-to-r from-accent-primary to-accent-rose hover:from-accent-rose hover:to-accent-secondary text-black font-bold rounded-xl shadow-lg shadow-accent-primary/25 cursor-pointer text-xs uppercase tracking-widest mt-4 btn-glow"
                 >
                   Send Another Inquiry
                 </button>

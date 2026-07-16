@@ -4,13 +4,13 @@ import { Calendar, MapPin, Tag, ArrowRight, Images, Maximize2 } from 'lucide-rea
 import gsap from 'gsap';
 
 const CATEGORY_COLORS = {
-  weddings:              { bg: 'bg-pink-950/60',   border: 'border-pink-600/40',   text: 'text-pink-300' },
-  'corporate-events':   { bg: 'bg-blue-950/60',   border: 'border-blue-600/40',   text: 'text-blue-300' },
-  'music-shows':        { bg: 'bg-purple-950/60', border: 'border-purple-600/40', text: 'text-purple-300' },
-  'dj-nights':          { bg: 'bg-cyan-950/60',   border: 'border-cyan-600/40',   text: 'text-cyan-300' },
-  'birthday-celebrations': { bg: 'bg-yellow-950/60', border: 'border-yellow-600/40', text: 'text-yellow-300' },
-  'college-events':     { bg: 'bg-green-950/60',  border: 'border-green-600/40',  text: 'text-green-300' },
-  'cultural-events':    { bg: 'bg-orange-950/60', border: 'border-orange-600/40', text: 'text-orange-300' },
+  weddings:              { bg: 'bg-pink-50/90',   border: 'border-pink-200',   text: 'text-pink-600' },
+  'corporate-events':   { bg: 'bg-blue-50/90',   border: 'border-blue-200',   text: 'text-blue-600' },
+  'music-shows':        { bg: 'bg-purple-50/90', border: 'border-purple-200', text: 'text-purple-600' },
+  'dj-nights':          { bg: 'bg-cyan-50/90',   border: 'border-cyan-200',   text: 'text-cyan-600' },
+  'birthday-celebrations': { bg: 'bg-yellow-50/90', border: 'border-yellow-200', text: 'text-yellow-600' },
+  'college-events':     { bg: 'bg-green-50/90',  border: 'border-green-200',  text: 'text-green-600' },
+  'cultural-events':    { bg: 'bg-orange-50/90', border: 'border-orange-200', text: 'text-orange-600' },
 };
 
 export default function GalleryCard({ event }) {

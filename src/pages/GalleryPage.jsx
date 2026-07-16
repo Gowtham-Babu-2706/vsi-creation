@@ -88,7 +88,7 @@ export default function GalleryPage() {
                 placeholder="Search event name, venue or keyword..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full bg-bg-card/45 border border-border-color/80 text-xs text-white pl-12 pr-4 py-3.5 rounded-xl focus:border-accent-primary outline-none transition-all placeholder:text-slate-655 focus:bg-bg-main/80 hover:border-accent-primary/25"
+                className="w-full bg-bg-card border border-border-color/80 text-xs text-text-main pl-12 pr-4 py-3.5 rounded-xl focus:border-accent-primary outline-none transition-all placeholder:text-text-muted focus:bg-bg-main/80 hover:border-accent-primary/25"
               />
             </div>
             <div className="flex items-center gap-2 w-full md:w-auto ml-auto">
@@ -108,7 +108,7 @@ export default function GalleryPage() {
                 className={`px-4 py-2.5 text-[10px] md:text-xs font-bold uppercase tracking-wider rounded-xl border transition-all cursor-pointer ${
                   category === cat.id
                     ? 'cat-active'
-                    : 'bg-bg-card border-border-color/85 hover:border-accent-primary text-text-muted hover:text-white'
+                    : 'bg-bg-surface border-border-color/80 hover:border-accent-primary text-text-muted hover:text-text-main'
                 }`}
               >
                 {cat.label}
@@ -141,15 +141,15 @@ export default function GalleryPage() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-24 bg-bg-surface/55 backdrop-blur-md border border-white/5 rounded-[32px] space-y-4 shadow-xl shadow-black/25">
+          <div className="text-center py-24 bg-bg-surface/55 backdrop-blur-md border border-border-color/40 rounded-[32px] space-y-4 shadow-xl shadow-black/5">
             <Images className="w-12 h-12 text-accent-primary mx-auto animate-pulse" />
-            <h3 className="text-lg font-bold text-white tracking-tight">No Events Found</h3>
+            <h3 className="text-lg font-bold text-text-main tracking-tight">No Events Found</h3>
             <p className="text-xs text-text-muted max-w-sm mx-auto font-light">
               No gallery records match your search or category filter. Try clearing the search or switching categories.
             </p>
             <button
               onClick={() => { setSearch(''); setCategory('all'); }}
-              className="px-6 py-2.5 bg-bg-card/70 hover:bg-accent-primary border border-border-color hover:border-accent-primary text-xs font-bold text-white rounded-xl uppercase tracking-wider transition-all cursor-pointer btn-glow"
+              className="px-6 py-2.5 bg-bg-card hover:bg-accent-primary border border-border-color hover:border-accent-primary text-xs font-bold text-text-main hover:text-white rounded-xl uppercase tracking-wider transition-all cursor-pointer btn-glow"
             >
               Reset Filters
             </button>
