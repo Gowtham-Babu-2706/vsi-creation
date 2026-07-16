@@ -91,6 +91,18 @@ const GALLERY_ITEMS = [
     title: 'Production Showcase II',
     isVideo: true
   }
+  ,
+  {
+    src:"https://res.cloudinary.com/dkhjubpyh/image/upload/ar_4:3,c_auto/WhatsApp_Image_2026-06-15_at_11.48.47_AM_1_c6sai6.jpg",
+    title:'showcase',
+    isVideo:false
+  }
+    ,
+  {
+    src:"https://res.cloudinary.com/dkhjubpyh/image/upload/ar_4:3,c_auto/WhatsApp_Image_2026-06-15_at_11.48.47_AM_2_bg6cz8.jpg",
+    title:'showcase 11',
+    isVideo:false
+  }
 ];
 
 const CAROUSEL_SLIDES = [
@@ -638,12 +650,12 @@ export default function Home() {
             <Link
               key={idx}
               to="/gallery"
-              className={"gallery-item-home rounded-[24px] overflow-hidden border border-border-color relative group cursor-pointer shadow-md transition-all duration-500 hover:scale-[1.02] hover:border-accent-primary/30 hover:shadow-xl hover:shadow-accent-primary/5"}
+              className="gallery-item-home rounded-[24px] overflow-hidden border border-border-color relative group cursor-pointer shadow-md transition-all duration-500 hover:scale-[1.02] hover:border-accent-primary/30 hover:shadow-xl hover:shadow-accent-primary/5 col-span-1 h-80 md:h-[450px]"
             >
               {item.isVideo ? (
                 <video
                   src={item.src}
-                  className=" object-contain transition-transform duration-700 group-hover:scale-105"
+                  className="w-full h-full p-10 object-contain transition-transform duration-700 group-hover:scale-105"
                   muted
                   loop
                   playsInline
@@ -653,7 +665,7 @@ export default function Home() {
                 <img
                   src={item.src}
                   alt={item.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="w-full h-full p-5 object-contain transition-transform duration-700 group-hover:scale-105"
                   loading="lazy"
                 />
               )}
