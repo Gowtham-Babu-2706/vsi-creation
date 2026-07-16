@@ -238,3 +238,92 @@ input:focus, select:focus, textarea:focus {
   will-change: transform, opacity;
 }
 
+/* ── Admin Theme Overrides (Light Mode Match) ── */
+.admin-theme {
+  background-color: var(--color-bg-main);
+  color: var(--color-text-main);
+}
+
+/* Force standard text color for dashboard text elements */
+.admin-theme h1,
+.admin-theme h2,
+.admin-theme h3,
+.admin-theme h4,
+.admin-theme span,
+.admin-theme p,
+.admin-theme label,
+.admin-theme td,
+.admin-theme th {
+  color: var(--color-text-main) !important;
+}
+
+/* Subtitles / Muted text */
+.admin-theme .text-text-muted,
+.admin-theme p.text-text-muted,
+.admin-theme span.text-text-muted,
+.admin-theme p.text-xs {
+  color: var(--color-text-muted) !important;
+}
+
+/* Inputs, selects and textareas styling */
+.admin-theme input,
+.admin-theme select,
+.admin-theme textarea {
+  background-color: var(--color-bg-card) !important;
+  border-color: var(--color-border-color) !important;
+  color: var(--color-text-main) !important;
+}
+
+.admin-theme input::placeholder,
+.admin-theme textarea::placeholder {
+  color: var(--color-text-muted) !important;
+}
+
+/* Non-active buttons/tabs styling */
+.admin-theme button:not(.bg-accent-gold):not([onClick*="logout"]) {
+  color: var(--color-text-muted) !important;
+}
+.admin-theme button:not(.bg-accent-gold):not([onClick*="logout"]):hover {
+  color: var(--color-text-main) !important;
+}
+
+/* Edit / View Icon Buttons inside tables */
+.admin-theme td button.text-white {
+  color: var(--color-text-muted) !important;
+  background-color: var(--color-bg-card) !important;
+  border-color: var(--color-border-color) !important;
+}
+.admin-theme td button.text-white:hover {
+  color: var(--color-accent-primary) !important;
+  border-color: var(--color-accent-primary) !important;
+}
+
+/* Delete Icon Button (specifically target the hover:bg-accent-primary to override) */
+.admin-theme td button.hover\:bg-accent-primary:hover {
+  background-color: #ef4444 !important;
+  border-color: #ef4444 !important;
+  color: #ffffff !important;
+}
+
+/* Logout Button styling for light mode */
+.admin-theme button[onClick*="logout"] {
+  background-color: #fef2f2 !important;
+  border-color: #fee2e2 !important;
+  color: #ef4444 !important;
+}
+.admin-theme button[onClick*="logout"]:hover {
+  background-color: #ef4444 !important;
+  border-color: #ef4444 !important;
+  color: #ffffff !important;
+}
+
+/* Detail Drawer items */
+.admin-theme .bg-bg-card\/50 {
+  background-color: var(--color-bg-card) !important;
+}
+.admin-theme .bg-bg-card {
+  background-color: var(--color-bg-card) !important;
+}
+
+
+

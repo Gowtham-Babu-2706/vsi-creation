@@ -2,17 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import {
   ArrowLeft, Calendar, MapPin, CheckCircle2,
-  Images, Camera, Film, Star, Share2
+  Images, Camera, Film, Star
 } from 'lucide-react';
 import { getGalleryEventById } from '../utils/galleryData';
 import VideoPlayer from '../components/VideoPlayer';
 import Lightbox from '../components/Lightbox';
 import { api } from '../utils/api';
-import { useGSAP, SplitText } from '../hooks/useGSAP';
-import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
 import { useDocumentMetadata } from '../hooks/useDocumentMetadata';
-gsap.registerPlugin(ScrollTrigger);
 
 export default function GalleryDetail() {
   const { id } = useParams();
@@ -62,33 +58,6 @@ export default function GalleryDetail() {
   const allEventPhotos = event?.photos || [];
   const allBtsPhotos   = event?.btsPhotos || [];
 
-  useGSAP(() => {
-    if (!event) return;
-    // Hero scale-in
-    gsap.fromTo('.gd-hero-img',
-      { scale: 1.1 },
-      { scale: 1, duration: 1.8, ease: 'power2.out' }
-    );
-    const tl = gsap.timeline({ delay: 0.25 });
-    tl.fromTo('.gd-back-link', { opacity: 0, x: -18 }, { opacity: 1, x: 0, duration: 0.5, ease: 'power2.out' })
-      .fromTo('.gd-eyebrow', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' }, '-=0.2')
-      .fromTo('.gd-title .char-span',
-        { opacity: 0, y: 36, rotateX: -42 },
-        { opacity: 1, y: 0, rotateX: 0, duration: 0.8, stagger: 0.018, ease: 'power4.out' },
-        '-=0.3'
-      )
-      .fromTo('.gd-meta', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' }, '-=0.55');
-
-    gsap.utils.toArray('.gd-section').forEach((el) => {
-      gsap.fromTo(el,
-        { opacity: 0, y: 40 },
-        {
-          opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
-          scrollTrigger: { trigger: el, start: 'top 87%', toggleActions: 'play none none none' }
-        }
-      );
-    });
-  }, [event]);
 
   if (loading) {
     return (
@@ -134,7 +103,7 @@ export default function GalleryDetail() {
               {event.categoryLabel}
             </span>
             <h1 className="gd-title text-3xl md:text-5xl font-extrabold text-black leading-tight tracking-tight font-display max-w-3xl">
-              <SplitText>{event.name}</SplitText>
+              {event.name}
             </h1>
             <div className="gd-meta flex flex-wrap gap-5 text-xs text-text-muted font-bold uppercase tracking-wider mt-3">
               <span className="flex items-center gap-1.5"><Calendar className="w-4 h-4 text-accent-gold" />{formatDate(event.date)}</span>

@@ -3,11 +3,7 @@ import { Search, SlidersHorizontal, Images, Sparkles } from 'lucide-react';
 import { GALLERY_EVENTS } from '../utils/galleryData';
 import GalleryCard from '../components/GalleryCard';
 import { api } from '../utils/api';
-import { useGSAP, SplitText } from '../hooks/useGSAP';
-import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
 import { useDocumentMetadata } from '../hooks/useDocumentMetadata';
-gsap.registerPlugin(ScrollTrigger);
 
 const CATEGORIES = [
   { id: 'all',                   label: 'All Events' },
@@ -57,26 +53,7 @@ export default function GalleryPage() {
     return matchSearch && matchCat;
   });
 
-  useGSAP(() => {
-    const tl = gsap.timeline();
-    tl.fromTo('.gal-eyebrow', { opacity: 0, y: -12 }, { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' })
-      .fromTo('.gal-title .char-span',
-        { opacity: 0, y: 32, rotateX: -40 },
-        { opacity: 1, y: 0, rotateX: 0, duration: 0.7, stagger: 0.02, ease: 'power4.out' },
-        '-=0.35'
-      )
-      .fromTo('.gal-desc', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' }, '-=0.5')
-      .fromTo('.gal-filter-box', { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 0.65, ease: 'power3.out' }, '-=0.3');
-  }, []);
 
-  // Animate cards on first load
-  useEffect(() => {
-    if (loading) return;
-    gsap.fromTo('.gal-card-anim',
-      { opacity: 0, y: 38, scale: 0.96 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.7, stagger: 0.08, ease: 'power3.out' }
-    );
-  }, [loading, filtered.length]);
 
   return (
     <div className="bg-bg-main text-text-main min-h-screen pt-24 pb-16 relative">
@@ -93,7 +70,7 @@ export default function GalleryPage() {
             Visual Archive
           </span>
           <h1 className="gal-title text-4xl md:text-5xl font-extrabold text-black tracking-tight font-display">
-            <SplitText>Event Gallery</SplitText>
+            <>Event Gallery</>
           </h1>
           <p className="gal-desc text-sm md:text-base text-text-muted leading-relaxed font-light">
             A curated showcase of every spectacle VSI Creations has engineered — from royal weddings and arena concerts to intimate cultural galas.

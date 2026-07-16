@@ -22,52 +22,10 @@ export default function GalleryCard({ event }) {
 
   const photoCount = (event.photos?.length || 0) + (event.btsPhotos?.length || 0);
 
-  const handleMouseMove = (e) => {
-    const el = cardRef.current;
-    if (!el) return;
-    const { left, top, width, height } = el.getBoundingClientRect();
-    const x = e.clientX - left - width / 2;
-    const y = e.clientY - top - height / 2;
-    
-    gsap.to(el, {
-      rotateY: (x / width) * 8,
-      rotateX: -(y / height) * 8,
-      transformPerspective: 1000,
-      ease: 'power2.out',
-      duration: 0.35,
-      overwrite: 'auto'
-    });
-  };
-
-  const handleMouseEnter = () => {
-    gsap.to(cardRef.current, {
-      y: -6,
-      scale: 1.025,
-      boxShadow: '0 20px 40px rgba(225, 29, 72, 0.1), 0 0 0 1px rgba(225, 29, 72, 0.15)',
-      ease: 'power2.out',
-      duration: 0.35
-    });
-  };
-
-  const handleMouseLeave = () => {
-    gsap.to(cardRef.current, {
-      y: 0,
-      scale: 1,
-      rotateX: 0,
-      rotateY: 0,
-      boxShadow: 'none',
-      ease: 'power2.out',
-      duration: 0.35,
-      overwrite: 'auto'
-    });
-  };
 
   return (
     <div
       ref={cardRef}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
       className="group relative bg-bg-card/45 backdrop-blur-md border border-border-color/60 rounded-[28px] overflow-hidden
                  glass-card-gold-hover flex flex-col select-none origin-center"
     >

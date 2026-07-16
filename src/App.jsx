@@ -18,6 +18,12 @@ const GalleryPage = React.lazy(() => import('./pages/GalleryPage'));
 const GalleryDetail = React.lazy(() => import('./pages/GalleryDetail'));
 const ServicesPage = React.lazy(() => import('./pages/ServicesPage'));
 const ContactPage = React.lazy(() => import('./pages/ContactPage'));
+const Login = React.lazy(() => import('./pages/Login'));
+const AdminDashboard = React.lazy(() => import('./pages/AdminDashboard'));
+
+const ProtectedRoute = ({ children }) => {
+  return api.isAuthenticated() ? children : <Navigate to="/login" replace />;
+};
 
 const LoadingFallback = () => (
   <div className="min-h-[60vh] bg-bg-main flex flex-col justify-center items-center gap-4">
@@ -125,6 +131,31 @@ function App() {
   const handleLogoMouseLeave = () => {
     gsap.to('.logo-img', { rotate: 0, scale: 1, duration: 0.8, ease: 'power3.out', overwrite: 'auto' });
   };
+
+  const isAdminRoute = location.pathname.startsWith('/admin') || location.pathname === '/login';
+
+  if (isAdminRoute) {
+    return (
+      <div className="admin-theme bg-bg-main text-text-main min-h-screen font-body flex flex-col justify-between">
+        <main className="flex-grow">
+          <Suspense fallback={<LoadingFallback />}>
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route
+                path="/admin"
+                element={
+                  <ProtectedRoute>
+                    <AdminDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="*" element={<Navigate to="/admin" replace />} />
+            </Routes>
+          </Suspense>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-bg-main text-text-main min-h-screen font-body flex flex-col justify-between selection:bg-accent-primary selection:text-white">
