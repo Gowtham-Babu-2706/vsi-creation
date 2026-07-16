@@ -111,6 +111,41 @@ export default function ContactPage() {
               Connect with VSI Creations production engineers and crew. Fill out our form or contact us directly to reserve high-fidelity setups.
             </p>
           </div>
+
+          <div className="space-y-4 pt-6 border-t border-border-color/40">
+            <h3 className="text-xs font-bold text-black uppercase tracking-wider">Connect With Us</h3>
+            <div className="grid grid-cols-1 gap-4">
+              <a
+                href="https://www.instagram.com/vsi_creations/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ct-info-card flex items-center gap-4 bg-bg-surface border border-border-color/40 p-4 rounded-2xl hover:border-accent-primary transition-all group"
+              >
+                <div className="p-3 bg-pink-500/10 text-pink-500 rounded-xl group-hover:bg-accent-primary group-hover:text-white transition-all flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                </div>
+                <div>
+                  <span className="text-[10px] text-text-muted uppercase font-bold block">Instagram</span>
+                  <span className="text-sm font-semibold text-text-main">@vsi_creations</span>
+                </div>
+              </a>
+
+              <a
+                href="https://www.facebook.com/people/vsicreations/61573339693236/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ct-info-card flex items-center gap-4 bg-bg-surface border border-border-color/40 p-4 rounded-2xl hover:border-accent-primary transition-all group"
+              >
+                <div className="p-3 bg-blue-500/10 text-blue-500 rounded-xl group-hover:bg-accent-primary group-hover:text-white transition-all flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                </div>
+                <div>
+                  <span className="text-[10px] text-text-muted uppercase font-bold block">Facebook</span>
+                  <span className="text-sm font-semibold text-text-main">vsicreations</span>
+                </div>
+              </a>
+            </div>
+          </div>
         </div>
 
         {/* Right Column: Interaction Form Card */}
