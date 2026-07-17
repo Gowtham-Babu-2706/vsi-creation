@@ -11,6 +11,7 @@ import { SERVICES } from '../utils/servicesData';
 import { useGSAP, useMagnetic, SplitText } from '../hooks/useGSAP';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import TestimonialSection from '../components/TestimonialSection';
 import ContactPage from './ContactPage';
 import { useDocumentMetadata } from '../hooks/useDocumentMetadata';
 
@@ -148,30 +149,7 @@ const CAROUSEL_SLIDES = [
   }
 ];
 
-// UPCOMING_EVENTS is now loaded dynamically from the backend API
 
-// SERVICES is now imported from '../utils/servicesData'
-
-const REVIEWS = [
-  {
-    stars: 5,
-    text: 'Exceptional engineering across the sound design stage. The film delivery speed was impressive.',
-    client: 'Music Festival Director',
-    avatar: '🎵'
-  },
-  {
-    stars: 5,
-    text: 'Highly professional execution crew. Took our event media project requirements and elevated them effortlessly.',
-    client: 'Corporate Communications Lead',
-    avatar: '🏆'
-  },
-  {
-    stars: 5,
-    text: 'Highly professional execution crew. Took our event media project requirements and elevated them effortlessly.',
-    client: 'Corporate Communications Lead',
-    avatar: '🏆'
-  }
-];
 
 /* ── Helpers ── */
 const MONTH_ABBR = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -645,7 +623,7 @@ export default function Home() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2  gap-4">
           {GALLERY_ITEMS.map((item, idx) => (
             <Link
               key={idx}
@@ -655,7 +633,7 @@ export default function Home() {
               {item.isVideo ? (
                 <video
                   src={item.src}
-                  className="w-full h-full p-10 object-contain transition-transform duration-700 group-hover:scale-105"
+                  className="w-full h-full column-span-1 p-10 object-contain transition-transform duration-700 group-hover:scale-105"
                   muted
                   loop
                   playsInline
@@ -803,35 +781,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── ══════════════════════════════════════════
-          REVIEWS
-      ══════════════════════════════════════════ */}
-      <section id="reviews-section" className="py-24 px-6 md:px-[8%] relative">
-        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-accent-primary/20 to-transparent" />
-        <div className="mb-12">
-          <span className="text-xs text-accent-secondary font-extrabold uppercase tracking-[4px]">Testimonials</span>
-          <h2 className="font-display text-3xl md:text-4xl text-text-main font-extrabold mt-2">Client Reviews</h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
-          {REVIEWS.map((review, idx) => (
-            <div key={idx} className="review-card-home bg-white border border-border-color rounded-[28px] p-8 space-y-4 relative overflow-hidden glass-card-gold-hover">
-              <div className="absolute -top-4 -right-4 text-8xl opacity-[0.04] select-none">{review.avatar}</div>
-              {/* Stars */}
-              <div className="flex gap-1">
-                {[...Array(review.stars)].map((_, s) => (
-                  <Star key={s} className="w-3.5 h-3.5 fill-accent-primary text-accent-primary" />
-                ))}
-              </div>
-              <p className="text-sm text-text-muted italic leading-relaxed font-light">"{review.text}"</p>
-              <div className="flex items-center gap-2.5 pt-3 border-t border-border-color">
-                <span className="text-lg">{review.avatar}</span>
-                <span className="text-[10px] text-text-muted uppercase font-bold tracking-wider">{review.client}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+      {/* ── Testimonials from Clients ── */}
+      <TestimonialSection />
 
       {/* ── ══════════════════════════════════════════
           CONTACT FORM

@@ -218,5 +218,24 @@ export const api = {
     });
     if (!res.ok) throw new Error('Failed to remove gallery event.');
     return true;
+  },
+
+  // Testimonials (Public)
+  getTestimonials: async () => {
+    const res = await fetch(`${API_BASE_URL}/testimonials`, {
+      headers: getHeaders(false)
+    });
+    if (!res.ok) throw new Error('Failed to retrieve testimonials.');
+    return res.json();
+  },
+
+  submitTestimonial: async (data) => {
+    const res = await fetch(`${API_BASE_URL}/testimonials`, {
+      method: 'POST',
+      headers: getHeaders(false),
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) throw new Error('Failed to submit testimonial.');
+    return res.json();
   }
 };
