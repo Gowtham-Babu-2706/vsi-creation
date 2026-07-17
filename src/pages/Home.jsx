@@ -82,13 +82,13 @@ const PORTFOLIO_ITEMS = [
 
 const GALLERY_ITEMS = [
   {
-    src: 'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/vedio+1.mp4',
+    src: 'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/upload1.mp4',
     title: 'Production Showcase I',
     isVideo: true
   },
 
   {
-    src: 'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/video2.mp4',
+    src: 'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/upload2.mp4',
     title: 'Production Showcase II',
     isVideo: true
   }
@@ -445,8 +445,8 @@ export default function Home() {
         </div>
 
         {/* ── Gradient overlays for readability ── */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/55 to-black/30 z-[1]" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30 z-[1]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/65 to-black/30 z-[1]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/55 to-black/50 z-[1]" />
 
         {/* ── Slide category badge (top-right) ── */}
         <div className="absolute top-28 right-6 md:right-[8%] z-20">
@@ -510,17 +510,16 @@ export default function Home() {
               >
                 Explore Portfolio <ArrowUpRight className="w-4 h-4" />
               </a>
-              <a
+              <Link
                 ref={cta2Ref}
-                href="#contact"
+                to='/contact'
                 className="hero-cta inline-flex items-center gap-2 px-8 py-4 bg-white/10 backdrop-blur-md border border-white/20
                   text-white hover:text-accent-primary hover:border-accent-primary/50 font-bold rounded-xl
                   hover:bg-white/15 transition-all text-xs uppercase tracking-widest cursor-pointer hover:shadow-lg"
               >
                 Book Your Event
-              </a>
+              </Link>
             </div>
-            <div className='hidden'><Link to="/admin" className='text-accent-primary'>Admin Login</Link></div>
           </div>
         </div>
       </section>

@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Mail, Phone, MapPin, Send, CheckCircle2, Clock, ShieldAlert } from 'lucide-react';
-import { useGSAP, SplitText } from '../hooks/useGSAP';
-import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
 import { useDocumentMetadata } from '../hooks/useDocumentMetadata';
-gsap.registerPlugin(ScrollTrigger);
+
 
 export default function ContactPage() {
   useDocumentMetadata('Inquire Now & Book Staging', 'Connect with VSI Creations production engineers and crew. Submit your project brief for customized event staging, audio-visual setups, and media production.');
@@ -77,18 +74,7 @@ export default function ContactPage() {
     setErrors({});
   };
 
-  useGSAP(() => {
-    const tl = gsap.timeline();
-    tl.fromTo('.ct-eyebrow', { opacity: 0, y: -12 }, { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' })
-      .fromTo('.ct-title .char-span',
-        { opacity: 0, y: 35, rotateX: -40 },
-        { opacity: 1, y: 0, rotateX: 0, duration: 0.75, stagger: 0.02, ease: 'power4.out' },
-        '-=0.35'
-      )
-      .fromTo('.ct-desc', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.55, ease: 'power2.out' }, '-=0.5')
-      .fromTo('.ct-info-card', { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.65, ease: 'power3.out' }, '-=0.35')
-      .fromTo('.ct-form-panel', { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.65, ease: 'power3.out' }, '-=0.6');
-  }, []);
+
 
   return (
     <div className="bg-bg-main text-text-main min-h-screen pt-24 pb-16 relative px-6">
@@ -105,7 +91,7 @@ export default function ContactPage() {
               Get in Touch
             </span>
             <h1 className="ct-title text-4xl md:text-5xl font-extrabold text-black tracking-tight font-display">
-              <SplitText>Let's Produce Your Spectacle</SplitText>
+              <>Let's Produce Your Spectacle</>
             </h1>
             <p className="ct-desc text-sm text-text-muted leading-relaxed max-w-sm font-light">
               Connect with VSI Creations production engineers and crew. Fill out our form or contact us directly to reserve high-fidelity setups.
