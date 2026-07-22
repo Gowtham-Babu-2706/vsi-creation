@@ -39,42 +39,42 @@ const PORTFOLIO_ITEMS = [
     id: 'music-festivals',
     title: 'Music Concerts',
     desc: 'Large-scale music festivals featuring world-class stage production, immersive lighting, premium sound systems, and audience engagement.',
-    img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=1000',
+    img: 'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/Music+Concert/3.jpg',
     tag: '🎵 Music Festival'
   },
   {
     id: 'concert-shows',
     title: 'Arena Concert',
     desc: 'High-energy concert production with custom staging, advanced lighting, live sound engineering, and crowd management.',
-    img: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1000',
+    img: 'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/Music+Concert/2.png',
     tag: '🎤 Concert Shows'
   },
   {
     id: 'celebrity-management',
     title: 'Celebrity Management',
     desc: 'Complete celebrity engagement services, artist coordination, hospitality, logistics, and on-ground management.',
-    img: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1000',
+    img: 'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/Celebrity+management/1.png',
     tag: '⭐ Celebrity Management'
   },
   {
     id: 'csr-projects',
     title: ' CSR Projects',
     desc: 'Strategic planning and execution of Corporate Social Responsibility programs that create meaningful community impact.',
-    img: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=1000',
+    img: 'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/CSRprojects/2.jpg',
     tag: '🌱 CSR Projects'
   },
   {
     id: 'corporate-projects',
     title: 'Corporate Events & Summits',
     desc: 'Professional conferences, product launches, annual meetings, leadership summits, and corporate event production.',
-    img: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1000',
+    img: 'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/CE%26S/1.jpg',
     tag: '💼 Corporate'
   },
   {
     id: 'awareness-projects',
     title: 'Social Awareness Campaigns',
     desc: 'Creative campaigns and public engagement initiatives designed to promote social causes and drive positive community action.',
-    img: 'https://images.unsplash.com/photo-1509099836639-18ba1795216d?q=80&w=1000',
+    img: 'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/SAC/4.jpg',
     tag: '📢 Awareness'
   }
 ];

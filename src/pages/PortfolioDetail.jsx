@@ -77,9 +77,9 @@ const PORTFOLIO_DATA = {
       'Rigid certified ground support structures capable of heavy payload rigging.',
     ],
     gallery: [
-      'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600',
-      'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600',
-      'https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=600'
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/Music+Concert/5.jpg',
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/Music+Concert/3.jpg',
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/Music+Concert/1.png'
     ]
   },
   'concert-shows': {
@@ -101,9 +101,9 @@ const PORTFOLIO_DATA = {
       'Broadcast-ready live mixing and IEM monitoring for all performers.',
     ],
     gallery: [
-      'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600',
-      'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600',
-      'https://images.unsplash.com/photo-1501386761578-eaa54b1b5c88?w=600'
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/Music+Concert/2.png',
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/Music+Concert/1.png',
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/Music+Concert/4.png'
     ]
   },
   'celebrity-management': {
@@ -125,9 +125,9 @@ const PORTFOLIO_DATA = {
       'Press & media interaction management and brand alignment.',
     ],
     gallery: [
-      'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600',
-      'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600',
-      'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600'
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/Celebrity+management/1.png',
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/Celebrity+management/2.jpg',
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/Celebrity+management/3.jpg'
     ]
   },
   'csr-projects': {
@@ -149,9 +149,11 @@ const PORTFOLIO_DATA = {
       'Impact reports and stakeholder communications support.',
     ],
     gallery: [
-      'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600',
-      'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=600',
-      'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=600'
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/CSRprojects/1.jpg',
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/CSRprojects/2.jpg',
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/CSRprojects/3.jpg',
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/CSRprojects/4.jpg',
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/CSRprojects/5.jpg'
     ]
   },
   'corporate-projects': {
@@ -173,16 +175,18 @@ const PORTFOLIO_DATA = {
       'Brand-consistent décor, signage, and experience design.',
     ],
     gallery: [
-      'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600',
-      'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=600',
-      'https://images.unsplash.com/photo-1556761175-4b46a572b786?w=600'
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/CE%26S/1.jpg',
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/CE%26S/2.jpg',
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/CE%26S/3.jpg',
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/CE%26S/4.jpg',
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/CE%26S/5.jpg'
     ]
   },
   'awareness-projects': {
     title: 'Social Awareness Campaigns',
     subtitle: 'Creative Campaigns Driving Community Action',
     description: 'Creative campaigns and public engagement initiatives designed to promote social causes and drive positive community action. We amplify voices that matter with impactful storytelling and on-ground presence.',
-    heroImage: 'https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=1800',
+    heroImage: 'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/SAC/4.jpg',
     tags: ['Public Campaign', 'Storytelling', 'Community Outreach', 'Social Media'],
     stats: [
       { label: 'Campaigns Executed', value: '35+' },
@@ -197,9 +201,11 @@ const PORTFOLIO_DATA = {
       'Ground activations with real-time social media amplification.',
     ],
     gallery: [
-      'https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=600',
-      'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600',
-      'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600'
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/SAC/1.jpg',
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/SAC/2.jpg',
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/SAC/3jpg',
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/SAC/4.jpg',
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/SAC/5.jpg'
     ]
   }
 };

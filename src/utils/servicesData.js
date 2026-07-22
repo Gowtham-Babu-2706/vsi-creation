@@ -364,7 +364,7 @@ export const SERVICES = [
     tagline: 'Complete exhibition planning for brands, businesses, and trade expos.',
     description: 'We provide exhibition planning services including booth fabrication, venue management, visitor registration, branding, lighting, audiovisual systems, exhibitor support, logistics, and event operations.',
     icon: 'Building2',
-    banner: 'https://images.unsplash.com/photo-1591115765373-5f9cf1da2271?w=1200',
+    banner: 'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/1.jpg',
     heroImage: 'https://images.unsplash.com/photo-1591115765373-5f9cf1da2271?w=1800',
     techStack: [
       { name: 'Booth Fabrication', detail: 'Custom stall design & construction' },

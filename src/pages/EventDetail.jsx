@@ -62,7 +62,7 @@ export default function EventDetail() {
 
   if (!event) {
     return (
-      <div className="min-h-screen bg-bg-main text-white flex flex-col justify-center items-center py-20 px-8 gap-4">
+      <div className="min-h-screen  bg-bg-main text-white flex flex-col justify-center items-center py-20 px-8 gap-4">
         <div className="text-6xl">📭</div>
         <h2 className="font-display text-2xl text-accent-secondary">Event Not Found</h2>
         <p className="text-sm text-text-muted">No event matches this ID in our database.</p>
@@ -77,7 +77,7 @@ export default function EventDetail() {
   }
 
   return (
-    <div className="bg-bg-main text-text-main min-h-screen relative overflow-hidden">
+    <div className="bg-bg-main text-text-main mt-21 min-h-screen relative overflow-hidden">
 
 
 
