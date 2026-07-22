@@ -8,10 +8,60 @@ import { useDocumentMetadata } from '../hooks/useDocumentMetadata';
 gsap.registerPlugin(ScrollTrigger);
 
 const PORTFOLIO_DATA = {
+  'awards-functions': {
+    title: 'Awards Functions',
+    subtitle: 'Premium Stage Production & Flawless Ceremony Coordination',
+    description: 'End-to-end planning and execution of award ceremonies with premium stage production, lighting, audiovisual systems, and seamless event coordination. From red carpets to trophies, we create moments that honour excellence.',
+    heroImage: '',
+    tags: ['Awards Ceremony', 'Stage Production', 'AV Systems', 'Red Carpet'],
+    stats: [
+      { label: 'Ceremonies Delivered', value: '30+' },
+      { label: 'VIP Capacity', value: '3,000' },
+      { label: 'Stage Width', value: '80 Feet' },
+      { label: 'Camera Coverage', value: '360°' },
+    ],
+    features: [
+      'Custom trophy podium stage designs with luxury lighting rigs.',
+      'Broadcast-grade multi-camera capture for live streaming & replay.',
+      'Full red carpet setup with branded step-and-repeat backdrops.',
+      'Seamless MC support, scripting coordination & cue management.',
+    ],
+    gallery: [
+      'http://res.cloudinary.com/gbarhqu6/image/upload/f_auto/q_auto/100422.aardsmain_hm6zsq.avif',
+      'https://res.cloudinary.com/gbarhqu6/image/upload/f_auto/q_auto/images_pecry1.jpg',
+      'https://res.cloudinary.com/gbarhqu6/image/upload/f_auto/q_auto/EakUcqCCzAr9zd4ndKWcHNM5pWaj0GllkUm6zjdL4uWtBUJHShs6KYbJz_0QBBWh7eX2uyVJfJjOh6IY2k_XzUAbcqqXV7JWz0b0cwVRZ9WIJ2UfsxlJOJORUdfDPW_QOzWgPzjK7EJLOL0whiCrRxqZoyk26EZFuNopJ1o3xNTwAfV246z-TJ5wKrWr4zbe_vriexx.jpg',
+      'https://res.cloudinary.com/gbarhqu6/image/upload/f_auto/q_auto/-W7QpIPGAxXN9yz0qXpk_8S6yg90u1uFv80FCEQa0ksAaIGR0a8z9NE_r64FzKyGkVwYlm0oPgUMuxH63aruDFPbW9Rr8yvutXQJj1hFPl07SYTfcOnwL9W33WzXfs41gUIvnj_HFX7FTwKi946x86ls_IJz122c79fW1Y-tstZ4C0iApqAbmZaHBEKpo-hq_1_j0p70j.jpg'
+    ]
+  },
+  'sports-events': {
+    title: 'Sports Events',
+    subtitle: 'High-Energy Tournaments & Stadium Production',
+    description: 'Professional management of sports tournaments, marathons, leagues, and stadium events with complete production and logistics support. We bring the roar of the crowd to life with world-class infrastructure.',
+    heroImage: 'https://res.cloudinary.com/dfjsh2zel/image/upload/hero_section_background_image_for_202606291753_icypn0.jpg',
+    tags: ['Sports Tournament', 'Stadium Production', 'Live Broadcast', 'Logistics'],
+    stats: [
+      { label: 'Events Managed', value: '25+' },
+      { label: 'Peak Attendance', value: '50,000+' },
+      { label: 'Broadcast Cameras', value: '12 Units' },
+      { label: 'LED Scoreboard', value: 'Full HD' },
+    ],
+    features: [
+      'Giant LED scoreboards and real-time data display systems.',
+      'PA sound systems engineered for outdoor stadium acoustics.',
+      'Multi-camera live broadcast with instant replay infrastructure.',
+      'Full logistics support: ticketing, crowd control, and VIP zones.',
+    ],
+    gallery: [
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/VSI/1.jpg',
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/VSI/images.jpg',
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/VSI/4.jpg',
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/VSI/sports-event-management-company-in-chandigarh-1170x650.webp'
+    ]
+  },
   'music-festivals': {
-    title: 'Music Festivals & DJ Sets',
+    title: 'Music Concerts',
     subtitle: 'High-Decibel Immersive Stage Systems',
-    description: 'We orchestrate explosive soundscapes and visual spectacles that captivate tens of thousands. Our festival setups combine custom steel deck trussing, high-intensity laser grids, and line-array acoustics tuned for high-fidelity outdoor distribution.',
+    description: 'Large-scale music festivals featuring world-class stage production, immersive lighting, premium sound systems, and audience engagement. Our festival setups combine custom steel deck trussing, high-intensity laser grids, and line-array acoustics tuned for high-fidelity outdoor distribution.',
     heroImage: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1800',
     tags: ['Acoustics', 'Lasers', 'Truss Construction', 'Live SFX'],
     stats: [
@@ -22,7 +72,7 @@ const PORTFOLIO_DATA = {
     ],
     features: [
       'Line-array sound systems calibrated using spatial modeling software.',
-      'Sychronized timeline lasers and cryo-jet CO2 effects.',
+      'Synchronized timeline lasers and cryo-jet CO2 effects.',
       'LED wall video mapping with live VJ performance inputs.',
       'Rigid certified ground support structures capable of heavy payload rigging.',
     ],
@@ -32,52 +82,124 @@ const PORTFOLIO_DATA = {
       'https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=600'
     ]
   },
-  'gala-awards': {
-    title: 'Gala Awards & Red Carpets',
-    subtitle: 'Elite Ballroom Configurations & Broadcast Integrity',
-    description: 'Elevating corporate milestones with impeccable execution. From custom backdrops and luxury entrance tunnels to pristine lighting rigs and multi-camera broadcast capture, we ensure your gala radiates luxury.',
-    heroImage: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=1800',
-    tags: ['Corporate Gala', 'Red Carpet', 'Live Broadcast', 'Luxury Lighting'],
+  'concert-shows': {
+    title: 'Arena Concert Shows',
+    subtitle: 'High-Energy Concert Production & Crowd Experience',
+    description: 'High-energy concert production with custom staging, advanced lighting, live sound engineering, and crowd management. We engineer immersive arena experiences that leave audiences breathless.',
+    heroImage: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1800',
+    tags: ['Arena Production', 'Live Sound', 'Crowd Management', 'Pyrotechnics'],
     stats: [
-      { label: 'VIP Capacity', value: '2,500' },
-      { label: 'Cameras Engaged', value: '8 Cameras' },
-      { label: 'Stage Width', value: '60 Feet' },
-      { label: 'Pristine Audio', value: 'Zero Delay' },
+      { label: 'Arena Capacity', value: '20,000+' },
+      { label: 'Stage Rigging', value: '120 Tons' },
+      { label: 'Moving Lights', value: '350+ Units' },
+      { label: 'Sound Coverage', value: '360° Array' },
     ],
     features: [
-      'Pin-spot lighting to isolate centerpieces and maintain elite atmosphere.',
-      'Custom fabricated step-and-repeat backdrops with matte light diffusers.',
-      'Ultra-fine pixel pitch LED stage backdrops with dual backup media servers.',
-      'Broadcast-grade camera cranes and wireless steady-cam operators.',
+      'Custom arena staging with motorized set pieces and flying rigs.',
+      'Full arena sound calibration using real-time acoustic modeling.',
+      'Pyrotechnics, confetti cannons, and aerial performer integration.',
+      'Broadcast-ready live mixing and IEM monitoring for all performers.',
     ],
     gallery: [
-      'https://images.unsplash.com/photo-1489641493513-ba4ee84ccea9?w=600',
-      'https://images.unsplash.com/photo-1505232458627-a7272640408a?w=600',
-      'https://images.unsplash.com/photo-1531058020387-3be344559be6?w=600'
+      'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600',
+      'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600',
+      'https://images.unsplash.com/photo-1501386761578-eaa54b1b5c88?w=600'
     ]
   },
-  'bespoke-celebrations': {
-    title: 'Bespoke Premium Celebrations',
-    subtitle: 'Tailored Luxury Themes & Visual Storytelling',
-    description: 'Transforming private spaces and luxury halls into conceptual dreamscapes. Designed for clients seeking extraordinary visual storytelling, luxury weddings, and neon-infused milestone milestones.',
+  'celebrity-management': {
+    title: 'Celebrity Management',
+    subtitle: 'End-to-End Artist Coordination & Hospitality',
+    description: 'Complete celebrity engagement services, artist coordination, hospitality, logistics, and on-ground management. From booking to backstage, we ensure every artist feels like royalty.',
     heroImage: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1800',
-    tags: ['Bespoke Event', 'Luxury Wedding', 'Projection Mapping', 'Immersive Decor'],
+    tags: ['Artist Booking', 'Hospitality', 'Logistics', 'Green Room Setup'],
     stats: [
-      { label: 'Custom Fabrications', value: '100% Unique' },
-      { label: 'Illumination Fixtures', value: '240+ Units' },
-      { label: 'Projector Arrays', value: '8 HD Nodes' },
-      { label: 'Theme Design', value: 'Concept to Reality' },
+      { label: 'Artists Managed', value: '100+' },
+      { label: 'Cities Covered', value: '20+' },
+      { label: 'Dedicated Crew', value: '50+ Staff' },
+      { label: 'Satisfaction Rate', value: '100%' },
     ],
     features: [
-      'Stunning projection mapping that brings architectural walls to life.',
-      'Custom ceiling floral and lighting installations tailored to theme.',
-      'High-end multi-cam cinema team tracking candid moments in ultra HD.',
-      'Interactive entertainment rigs and intelligent warm-ambient lighting design.',
+      'Comprehensive artist rider fulfilment and green room setup.',
+      'Airport-to-venue executive transport and security coordination.',
+      'On-site personal assistants and 24/7 celebrity hospitality teams.',
+      'Press & media interaction management and brand alignment.',
     ],
     gallery: [
-      'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=600',
-      'https://images.unsplash.com/photo-1519741497674-611481863552?w=600',
-      'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=600'
+      'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600',
+      'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600',
+      'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600'
+    ]
+  },
+  'csr-projects': {
+    title: 'CSR Projects',
+    subtitle: 'Strategic Corporate Social Responsibility Execution',
+    description: 'Strategic planning and execution of Corporate Social Responsibility programs that create meaningful community impact. We help brands tell their purpose-driven stories through powerful, on-ground activations.',
+    heroImage: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=1800',
+    tags: ['Community Impact', 'Brand Purpose', 'On-ground Activation', 'Media Coverage'],
+    stats: [
+      { label: 'CSR Projects', value: '40+' },
+      { label: 'Communities Reached', value: '200+' },
+      { label: 'Beneficiaries', value: '10,000+' },
+      { label: 'Media Impressions', value: '5M+' },
+    ],
+    features: [
+      'End-to-end CSR campaign conceptualisation and execution.',
+      'Community engagement programs with NGO partnerships.',
+      'Live documentation & PR-ready media production.',
+      'Impact reports and stakeholder communications support.',
+    ],
+    gallery: [
+      'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600',
+      'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=600',
+      'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=600'
+    ]
+  },
+  'corporate-projects': {
+    title: 'Corporate Events & Summits',
+    subtitle: 'Professional Conference & Leadership Summit Production',
+    description: 'Professional conferences, product launches, annual meetings, leadership summits, and corporate event production. We set the stage for ideas that move industries forward.',
+    heroImage: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1800',
+    tags: ['Conference', 'Product Launch', 'Summit', 'Annual Meet'],
+    stats: [
+      { label: 'Corporate Events', value: '60+' },
+      { label: 'Delegates Hosted', value: '15,000+' },
+      { label: 'Keynote Stages', value: '30+' },
+      { label: 'Live Streams', value: '50+ Events' },
+    ],
+    features: [
+      'Modular conference staging with seamless AV integration.',
+      'Live polling, Q&A systems, and audience engagement tech.',
+      'Professional broadcast-quality live streaming setup.',
+      'Brand-consistent décor, signage, and experience design.',
+    ],
+    gallery: [
+      'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600',
+      'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=600',
+      'https://images.unsplash.com/photo-1556761175-4b46a572b786?w=600'
+    ]
+  },
+  'awareness-projects': {
+    title: 'Social Awareness Campaigns',
+    subtitle: 'Creative Campaigns Driving Community Action',
+    description: 'Creative campaigns and public engagement initiatives designed to promote social causes and drive positive community action. We amplify voices that matter with impactful storytelling and on-ground presence.',
+    heroImage: 'https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=1800',
+    tags: ['Public Campaign', 'Storytelling', 'Community Outreach', 'Social Media'],
+    stats: [
+      { label: 'Campaigns Executed', value: '35+' },
+      { label: 'Audience Reached', value: '2M+' },
+      { label: 'Partner NGOs', value: '15+' },
+      { label: 'Digital Reach', value: '10M+ Views' },
+    ],
+    features: [
+      'Campaign concept development rooted in social insight and empathy.',
+      'Experiential installations designed for maximum public visibility.',
+      'Multi-platform digital content production and distribution.',
+      'Ground activations with real-time social media amplification.',
+    ],
+    gallery: [
+      'https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=600',
+      'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600',
+      'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600'
     ]
   }
 };
@@ -100,50 +222,11 @@ export default function PortfolioDetail() {
     alert(`Thank you for inquiring about ${project?.title}. Our executive producer will contact you in 24 hours.`);
   };
 
-  useGSAP(() => {
-    if (!project) return;
-    // Hero image scale-in
-    gsap.fromTo('.pd-hero-img',
-      { scale: 1.1 },
-      { scale: 1, duration: 1.8, ease: 'power2.out' }
-    );
-    // Hero content stagger
-    const tl = gsap.timeline({ delay: 0.2 });
-    tl.fromTo('.pd-back-link', { opacity: 0, x: -18 }, { opacity: 1, x: 0, duration: 0.5, ease: 'power2.out' })
-      .fromTo('.pd-eyebrow', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' }, '-=0.2')
-      .fromTo('.pd-title .char-span',
-        { opacity: 0, y: 38, rotateX: -42 },
-        { opacity: 1, y: 0, rotateX: 0, duration: 0.8, stagger: 0.018, ease: 'power4.out' },
-        '-=0.3'
-      )
-      .fromTo('.pd-subtitle', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.55');
-
-    // Body sections scroll-triggered
-    gsap.utils.toArray('.pd-section').forEach((el) => {
-      gsap.fromTo(el,
-        { opacity: 0, y: 42 },
-        {
-          opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
-          scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
-        }
-      );
-    });
-
-    // Stats counter stagger
-    gsap.fromTo('.pd-stat',
-      { opacity: 0, y: 24, scale: 0.92 },
-      {
-        opacity: 1, y: 0, scale: 1, duration: 0.6, stagger: 0.1, ease: 'back.out(1.5)',
-        scrollTrigger: { trigger: '.pd-stats-row', start: 'top 90%', toggleActions: 'play none none none' }
-      }
-    );
-  }, [project]);
-
-  if (!project) {
+ if (!project) {
     return (
-      <div className="min-height-screen bg-bg-main text-white flex flex-col justify-center items-center py-20 px-8">
+      <div className="min-height-screen bg-bg-main text-black flex flex-col justify-center items-center py-20 px-8">
         <h2 className="text-3xl font-bold text-accent-gold mb-4">Project Not Found</h2>
-        <Link to="/" className="inline-flex items-center text-white bg-accent-primary hover:bg-red-700 px-6 py-3 rounded-xl transition-all">
+        <Link to="/" className="inline-flex items-center text-black bg-accent-primary hover:bg-red-700 px-6 py-3 rounded-xl transition-all">
           <ArrowLeft className="w-5 h-5 mr-2" /> Back to Home
         </Link>
       </div>
@@ -156,18 +239,17 @@ export default function PortfolioDetail() {
       <div className="relative h-[60vh] flex items-end overflow-hidden">
         <div
           className="pd-hero-img absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${project.heroImage})` }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-bg-main via-bg-main/50 to-transparent"></div>
         <div className="relative max-w-7xl mx-auto w-full px-8 pb-12 z-10">
-          <Link to="/" className="pd-back-link inline-flex items-center text-accent-primary hover:text-white mb-6 text-xs font-bold uppercase tracking-widest transition-colors cursor-pointer">
+          <Link to="/" className="pd-back-link inline-flex items-center text-accent-primary hover:text-black mb-6 text-xs font-bold uppercase tracking-widest transition-colors cursor-pointer">
             <ArrowLeft className="w-4 h-4 mr-2" /> Back to Masterpieces
           </Link>
-          <span className="pd-eyebrow text-[10px] text-accent-gold tracking-widest uppercase font-extrabold bg-accent-primary/20 border border-accent-primary/40 px-3 py-1.5 rounded-full">{project.tags[0]}</span>
-          <h1 className="pd-title text-4xl md:text-6xl font-extrabold text-white mt-4 tracking-tight leading-tight">
-            <SplitText>{project.title}</SplitText>
+          <span className="pd-eyebrow text-[10px] text-accent-gold tracking-widest uppercase font-extrabold bg-accent-primary/20 border border-accent-primary/40 px-3 py-1.5 ml-3 rounded-full">{project.tags[0]}</span>
+          <h1 className="pd-title text-4xl md:text-6xl font-extrabold text-black mt-4 tracking-tight leading-tight">
+            <>{project.title}</>
           </h1>
-          <p className="pd-subtitle text-accent-gold text-lg md:text-xl font-medium mt-2 max-w-2xl">{project.subtitle}</p>
+          <p className="pd-subtitle text-accent-gold  text-lg md:text-xl font-medium mt-2 max-w-2xl">{project.subtitle}</p>
         </div>
       </div>
 
@@ -177,35 +259,24 @@ export default function PortfolioDetail() {
         <div className="lg:col-span-2 space-y-12">
           {/* Detailed Summary */}
           <section className="pd-section bg-bg-surface/55 backdrop-blur-md border border-white/5 p-8 rounded-[32px] shadow-xl shadow-black/30">
-            <h2 className="text-xl font-extrabold text-white mb-4 border-b border-border-color/20 pb-3 font-display tracking-tight">Project Overview</h2>
+            <h2 className="text-xl font-extrabold text-black mb-4 border-b border-border-color/20 pb-3 font-display tracking-tight">Project Overview</h2>
             <p className="text-text-muted text-sm leading-relaxed font-light">{project.description}</p>
             
             {/* Tags list */}
             <div className="flex flex-wrap gap-2 mt-6">
               {project.tags.map((tag, idx) => (
-                <span key={idx} className="bg-bg-card/45 text-white border border-white/5 text-[10px] px-3 py-1.5 rounded-lg font-bold uppercase tracking-wider">
+                <span key={idx} className="bg-bg-card/45 text-black border border-white/5 text-[10px] px-3 py-1.5 rounded-lg font-bold uppercase tracking-wider">
                   #{tag}
                 </span>
               ))}
             </div>
           </section>
 
-          {/* Key Deliverables/Specs */}
-          <section className="bg-bg-surface/55 backdrop-blur-md border border-white/5 p-8 rounded-[32px] shadow-xl shadow-black/30">
-            <h2 className="text-xl font-extrabold text-white mb-6 border-b border-border-color/20 pb-3 font-display tracking-tight">Engineering Specifications</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {project.features.map((feature, idx) => (
-                <div key={idx} className="flex items-start space-x-3 bg-bg-card/45 backdrop-blur-md p-4 rounded-xl border border-white/5 hover:border-accent-primary/25 transition-all">
-                  <CheckCircle2 className="w-5 h-5 text-accent-gold shrink-0 mt-0.5" />
-                  <span className="text-xs text-text-muted font-light leading-relaxed">{feature}</span>
-                </div>
-              ))}
-            </div>
-          </section>
+
 
           {/* Photo Gallery Grid */}
           <section className="space-y-6">
-            <h2 className="text-xl font-extrabold text-white border-b border-border-color/20 pb-3 font-display tracking-tight">Project Visuals</h2>
+            <h2 className="text-xl font-extrabold text-black border-b border-border-color/20 pb-3 font-display tracking-tight">Project Visuals</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {project.gallery.map((img, idx) => (
                 <div key={idx} className="h-64 rounded-[20px] overflow-hidden border border-white/5 group relative shadow-lg hover:border-accent-primary/30 transition-all">
@@ -228,7 +299,7 @@ export default function PortfolioDetail() {
         <div className="space-y-8">
           {/* Stats Box */}
           <div className="bg-gradient-to-br from-bg-surface/55 to-bg-card/65 backdrop-blur-md border border-white/5 p-6 rounded-[28px] shadow-xl shadow-black/30">
-            <h3 className="text-base font-extrabold text-white mb-4 flex items-center font-display tracking-tight">
+            <h3 className="text-base font-extrabold text-black mb-4 flex items-center font-display tracking-tight">
               <Zap className="w-5 h-5 text-accent-gold mr-2" /> Production Metrics
             </h3>
             <div className="grid grid-cols-2 gap-4">
@@ -241,55 +312,6 @@ export default function PortfolioDetail() {
             </div>
           </div>
 
-          {/* Intake Inquire Form Card */}
-          <div className="bg-bg-surface/55 backdrop-blur-md border border-white/5 p-8 rounded-[28px] shadow-xl shadow-black/30 relative overflow-hidden">
-            <div className="absolute -top-12 -right-12 w-24 h-24 bg-accent-primary/10 rounded-full blur-2xl"></div>
-            <h3 className="text-base font-extrabold text-white mb-2 flex items-center font-display tracking-tight">
-              <Flame className="w-5 h-5 text-accent-primary mr-2" /> Book This Layout
-            </h3>
-            <p className="text-xs text-text-muted mb-6 font-light">Coordinate our structural resources and media crew for your upcoming execution.</p>
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <input 
-                  type="text" 
-                  placeholder="Contact Person" 
-                  required 
-                  className="w-full bg-bg-card/45 border border-border-color/80 text-sm text-white px-4 py-3.5 rounded-xl focus:border-accent-primary focus:bg-bg-main/80 outline-none transition-all placeholder:text-slate-600 hover:border-accent-primary/25"
-                />
-              </div>
-              <div>
-                <input 
-                  type="email" 
-                  placeholder="Email Address" 
-                  required 
-                  className="w-full bg-bg-card/45 border border-border-color/80 text-sm text-white px-4 py-3.5 rounded-xl focus:border-accent-primary focus:bg-bg-main/80 outline-none transition-all placeholder:text-slate-600 hover:border-accent-primary/25"
-                />
-              </div>
-              <div>
-                <input 
-                  type="text" 
-                  placeholder="Target Date / Season" 
-                  required 
-                  className="w-full bg-bg-card/45 border border-border-color/80 text-sm text-white px-4 py-3.5 rounded-xl focus:border-accent-primary focus:bg-bg-main/80 outline-none transition-all placeholder:text-slate-600 hover:border-accent-primary/25"
-                />
-              </div>
-              <div>
-                <textarea 
-                  rows="3" 
-                  placeholder="Special requests or spatial details..." 
-                  required 
-                  className="w-full bg-bg-card/45 border border-border-color/80 text-sm text-white px-4 py-3.5 rounded-xl focus:border-accent-primary focus:bg-bg-main/80 outline-none transition-all placeholder:text-slate-600 resize-none hover:border-accent-primary/25"
-                ></textarea>
-              </div>
-              <button 
-                type="submit" 
-                className="w-full py-4 bg-gradient-to-r from-accent-primary to-accent-rose hover:from-accent-rose hover:to-accent-secondary text-xs text-white font-bold rounded-xl border border-white/10 shadow-lg shadow-accent-primary/25 hover:shadow-accent-secondary/35 hover:-translate-y-0.5 btn-glow transition-all cursor-pointer uppercase tracking-widest"
-              >
-                Request Production Slot
-              </button>
-            </form>
-          </div>
         </div>
       </div>
     </div>

@@ -88,10 +88,10 @@ export default function GalleryDetail() {
       <div className="absolute top-0 right-0 w-96 h-96 bg-accent-primary/10 rounded-full blur-[120px] pointer-events-none -z-10" />      {/* ── Hero Banner ─────────────────────────── */}
       <div className="relative h-[60vh] md:h-[70vh] overflow-hidden">
         <div
-          className="gd-hero-img absolute inset-0 bg-cover bg-center"
+          className="gd-hero-img absolute inset-0 bg-contain bg-center"
           style={{ backgroundImage: `url(${event.banner})` }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-bg-main via-bg-main/50 to-black/30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-bg-main via-bg-main/0 to-black/90" />
 
         <div className="absolute inset-x-0 bottom-0 max-w-7xl mx-auto px-6 md:px-8 pb-12 z-10">
           <Link to="/gallery" className="gd-back-link inline-flex items-center gap-2 text-accent-primary hover:text-black text-xs font-bold uppercase tracking-widest mb-6 transition-colors cursor-pointer">

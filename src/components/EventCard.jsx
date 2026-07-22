@@ -28,7 +28,7 @@ export default function EventCard({ event }) {
         <img
           src={event.banner}
           alt={event.title}
-          className="w-full h-full object-cover transition-all duration-700 scale-100 brightness-90 group-hover:scale-105 group-hover:brightness-75"
+          className="w-full h-full object-contain transition-all duration-700 scale-100 brightness-90 group-hover:scale-105 group-hover:brightness-75"
           loading="lazy"
         />
 

@@ -79,62 +79,16 @@ export default function EventDetail() {
   return (
     <div className="bg-bg-main text-text-main min-h-screen relative overflow-hidden">
 
-      {/* ── Ambient glows ── */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-accent-primary/8 rounded-full blur-[140px] pointer-events-none -z-10" />
-      <div className="absolute bottom-40 left-0 w-[400px] h-[400px] bg-accent-rose/5 rounded-full blur-[120px] pointer-events-none -z-10" />
+
 
       {/* ── Hero Banner ── */}
       <div
         className="relative h-[65vh] min-h-[420px] flex items-end overflow-hidden"
       >
         <div
-          className="ed-hero-img absolute inset-0 bg-cover bg-center"
+          className="ed-hero-img absolute inset-0 bg-contain bg-center"
           style={{ backgroundImage: `url(${event.banner || 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1800'})` }}
         />
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-bg-main via-bg-main/55 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-r from-bg-main/40 to-transparent pointer-events-none" />
-
-        <div className="relative max-w-7xl mx-auto w-full px-6 md:px-8 pb-12 z-10 space-y-5">
-          {/* Back link */}
-          <Link
-            to="/events"
-            className="ed-back-link inline-flex items-center gap-2 text-text-muted hover:text-accent-secondary text-xs font-bold uppercase tracking-widest transition-colors mb-2 cursor-pointer"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" /> Back to Events
-          </Link>
-
-          {/* Status + Category */}
-          <div className="ed-badges flex flex-wrap items-center gap-3">
-            <span className="badge-pill backdrop-blur-md">
-              {event.category || 'Special Edition'}
-            </span>
-            <span className={`text-[9px] font-extrabold uppercase tracking-widest px-3 py-1 rounded-full border backdrop-blur-md
-              ${isUpcoming
-                ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
-                : 'bg-bg-card/85 border-border-color text-text-muted'
-              }`}>
-              {isUpcoming ? '🟢 Upcoming Event' : '✓ Past Event'}
-            </span>
-          </div>
-
-          {/* Event Title */}
-          <h1 className="ed-title font-display text-4xl md:text-6xl text-text-main leading-tight max-w-4xl font-extrabold tracking-tight">
-            {event.title}
-          </h1>
-
-          {/* Meta */}
-          <div className="ed-meta flex flex-wrap gap-6 text-sm text-text-muted">
-            <span className="flex items-center gap-2 font-medium">
-              <Calendar className="w-4 h-4 text-accent-gold" />
-              {formatDate(event.date)}
-            </span>
-            <span className="flex items-center gap-2 font-medium">
-              <MapPin className="w-4 h-4 text-accent-rose" />
-              {event.location}
-            </span>
-          </div>
-        </div>
       </div>
 
       {/* ── Main Content ── */}
@@ -265,18 +219,20 @@ export default function EventDetail() {
                 Reserve your entry to this exclusive VSI experience. Limited seats available — don't miss out.
               </p>
 
-              <button
+              <a
                 id="register-event-btn"
-                onClick={() => setIsModalOpen(true)}
+                href="https://docs.google.com/forms/d/e/1FAIpQLSeISAtJjv-c-nyNpLS6UQm91wK8evftJ6re-4VJLQW0lApW_A/viewform"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-full py-4 bg-gradient-to-r from-accent-primary to-accent-rose hover:from-accent-rose hover:to-accent-secondary text-white font-bold rounded-xl btn-glow
                   hover:shadow-lg hover:shadow-accent-primary/20 hover:-translate-y-0.5 transition-all
-                  flex items-center justify-center gap-2 cursor-pointer text-xs uppercase tracking-widest"
+                  flex items-center justify-center gap-2 text-xs uppercase tracking-widest"
               >
                 Register Now <ChevronRight className="w-4 h-4" />
-              </button>
+              </a>
 
               <p className="text-[10px] text-text-muted text-center font-light">
-                {event.price > 0 ? 'Secure Razorpay payment · Limited availability' : 'Free registration · Limited availability'}
+                Limited availability · Opens registration form
               </p>
             </div>
           </div>
@@ -293,14 +249,7 @@ export default function EventDetail() {
         </div>
       </div>
 
-      {/* Registration Modal */}
-      <RegistrationModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        eventName={event.title}
-        eventId={event.id}
-        eventPrice={event.price ?? 0}
-      />
+
     </div>
   );
 }

@@ -10,7 +10,6 @@ import { api } from '../utils/api';
 import { SERVICES } from '../utils/servicesData';
 import { useGSAP, useMagnetic, SplitText } from '../hooks/useGSAP';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import TestimonialSection from '../components/TestimonialSection';
 import ContactPage from './ContactPage';
 import { useDocumentMetadata } from '../hooks/useDocumentMetadata';
@@ -24,42 +23,42 @@ const LucideIcons = {
 const PORTFOLIO_ITEMS = [
   {
     id: 'awards-functions',
-    title: 'Prestigious Awards Functions',
+    title: 'Awards Functions',
     desc: 'End-to-end planning and execution of award ceremonies with premium stage production, lighting, audiovisual systems, and seamless event coordination.',
-    img: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1000',
+    img: 'https://res.cloudinary.com/gbarhqu6/image/upload/f_auto/q_auto/100422.aardsmain_hm6zsq.avif',
     tag: '🏆 Awards Function'
   },
   {
     id: 'sports-events',
-    title: 'High-Octane Sports Events',
+    title: 'Sports Events',
     desc: 'Professional management of sports tournaments, marathons, leagues, and stadium events with complete production and logistics support.',
-    img: 'https://res.cloudinary.com/dfjsh2zel/image/upload/hero_section_background_image_for_202606291753_icypn0.jpg',
+    img: 'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/VSI/images.jpg',
     tag: '🏅 Sports Event'
   },
   {
     id: 'music-festivals',
-    title: 'Spectacular Music Festivals',
+    title: 'Music Concerts',
     desc: 'Large-scale music festivals featuring world-class stage production, immersive lighting, premium sound systems, and audience engagement.',
     img: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=1000',
     tag: '🎵 Music Festival'
   },
   {
     id: 'concert-shows',
-    title: 'Grand Arena Concert Shows',
+    title: 'Arena Concert',
     desc: 'High-energy concert production with custom staging, advanced lighting, live sound engineering, and crowd management.',
     img: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1000',
     tag: '🎤 Concert Shows'
   },
   {
     id: 'celebrity-management',
-    title: 'Exclusive Celebrity Management',
+    title: 'Celebrity Management',
     desc: 'Complete celebrity engagement services, artist coordination, hospitality, logistics, and on-ground management.',
     img: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1000',
     tag: '⭐ Celebrity Management'
   },
   {
     id: 'csr-projects',
-    title: 'Impactful CSR Initiatives',
+    title: ' CSR Projects',
     desc: 'Strategic planning and execution of Corporate Social Responsibility programs that create meaningful community impact.',
     img: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=1000',
     tag: '🌱 CSR Projects'
@@ -590,7 +589,13 @@ export default function Home() {
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   loading="lazy"
                 />
-                <span className="absolute top-4 left-4 badge-pill backdrop-blur-md">{project.tag}</span>
+                {/* Tag badge — styled as a link chip; click navigates via parent <Link> */}
+                <span className="absolute top-4 left-4 inline-flex items-center gap-1.5 badge-pill backdrop-blur-md
+                  group-hover:bg-accent-primary group-hover:text-white group-hover:border-accent-primary/40
+                  transition-all duration-300 cursor-pointer shadow-sm">
+                  {project.tag}
+                  <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </span>
                 <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md p-2.5 rounded-full border border-border-color text-accent-primary opacity-0 group-hover:opacity-100 transition-all duration-300">
                   <ArrowUpRight className="w-4 h-4" />
                 </div>
@@ -598,8 +603,10 @@ export default function Home() {
               <div className="p-6 flex flex-col flex-grow space-y-3">
                 <h3 className="font-display text-lg text-text-main group-hover:text-accent-primary transition-colors font-extrabold tracking-tight">{project.title}</h3>
                 <p className="text-xs text-text-muted font-light leading-relaxed flex-grow">{project.desc}</p>
-                <div className="flex items-center gap-1.5 text-xs font-bold text-accent-primary hover:text-accent-secondary uppercase tracking-wider pt-3">
-                  View Project <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                <div className="flex items-center justify-between pt-3">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-accent-primary hover:text-accent-secondary uppercase tracking-wider">
+                    View Project <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                  </div>
                 </div>
               </div>
             </Link>
@@ -706,11 +713,6 @@ export default function Home() {
                     <p className="text-xs text-text-muted font-light leading-relaxed">{event.description}</p>
                     <div className="flex items-center gap-3 flex-wrap">
                       <span className="badge-pill">{badge}</span>
-                      {event.price != null && (
-                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-accent-primary bg-accent-primary/8 border border-accent-primary/20 px-3 py-1 rounded-full">
-                          ₹{event.price.toFixed(2)} / seat
-                        </span>
-                      )}
                     </div>
                   </div>
 
@@ -755,7 +757,7 @@ export default function Home() {
           {SERVICES.map(service => {
             const IconComponent = LucideIcons[service.icon] || LucideIcons.HelpCircle;
             return (
-              <Link
+              <div
                 key={service.id}
                 to={`/services/${service.id}`}
                 className="service-card-home bg-white border border-border-color rounded-[28px] p-8 flex flex-col justify-between
@@ -774,7 +776,7 @@ export default function Home() {
                 <div className="flex items-center gap-1.5 text-xs text-accent-primary font-bold uppercase tracking-widest mt-7">
                   Learn More <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1.5 transition-transform" />
                 </div>
-              </Link>
+              </div>
             );
           })}
         </div>
