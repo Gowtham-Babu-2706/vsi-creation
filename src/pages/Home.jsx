@@ -25,7 +25,7 @@ const PORTFOLIO_ITEMS = [
     id: 'awards-functions',
     title: 'Awards Functions',
     desc: 'End-to-end planning and execution of award ceremonies with premium stage production, lighting, audiovisual systems, and seamless event coordination.',
-    img: 'https://res.cloudinary.com/gbarhqu6/image/upload/f_auto/q_auto/100422.aardsmain_hm6zsq.avif',
+    img:'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/kamala.png',
     tag: '🏆 Awards Function'
   },
   {

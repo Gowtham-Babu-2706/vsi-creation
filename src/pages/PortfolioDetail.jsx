@@ -27,7 +27,7 @@ const PORTFOLIO_DATA = {
       'Seamless MC support, scripting coordination & cue management.',
     ],
     gallery: [
-      'http://res.cloudinary.com/gbarhqu6/image/upload/f_auto/q_auto/100422.aardsmain_hm6zsq.avif',
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/kamala.png',
       'https://res.cloudinary.com/gbarhqu6/image/upload/f_auto/q_auto/images_pecry1.jpg',
       'https://res.cloudinary.com/gbarhqu6/image/upload/f_auto/q_auto/EakUcqCCzAr9zd4ndKWcHNM5pWaj0GllkUm6zjdL4uWtBUJHShs6KYbJz_0QBBWh7eX2uyVJfJjOh6IY2k_XzUAbcqqXV7JWz0b0cwVRZ9WIJ2UfsxlJOJORUdfDPW_QOzWgPzjK7EJLOL0whiCrRxqZoyk26EZFuNopJ1o3xNTwAfV246z-TJ5wKrWr4zbe_vriexx.jpg',
       'https://res.cloudinary.com/gbarhqu6/image/upload/f_auto/q_auto/-W7QpIPGAxXN9yz0qXpk_8S6yg90u1uFv80FCEQa0ksAaIGR0a8z9NE_r64FzKyGkVwYlm0oPgUMuxH63aruDFPbW9Rr8yvutXQJj1hFPl07SYTfcOnwL9W33WzXfs41gUIvnj_HFX7FTwKi946x86ls_IJz122c79fW1Y-tstZ4C0iApqAbmZaHBEKpo-hq_1_j0p70j.jpg'
@@ -203,7 +203,7 @@ const PORTFOLIO_DATA = {
     gallery: [
       'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/SAC/1.jpg',
       'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/SAC/2.jpg',
-      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/SAC/3jpg',
+      'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/SAC/3.jpg',
       'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/SAC/4.jpg',
       'https://braiilpictures-565122144511-eu-north-1-an.s3.eu-north-1.amazonaws.com/Service+images/SAC/5.jpg'
     ]
@@ -299,25 +299,6 @@ export default function PortfolioDetail() {
               ))}
             </div>
           </section>
-        </div>
-
-        {/* Right 1 Column: Stats & Inquiry Card */}
-        <div className="space-y-8">
-          {/* Stats Box */}
-          <div className="bg-gradient-to-br from-bg-surface/55 to-bg-card/65 backdrop-blur-md border border-white/5 p-6 rounded-[28px] shadow-xl shadow-black/30">
-            <h3 className="text-base font-extrabold text-black mb-4 flex items-center font-display tracking-tight">
-              <Zap className="w-5 h-5 text-accent-gold mr-2" /> Production Metrics
-            </h3>
-            <div className="grid grid-cols-2 gap-4">
-              {project.stats.map((stat, idx) => (
-                <div key={idx} className="bg-bg-main/60 backdrop-blur-md p-4 rounded-xl border border-white/5 text-center hover:border-accent-gold/25 transition-all">
-                  <span className="text-2xl font-black text-accent-gold block glow-gold">{stat.value}</span>
-                  <span className="text-[10px] text-text-muted uppercase font-bold tracking-wider">{stat.label}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
         </div>
       </div>
     </div>
