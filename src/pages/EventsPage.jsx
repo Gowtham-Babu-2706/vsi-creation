@@ -219,7 +219,7 @@ export default function EventsPage() {
             {/* Date badge */}
             <div className="absolute top-5 right-5 bg-white/10 backdrop-blur border border-white/20 rounded-2xl px-4 py-2 text-center">
               <p className="text-white text-[10px] font-bold uppercase tracking-widest opacity-70">Event Date</p>
-              <p className="text-white font-extrabold text-base font-display">16 Aug 2026</p>
+              <p className="text-white font-extrabold text-base font-display">20 Sep 2026</p>
             </div>
 
             {/* Title overlay */}
@@ -243,7 +243,7 @@ export default function EventsPage() {
             <div className="flex flex-wrap gap-x-8 gap-y-3 px-6 md:px-10 py-5 border-b border-border-color/40 bg-bg-surface/50">
               <div className="flex items-center gap-2 text-sm">
                 <Calendar className="w-4 h-4 text-accent-primary" />
-                <span className="font-semibold text-black">16 August 2026</span>
+                <span className="font-semibold text-black">20 Sep 2026</span>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <MapPin className="w-4 h-4 text-accent-rose" />
