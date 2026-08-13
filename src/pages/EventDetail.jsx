@@ -86,7 +86,7 @@ export default function EventDetail() {
         className="relative h-[65vh] min-h-[420px] flex items-end overflow-hidden"
       >
         <div
-          className="ed-hero-img absolute inset-0 bg-cover bg-center bg-no-repeat"
+          className="ed-hero-img absolute inset-0 bg-contain bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${event.banner || 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1800'})` }}
         />
       </div>
