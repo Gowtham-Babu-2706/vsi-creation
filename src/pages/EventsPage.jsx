@@ -12,7 +12,7 @@ const CYRA_EVENT = {
   id: 'cyra-awards-2026',
   title: 'CYRA AWARDS 2026',
   subtitle: "Tamil Nadu's Biggest Influencers Thiruvizha",
-  date: '2026-08-16',
+  date: '2026-09-20',
   location: 'Chennai, Tamil Nadu',
   contact: { phone: '9150651872', email: 'vsicreations.41@gmail.com' },
   about:
